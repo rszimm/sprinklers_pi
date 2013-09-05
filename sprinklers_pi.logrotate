@@ -1,0 +1,12 @@
+/var/log/sprinklers_pi {
+	rotate 5
+	size 100k
+	postrotate
+		if [ -e /var/run/sprinklers_pi.pid ]; then
+			invoke-rc.d --quiet sprinklers_pi restart > /dev/null
+		fi
+	endscript
+	notifempty
+	compress
+	create 644 root root
+}

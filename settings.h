@@ -1,0 +1,1 @@
+/home/rzimmerman/projects/sprinklers/settings.h
