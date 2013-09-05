@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  
+  <head>
+    <title>Advanced Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" type="text/css">
+    <link rel="stylesheet" href="custom.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js" type="text/javascript"></script>
+  </head>
+  
+  <body>
+    <!-- Home -->
+    <div data-role="page" id="advanced">
+      <script language="javascript" type="text/javascript">
+        function factoryDefaults() {
+          if (confirm('Are you sure you want to return to Factory Defaults?'))
+            $.ajax({
+              type: 'get',
+              url: 'bin/factory',
+              success: function (d) {
+                alert('Reset to Factory Defaults');
+              },
+              error: function (xhr, st, e) {
+                alert(st);
+              }
+            });
+        }
+        function resetSystem() {
+          if (confirm('Are you sure you want to Reset?'))
+            $.ajax({
+              type: 'get',
+              url: 'bin/reset',
+              success: function (d) {
+                alert('System Resetting');
+              },
+              error: function (xhr, st, e) {
+                alert(st);
+              }
+            });
+        }
+      </script>
+      <div data-theme="a" data-role="header"> 
+        <a data-role="button" data-direction="reverse" data-rel="back" href="#page1" data-icon="back" data-iconpos="left" class="ui-btn-left">
+            Back
+        </a>
+        <h3>Advanced</h3>
+      </div>
+      <div data-role="content">
+        <ul data-role="listview" data-divider-theme="b" data-inset="true" data-split-theme="b">
+          <li data-theme="c"><a href="WCheck.htm" data-transition="slide">WUnderground Diagnostics</a>
+          </li>
+          <li data-theme="c"><a href="javascript:resetSystem()">Reset System</a>
+          </li>
+          <li data-theme="c"><a href="javascript:factoryDefaults()">Factory Defaults</a>
+          </li>
+        </ul>
+      </div> <!-- /content -->
+      <div data-role="footer" class="footer-docs" data-theme="c">
+        <p> &copy; 2013 Richard Zimmerman</p>
+      </div>
+    </div><!-- /page -->
+  </body>
+
+</html>
