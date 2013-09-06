@@ -166,6 +166,31 @@ static void JSONLogs(const KVPairs & key_value_pairs, FILE * stream_file)
 	log.GraphZone(stream_file, sdate, edate, grouping);
 	fprintf(stream_file, "}");
 }
+
+static void JSONtLogs(const KVPairs & key_value_pairs, FILE * stream_file)
+{
+	ServeHeader(stream_file, 200, "OK", false, "text/plain");
+	fprintf(stream_file, "{\n\t\"logs\": [\n");
+	time_t sdate = 0;
+	time_t edate = 0;
+	// Iterate through the kv pairs and search for the start and end dates.
+	for (int i = 0; i < key_value_pairs.num_pairs; i++)
+	{
+		const char * key = key_value_pairs.keys[i];
+		const char * value = key_value_pairs.values[i];
+		if (strcmp(key, "sdate") == 0)
+		{
+			sdate = strtol(value, 0, 10);
+		}
+		else if (strcmp(key, "edate") == 0)
+		{
+			edate = strtol(value, 0, 10);
+		}
+	}
+	log.TableZone(stream_file, sdate, edate);
+	fprintf(stream_file, "\t]\n}");
+}
+
 #endif
 
 static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
@@ -188,10 +213,38 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 	fprintf_P(stream_file, PSTR("\t\"ot\" : \"%d\",\n"), GetOT());
 	ip = GetWUIP();
 	fprintf_P(stream_file, PSTR("\t\"wuip\" : \"%d.%d.%d.%d\",\n"), ip[0], ip[1], ip[2], ip[3]);
+	fprintf_P(stream_file, PSTR("\t\"wutype\" : \"%s\",\n"), GetUsePWS() ? "pws" : "zip");
 	fprintf_P(stream_file, PSTR("\t\"zip\" : \"%ld\",\n"), (long) GetZip());
+	fprintf_P(stream_file, PSTR("\t\"sadj\" : \"%ld\",\n"), (long) GetSeasonalAdjust());
 	char ak[17];
 	GetApiKey(ak);
-	fprintf_P(stream_file, PSTR("\t\"apikey\" : \"%s\"\n"), ak);
+	fprintf_P(stream_file, PSTR("\t\"apikey\" : \"%s\",\n"), ak);
+	GetPWS(ak);
+	ak[11] = 0;
+	fprintf_P(stream_file, PSTR("\t\"pws\" : \"%s\"\n"), ak);
+	fprintf(stream_file, "}");
+}
+
+static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
+{
+	Weather w;
+	ServeHeader(stream_file, 200, "OK", false, "text/plain");
+	char key[17];
+	GetApiKey(key);
+	char pws[12] = {0};
+	GetPWS(pws);
+	const Weather::ReturnVals vals = w.GetVals(GetWUIP(), key, GetZip(), pws, GetUsePWS());
+	const int scale = w.GetScale(vals);
+
+	fprintf(stream_file, "{\n");
+	fprintf_P(stream_file, PSTR("\t\"valid\" : \"%s\",\n"), vals.valid ? "true" : "false");
+	fprintf_P(stream_file, PSTR("\t\"keynotfound\" : \"%s\",\n"), vals.keynotfound ? "true" : "false");
+	fprintf_P(stream_file, PSTR("\t\"minhumidity\" : \"%d\",\n"), vals.minhumidity);
+	fprintf_P(stream_file, PSTR("\t\"maxhumidity\" : \"%d\",\n"), vals.maxhumidity);
+	fprintf_P(stream_file, PSTR("\t\"meantempi\" : \"%d\",\n"), vals.meantempi);
+	fprintf_P(stream_file, PSTR("\t\"precip_today\" : \"%d\",\n"), vals.precip_today);
+	fprintf_P(stream_file, PSTR("\t\"precip\" : \"%d\",\n"), vals.precipi);
+	fprintf_P(stream_file, PSTR("\t\"scale\" : \"%d\"\n"), scale);
 	fprintf(stream_file, "}");
 }
 
@@ -200,7 +253,7 @@ static void JSONState(const KVPairs & key_value_pairs, FILE * stream_file)
 	ServeHeader(stream_file, 200, "OK", false, "text/plain");
 	fprintf_P(stream_file,
 			PSTR("{\n\t\"version\" : \"%s\",\n\t\"run\" : \"%s\",\n\t\"zones\" : \"%d\",\n\t\"schedules\" : \"%d\",\n\t\"timenow\" : \"%lu\",\n\t\"events\" : \"%d\""),
-			VERSION, GetRunSchedules() ? "on" : "off", NUM_ZONES, GetNumSchedules(), now(), iNumEvents);
+			VERSION, GetRunSchedules() ? "on" : "off", NUM_ZONES, GetNumSchedules(), nntpTimeServer.LocalNow(), iNumEvents);
 	if (runState.isSchedule() || runState.isManual())
 	{
 		FullZone zone;
@@ -284,9 +337,9 @@ static bool SetQSched(const KVPairs & key_value_pairs)
 	{
 		const char * key = key_value_pairs.keys[i];
 		const char * value = key_value_pairs.values[i];
-		if ((key[0] == 'z') && (key[1] > '0') && (key[1] <= ('0' + NUM_ZONES)) && (key[2] == 0))
+		if ((key[0] == 'z') && (key[1] > 'a') && (key[1] <= ('a' + NUM_ZONES)) && (key[2] == 0))
 		{
-			quickSchedule.zone_duration[key[1] - '1'] = atoi(value);
+			quickSchedule.zone_duration[key[1] - 'b'] = atoi(value);
 		}
 		if (strcmp(key, "sched") == 0)
 		{
@@ -406,9 +459,9 @@ static bool ManualZone(const KVPairs & key_value_pairs)
 	{
 		const char * key = key_value_pairs.keys[i];
 		const char * value = key_value_pairs.values[i];
-		if ((strcmp(key, "zone") == 0) && (value[0] == 'z') && (value[1] > '0') && (value[1] <= ('0' + NUM_ZONES)))
+		if ((strcmp(key, "zone") == 0) && (value[0] == 'z') && (value[1] > 'a') && (value[1] <= ('a' + NUM_ZONES)))
 		{
-			iZoneNum = value[1] - '0';
+			iZoneNum = value[1] - 'a';
 		}
 		else if (strcmp(key, "state") == 0)
 		{
@@ -431,10 +484,35 @@ static bool ManualZone(const KVPairs & key_value_pairs)
 	return true;
 }
 
-static void ServeFile(FILE * stream_file, SdFile & theFile, EthernetClient & client)
+static void ServeFile(FILE * stream_file, const char * fname, SdFile & theFile, EthernetClient & client)
 {
 	freeMemory();
-	ServeHeader(stream_file, 200, "OK", true);
+	const char * ext;
+	for (ext=fname + strlen(fname); ext>fname; ext--)
+		if (*ext == '.')
+		{
+			ext++;
+			break;
+		}
+	if (ext > fname)
+	{
+		if (strcmp(ext, "jpg") == 0)
+			ServeHeader(stream_file, 200, "OK", true, "image/jpeg");
+		else if (strcmp(ext, "gif") == 0)
+			ServeHeader(stream_file, 200, "OK", true, "image/gif");
+		else if (strcmp(ext, "css") == 0)
+			ServeHeader(stream_file, 200, "OK", true, "text/css");
+		else if (strcmp(ext, "js") == 0)
+			ServeHeader(stream_file, 200, "OK", true, "application/javascript");
+		else if (strcmp(ext, "ico") == 0)
+			ServeHeader(stream_file, 200, "OK", true, "image/x-icon");
+		else
+			ServeHeader(stream_file, 200, "OK", true);
+	}
+	else
+		ServeHeader(stream_file, 200, "OK", true);
+
+
 #ifdef ARDUINO
 	flush_sendbuf(client);
 #else
@@ -630,7 +708,7 @@ void web::ProcessWebClients()
 		trace(F("Got a client\n"));
 		//ShowSockStatus();
 		KVPairs key_value_pairs;
-		char sPage[30];
+		char sPage[35];
 
 		if (!ParseHTTPHeader(client, &key_value_pairs, sPage, sizeof(sPage)))
 		{
@@ -744,10 +822,18 @@ void web::ProcessWebClients()
 			{
 				JSONSchedule(key_value_pairs, pFile);
 			}
+			else if (strcmp(sPage, "json/wcheck") == 0)
+			{
+				JSONwCheck(key_value_pairs, pFile);
+			}
 #ifdef LOGGING
 			else if (strcmp(sPage, "json/logs") == 0)
 			{
 				JSONLogs(key_value_pairs, pFile);
+			}
+			else if (strcmp(sPage, "json/tlogs") == 0)
+			{
+				JSONtLogs(key_value_pairs, pFile);
 			}
 #endif
 			else if (strcmp(sPage, "ShowSched") == 0)
@@ -763,15 +849,6 @@ void web::ProcessWebClients()
 			else if (strcmp(sPage, "ShowEvent") == 0)
 			{
 				ServeEventPage(pFile);
-			}
-			else if (strcmp(sPage, "LoadWeather") == 0)
-			{
-				Weather w;
-				ServeHeader(pFile, 200, "OK", false);
-				char key[17];
-				GetApiKey(key);
-				int scale = w.GetScale(GetWUIP(), key, GetZip());
-				fprintf(pFile, "%d\n", scale);
 			}
 			else if (strcmp(sPage, "ReloadEvent") == 0)
 			{
@@ -793,7 +870,7 @@ void web::ProcessWebClients()
 				else
 				{
 					if (theFile.isFile())
-						ServeFile(pFile, theFile, client);
+						ServeFile(pFile, sPage, theFile, client);
 					else
 						Serve404(pFile);
 					theFile.close();
