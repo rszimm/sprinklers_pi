@@ -2,11 +2,11 @@
 # Makefile for the Sprinkling System
 # $Id: Makefile 578 2012-10-08 22:42:44Z rzimmerman $
 
-VERSION=1.0.1
+VERSION=1.0.4
 
 BUILD_DIR=build
 CC=gcc
-CCFLAGS=-O3 -Wall -fmessage-length=0 -MMD -MP -DLOGGING
+CCFLAGS=-O3 -Wall -fmessage-length=0 -MMD -MP -DLOGGING -DVERSION=\"$(VERSION)\"
 
 CPP_SRCS += \
 Event.cpp \
@@ -23,15 +23,6 @@ LIBS := -lsqlite3 -lwiringPi
 LIBNAME=sprinklers_pi
 
 OBJS=$(CPP_SRCS:%.cpp=$(BUILD_DIR)/%.o)
-
-# Load the svnversion.cpp file assuming the version has not changed.
-DUMMY:=$(shell echo -n 'static const char* svn_version(void) { return "' > svnversion.cpp.tmp )
-DUMMY:=$(shell svnversion -c .. | awk -F ':' '{ printf("%s", $$2); }' >> svnversion.cpp.tmp )
-DUMMY:=$(shell echo '"; }' >> svnversion.cpp.tmp )
-DUMMY:=$(shell echo 'static const char* lib_version(void) { return "$(VERSION)"; }' >> svnversion.cpp.tmp )
-DUMMY:=$(shell if [ ! -f svnversion.cpp ]; then touch svnversion.cpp; fi )
-DUMMY:=$(shell diff --brief svnversion.cpp svnversion.cpp.tmp; if [ $$? = 1 ]; then cp -f svnversion.cpp.tmp svnversion.cpp; fi )
-DUMMY:=$(shell rm -f svnversion.cpp.tmp)
 
 all: build_dir $(LIBNAME)
 
@@ -71,6 +62,9 @@ endif
 	
 	@echo "done"
 
+upgrade: install
+	/etc/init.d/sprinklers_pi restart
+
 remove:
 ifneq  ($(IUSER),root)
 	$(error You are not ROOT.  Rerun with sudo)
@@ -94,7 +88,7 @@ version:
 	@echo $(VERSION)
 
 clean:
-	rm -rf $(BUILD_DIR) $(LIBNAME) svnversion.cpp *.tar.gz
+	rm -rf $(BUILD_DIR) $(LIBNAME) settings db.sql *.tar.gz
 
 FORCE:
 # DO NOT DELETE
