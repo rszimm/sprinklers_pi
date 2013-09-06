@@ -16,18 +16,10 @@ Weather::Weather(void)
 {
 }
 
-struct ReturnVals
-{
-	short minhumidity;
-	short maxhumidity;
-	short meantempi;
-	short precip_today;
-	short precipi;
-};
-
-static void ParseResponse(EthernetClient & client, ReturnVals * ret)
+static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 {
 	freeMemory();
+	ret->valid = false;
 	enum
 	{
 		FIND_QUOTE1 = 0, PARSING_KEY, FIND_QUOTE2, PARSING_VALUE, PARSING_QVALUE, ERROR
@@ -122,6 +114,8 @@ static void ParseResponse(EthernetClient & client, ReturnVals * ret)
 				//trace("%s:%s\n", key, val);
 				if (strcmp(key, "maxhumidity") == 0)
 				{
+					ret->valid = true;
+					ret->keynotfound = false;
 					ret->maxhumidity = atoi(val);
 				}
 				else if (strcmp(key, "minhumidity") == 0)
@@ -140,6 +134,12 @@ static void ParseResponse(EthernetClient & client, ReturnVals * ret)
 				{
 					ret->precipi = (atof(val) * 100.0);
 				}
+				else if (strcmp(key, "type") == 0)
+				{
+					if (strcmp(val, "keynotfound") == 0)
+						ret->keynotfound = true;
+				}
+
 			}
 			else
 			{
@@ -156,33 +156,53 @@ static void ParseResponse(EthernetClient & client, ReturnVals * ret)
 	} // while (true)
 }
 
-int Weather::GetScale(const IPAddress & ip, const char * key, uint32_t zip) const
+int Weather::GetScale(const IPAddress & ip, const char * key, uint32_t zip, const char * pws, bool usePws) const
 {
+	ReturnVals vals = GetVals(ip, key, zip, pws, usePws);
+	return GetScale(vals);
+}
+
+int Weather::GetScale(const ReturnVals & vals) const
+{
+	if (!vals.valid)
+		return 100;
+	const int humid_factor = 30 - (vals.maxhumidity + vals.minhumidity) / 2;
+	const int temp_factor = (vals.meantempi - 70) * 4;
+	const int rain_factor = (vals.precipi + vals.precip_today) * -2;
+	const int adj = min(max(0, 100+humid_factor+temp_factor+rain_factor), 200);
+	trace(F("Adjusting H(%d)T(%d)R(%d):%d\n"), humid_factor, temp_factor, rain_factor, adj);
+	return adj;
+}
+
+Weather::ReturnVals Weather::GetVals(const IPAddress & ip, const char * key, uint32_t zip, const char * pws, bool usePws) const
+{
+	ReturnVals vals = {0};
 	EthernetClient client;
 	if (client.connect(ip, 80))
 	{
-		char getstring[80];
+		char getstring[90];
 		trace(F("Connected\n"));
-		snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/%ld.json HTTP/1.0\n\n", key, (long) zip);
+		if (usePws)
+			snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/pws:%s.json HTTP/1.0\n\n", key, pws);
+		else
+			snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/%ld.json HTTP/1.0\n\n", key, (long) zip);
 		//trace(getstring);
 		client.write((uint8_t*) getstring, strlen(getstring));
-		ReturnVals vals = {0};
 
 		ParseResponse(client, &vals);
 		client.stop();
-		//trace("%d, %d, %d, %d %d\n", vals.maxhumidity, vals.minhumidity, vals.meantempi, vals.precip_today, vals.precipi);
-
-		const int humid_factor = 30 - (vals.maxhumidity + vals.minhumidity) / 2;
-		const int temp_factor = (vals.meantempi - 70) * 4;
-		const int rain_factor = (vals.precipi + vals.precip_today) * -2;
-		const int adj = min(max(0, 100+humid_factor+temp_factor+rain_factor), 200);
-		trace(F("Adjusting H(%d)T(%d)R(%d):%d\n"), humid_factor, temp_factor, rain_factor, adj);
-		return adj;
+		if (!vals.valid)
+		{
+			if (vals.keynotfound)
+				trace("Invalid WUnderground Key\n");
+			else
+				trace("Bad WUnderground Response\n");
+		}
 	}
 	else
 	{
 		trace(F("connection failed\n"));
 		client.stop();
-		return 100;
 	}
+	return vals;
 }

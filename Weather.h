@@ -14,8 +14,21 @@
 class Weather
 {
 public:
+	struct ReturnVals
+	{
+		bool valid;
+		bool keynotfound;
+		short minhumidity;
+		short maxhumidity;
+		short meantempi;
+		short precip_today;
+		short precipi;
+	};
+public:
 	Weather(void);
-	int GetScale(const IPAddress & ip, const char * key, uint32_t zip) const;
+	int GetScale(const IPAddress & ip, const char * key, uint32_t zip, const char * pws, bool usePws) const;
+	int GetScale(const ReturnVals & vals) const;
+	ReturnVals GetVals(const IPAddress & ip, const char * key, uint32_t zip, const char * pws, bool usePws) const;
 };
 
 #endif
