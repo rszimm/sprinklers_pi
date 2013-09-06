@@ -18,7 +18,9 @@
 extern Logging log;
 #endif
 
-#define VERSION "1.0.1"
+#ifndef VERSION
+#define VERSION "0.0.0"
+#endif
 
 void mainLoop();
 void ClearEvents();
@@ -32,8 +34,16 @@ void io_setup();
 class runStateClass
 {
 public:
+	class DurationAdjustments {
+	public:
+		DurationAdjustments() : seasonal(-1), wunderground(-1) {}
+		DurationAdjustments(int16_t val) : seasonal(val), wunderground(val) {}
+		int16_t seasonal;
+		int16_t wunderground;
+	};
+public:
 	runStateClass();
-	void SetSchedule(bool val, int8_t iSchedNum = -1);
+	void SetSchedule(bool val, int8_t iSchedNum = -1, const runStateClass::DurationAdjustments * adj = 0);
 	void ContinueSchedule(int8_t zone, short endTime);
 	void SetManual(bool val, int8_t zone = -1);
 	bool isSchedule()
@@ -60,6 +70,7 @@ private:
 	int8_t m_zone;
 	short m_endTime;
 	time_t m_eventTime;
+	DurationAdjustments m_adj;
 };
 
 extern runStateClass runState;

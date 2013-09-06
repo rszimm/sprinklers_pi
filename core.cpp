@@ -38,11 +38,11 @@ void runStateClass::LogSchedule()
 {
 #ifdef LOGGING
 	if ((m_eventTime > 0) && (m_zone >= 0))
-		log.LogZoneEvent(m_eventTime, m_zone, nntpTimeServer.LocalNow() - m_eventTime, m_bSchedule ? m_iSchedule+1:-1);
+		log.LogZoneEvent(m_eventTime, m_zone, nntpTimeServer.LocalNow() - m_eventTime, m_bSchedule ? m_iSchedule+1:-1, m_adj.seasonal, m_adj.wunderground);
 #endif
 }
 
-void runStateClass::SetSchedule(bool val, int8_t iSched)
+void runStateClass::SetSchedule(bool val, int8_t iSched, const runStateClass::DurationAdjustments * adj)
 {
 	LogSchedule();
 	m_bSchedule = val;
@@ -51,6 +51,7 @@ void runStateClass::SetSchedule(bool val, int8_t iSched)
 	m_endTime = 0;
 	m_iSchedule = val?iSched:-1;
 	m_eventTime = nntpTimeServer.LocalNow();
+	m_adj = adj?*adj:DurationAdjustments();
 }
 
 void runStateClass::ContinueSchedule(int8_t zone, short endTime)
@@ -72,12 +73,13 @@ void runStateClass::SetManual(bool val, int8_t zone)
 	m_endTime = 0;
 	m_iSchedule = -1;
 	m_eventTime = nntpTimeServer.LocalNow();
+	m_adj=DurationAdjustments();
 }
 
 #ifdef ARDUINO
-uint8_t ZoneToIOMap[] = {22, 23, 24, 25, 26, 27, 28, 29};
+uint8_t ZoneToIOMap[] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
 #else
-uint8_t ZoneToIOMap[] = {0, 1, 2, 3, 4, 5, 6, 7};
+uint8_t ZoneToIOMap[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 #define SR_CLK_PIN  7
 #define SR_NOE_PIN  0
 #define SR_DAT_PIN  2
@@ -199,15 +201,23 @@ void TurnOnZone(int iValve)
 }
 
 // Adjust the durations based on atmospheric conditions
-static void AdjustDurations(Schedule * sched)
+static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 {
-	Weather w;
-	char key[17];
-	GetApiKey(key);
-	int scale = w.GetScale(GetWUIP(), key, GetZip());   // factor to adjust times by.  100 = 100% (i.e. no adjustment)
-
+	runStateClass::DurationAdjustments adj(100);
+	if (sched->type & 0x04)
+	{
+		Weather w;
+		char key[17];
+		GetApiKey(key);
+		char pws[12] = {0};
+		GetPWS(pws);
+		adj.wunderground = w.GetScale(GetWUIP(), key, GetZip(), pws, GetUsePWS());   // factor to adjust times by.  100 = 100% (i.e. no adjustment)
+	}
+	adj.seasonal = GetSeasonalAdjust();
+	long scale = ((long)adj.seasonal * (long)adj.wunderground) / 100;
 	for (uint8_t k = 0; k < NUM_ZONES; k++)
-		sched->zone_duration[k] = min(((int)sched->zone_duration[k] * scale + 50) / 100, 254);
+		sched->zone_duration[k] = min(((long)sched->zone_duration[k] * scale + 50) / 100, 254);
+	return adj;
 }
 
 // return true if the schedule is enabled and runs today.
@@ -224,14 +234,14 @@ static inline bool IsRunToday(const Schedule & sched, time_t time_now)
 void LoadSchedTimeEvents(int8_t sched_num, bool bQuickSchedule)
 {
 	Schedule sched;
+	runStateClass::DurationAdjustments adj;
 	if (!bQuickSchedule)
 	{
 		const uint8_t iNumSchedules = GetNumSchedules();
 		if ((sched_num < 0) || (sched_num >= iNumSchedules))
 			return;
 		LoadSchedule(sched_num, &sched);
-		if (sched.type & 0x04)
-			AdjustDurations(&sched);
+		adj=AdjustDurations(&sched);
 	}
 	else
 		sched = quickSchedule;
@@ -267,7 +277,7 @@ void LoadSchedTimeEvents(int8_t sched_num, bool bQuickSchedule)
 	events[iNumEvents].data[0] = 0;
 	events[iNumEvents].data[1] = 0;
 	iNumEvents++;
-	runState.SetSchedule(true, bQuickSchedule?99:sched_num);
+	runState.SetSchedule(true, bQuickSchedule?99:sched_num, &adj);
 }
 
 void ClearEvents()
