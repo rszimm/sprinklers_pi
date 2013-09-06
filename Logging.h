@@ -21,9 +21,11 @@ public:
 	bool Init();
 	void Close();
 	// Log an actual row to the database
-	bool LogZoneEvent(time_t start, int zone, int duration, int schedule);
+	bool LogZoneEvent(time_t start, int zone, int duration, int schedule, int sadj, int wunderground);
 	// Retrieve data sutible for graphing
 	bool GraphZone(FILE * stream_file, time_t start, time_t end, GROUPING group);
+	// Retrieve data suitble for putting into a table
+	bool TableZone(FILE* stream_file, time_t start, time_t end);
 private:
 	sqlite3 *m_db;
 };

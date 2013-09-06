@@ -50,7 +50,24 @@ static bool CreateSchema(sqlite3 * db)
 	char * zErrMsg = 0;
 	if (sqlite3_exec(db,
 			"DROP TABLE IF EXISTS versions; DROP TABLE IF EXISTS zonelog; CREATE TABLE versions (version INT);"
-			"INSERT INTO versions VALUES (1);CREATE TABLE zonelog(date INTEGER, zone INTEGER, duration INTEGER, schedule INTEGER);",
+			"INSERT INTO versions VALUES (2);CREATE TABLE zonelog(date INTEGER, zone INTEGER, duration INTEGER, schedule INTEGER,"
+			"seasonal INTEGER, wunderground INTEGER);",
+			NULL, NULL, &zErrMsg) != SQLITE_OK)
+	{
+		trace("SQL Error (%s)\n", zErrMsg);
+		sqlite3_free(zErrMsg);
+		return false;
+	}
+	return true;
+}
+
+static bool UpdateV1toV2(sqlite3 * db)
+{
+	char * zErrMsg = 0;
+	if (sqlite3_exec(db,
+			"begin;DROP TABLE IF EXISTS tmp_zonelog; CREATE TABLE tmp_zonelog(date INTEGER, zone INTEGER, duration INTEGER, schedule INTEGER,"
+			"seasonal INTEGER, wunderground INTEGER);INSERT INTO tmp_zonelog SELECT date, zone, duration, schedule, -1, -1 from zonelog;"
+			"DROP TABLE zonelog; ALTER TABLE tmp_zonelog rename to zonelog;INSERT INTO versions VALUES (2);commit;",
 			NULL, NULL, &zErrMsg) != SQLITE_OK)
 	{
 		trace("SQL Error (%s)\n", zErrMsg);
@@ -62,7 +79,6 @@ static bool CreateSchema(sqlite3 * db)
 
 bool Logging::Init()
 {
-
 	int rc = sqlite3_open("db.sql", &m_db);
 	if (rc)
 	{
@@ -73,15 +89,11 @@ bool Logging::Init()
 
 	int version = GetDBVersion(m_db);
 	if (version == 0)
-	{
 		CreateSchema(m_db);
-	}
-	else if (version != 1)
-	{
-		// Upgrade to new version here
-		//  Currently we just dump everything and recreate
+	else if (version == 1)
+		UpdateV1toV2(m_db);
+	else if (version != 2)
 		CreateSchema(m_db);
-	}
 
 	return true;
 }
@@ -95,12 +107,12 @@ void Logging::Close()
 	}
 }
 
-bool Logging::LogZoneEvent(time_t start, int zone, int duration, int schedule)
+bool Logging::LogZoneEvent(time_t start, int zone, int duration, int schedule, int sadj, int wunderground)
 {
 	char * zErrMsg = 0;
 	char sSQL[100];
-	snprintf(sSQL, sizeof(sSQL), "INSERT INTO zonelog VALUES(%ld, %d, %d, %d);", start, zone, duration, schedule);
-	sSQL[sizeof(sSQL)-1] = 0;
+	snprintf(sSQL, sizeof(sSQL), "INSERT INTO zonelog VALUES(%ld, %d, %d, %d, %d, %d);", start, zone, duration, schedule, sadj, wunderground);
+	sSQL[sizeof(sSQL) - 1] = 0;
 	if (sqlite3_exec(m_db, sSQL, NULL, NULL, &zErrMsg) != SQLITE_OK)
 	{
 		trace("SQL Error (%s)\n", zErrMsg);
@@ -210,3 +222,54 @@ bool Logging::GraphZone(FILE* stream_file, time_t start, time_t end, GROUPING gr
 
 	return true;
 }
+
+bool Logging::TableZone(FILE* stream_file, time_t start, time_t end)
+{
+	if (start == 0)
+		start = nntpTimeServer.LocalNow();
+	end = max(start,end) + 24*3600;  // add 1 day to end time.
+	char sSQL[200];
+	snprintf(sSQL, sizeof(sSQL),
+			"SELECT zone, date, duration, schedule, seasonal, wunderground"
+			" FROM zonelog WHERE date BETWEEN %lu AND %lu"
+			" ORDER BY zone,date",
+			start, end);
+	// Make sure we've zero terminated this string.
+	sSQL[sizeof(sSQL)-1] = 0;
+
+	sqlite3_stmt * statement;
+	// Now determine if we're running V1.0 of the schema.
+	int res = sqlite3_prepare_v2(m_db, sSQL, -1, &statement, NULL);
+	if (res)
+	{
+		trace("Prepare Failure (%s)\n", sqlite3_errmsg(m_db));
+		return false;
+	}
+	int current_zone=-1;
+	bool bFirstRow = false;
+	while (sqlite3_step(statement) == SQLITE_ROW)
+	{
+		int zone = sqlite3_column_int(statement, 0);
+		if (current_zone != zone)
+		{
+			fprintf(stream_file, "%s\t\t{\n\t\t\t\"zone\" : %d,\n\t\t\t\"entries\" : [", current_zone==-1?"":"\n\t\t\t]\n\t\t},\n", zone);
+			current_zone = zone;
+			bFirstRow = true;
+		}
+		fprintf(stream_file, "%s\n\t\t\t\t{ \"date\":%ld, \"duration\":%d, \"schedule\":%d, \"seasonal\":%d, \"wunderground\":%d}",
+				bFirstRow ? "":",",
+				(long)sqlite3_column_int(statement, 1), sqlite3_column_int(statement, 2), sqlite3_column_int(statement, 3),
+				sqlite3_column_int(statement, 4), sqlite3_column_int(statement, 5));
+		bFirstRow = false;
+	}
+	if (current_zone!=-1)
+	{
+		fprintf(stream_file, "\n\t\t\t]\n\t\t}\n");
+	}
+
+	sqlite3_finalize(statement);
+
+	return true;
+}
+
+
