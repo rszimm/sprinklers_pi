@@ -26,11 +26,16 @@ int main(int argc, char **argv)
 
 	char * logfile = 0;
 	int c = -1;
-	while ((c = getopt(argc, argv, "?L:")) != -1)
+	while ((c = getopt(argc, argv, "?L:Vv")) != -1)
 		switch (c)
 		{
 		case 'L':
 			logfile = optarg;
+			break;
+		case 'V':
+		case 'v':
+			fprintf(stderr, "Version %s\n", VERSION);
+			return 0;
 			break;
         case '?':
           if (optopt == 'L')
