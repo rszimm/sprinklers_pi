@@ -262,8 +262,8 @@ void LoadSchedTimeEvents(int8_t sched_num, bool bQuickSchedule)
 			else
 			{
 				events[iNumEvents].time = start_time;
-				events[iNumEvents].command = 0x01;
-				events[iNumEvents].data[0] = k + 1;
+				events[iNumEvents].command = 0x01; // Turn on a zone
+				events[iNumEvents].data[0] = k + 1; // Zone to turn on
 				events[iNumEvents].data[1] = (start_time + sched.zone_duration[k]) >> 8;
 				events[iNumEvents].data[2] = (start_time + sched.zone_duration[k]) & 0x00FF;
 				iNumEvents++;
@@ -273,9 +273,10 @@ void LoadSchedTimeEvents(int8_t sched_num, bool bQuickSchedule)
 	}
 	// Load up the last turn off event.
 	events[iNumEvents].time = start_time;
-	events[iNumEvents].command = 0x02;
+	events[iNumEvents].command = 0x02; // Turn off all zones
 	events[iNumEvents].data[0] = 0;
 	events[iNumEvents].data[1] = 0;
+	events[iNumEvents].data[2] = 0;
 	iNumEvents++;
 	runState.SetSchedule(true, bQuickSchedule?99:sched_num, &adj);
 }
@@ -326,6 +327,7 @@ void ReloadEvents(bool bAllEvents)
 						events[iNumEvents].command = 0x03;  // load events for schedule i, time j
 						events[iNumEvents].data[0] = i;
 						events[iNumEvents].data[1] = j;
+						events[iNumEvents].data[2] = 0;
 						iNumEvents++;
 					}
 				}
@@ -352,7 +354,7 @@ static void ProcessEvents()
 				runState.ContinueSchedule(events[i].data[0], events[i].data[1] << 8 | events[i].data[2]);
 				events[i].time = -1;
 				break;
-			case 0x02:  // turn of all valves
+			case 0x02:  // turn off all valves
 				TurnOffZones();
 				runState.SetSchedule(false);
 				events[i].time = -1;
