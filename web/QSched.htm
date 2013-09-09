@@ -18,7 +18,9 @@
             $('#schedsel').empty();
             for (var i=0; i< data.Table.length; i++) {
               if (data.Table[i].e == "on")
-                $('#schedsel').append($('<option>', { value: data.Table[i].id }).text(data.Table[i].name)); 
+                $('#schedsel').append($('<option>', { value: data.Table[i].id }).text(data.Table[i].name));
+              else
+                $('#schedsel').append($('<option>', { value: data.Table[i].id }).text(data.Table[i].name+' (disabled)'));
             }
             $('#schedsel').append($('<option>', { value: "-1" }).text("Custom")).val(-1).selectmenu('refresh'); 
             onSelChange();
