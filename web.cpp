@@ -106,12 +106,12 @@ static void JSONSchedules(const KVPairs & key_value_pairs, FILE * stream_file)
 	ServeHeader(stream_file, 200, "OK", false, "text/plain");
 	int iNumSchedules = GetNumSchedules();
 	fprintf(stream_file, "{\n\"Table\" : [\n");
-	Schedule sched = {0};
+	Schedule sched;
 	for (int i = 0; i < iNumSchedules; i++)
 	{
 		LoadSchedule(i, &sched);
 		fprintf_P(stream_file, PSTR("%s\t{\"id\" : %d, \"name\" : \"%s\", \"e\" : \"%s\" }"), (i == 0) ? "" : ",\n", i, sched.name,
-				(sched.type & 0x01) ? "on" : "off");
+				(sched.IsEnabled()) ? "on" : "off");
 	}
 	fprintf(stream_file, "\n]}");
 }
@@ -296,7 +296,7 @@ static void JSONSchedule(const KVPairs & key_value_pairs, FILE * stream_file)
 	LoadSchedule(sched_num, &sched);
 	fprintf_P(stream_file,
 			PSTR("{\n\t\"name\" : \"%s\",\n\t\"enabled\" : \"%s\",\n\t\"wadj\" : \"%s\",\n\t\"type\" : \"%s\",\n\t\"d1\" : \"%s\",\n\t\"d2\" : \"%s\""),
-			sched.name, sched.type & 0x01 ? "on" : "off", sched.type & 0x04 ? "on" : "off", sched.type & 0x02 ? "off" : "on", sched.day & 0x01 ? "on" : "off",
+			sched.name, sched.IsEnabled() ? "on" : "off", sched.IsWAdj() ? "on" : "off", sched.IsInterval() ? "off" : "on", sched.day & 0x01 ? "on" : "off",
 			sched.day & 0x02 ? "on" : "off");
 	fprintf_P(stream_file,
 			PSTR(",\n\t\"d3\" : \"%s\",\n\t\"d4\" : \"%s\",\n\t\"d5\" : \"%s\",\n\t\"d6\" : \"%s\",\n\t\"d7\" : \"%s\",\n\t\"interval\" : \"%d\",\n\t\"times\" : [\n"),
@@ -376,12 +376,12 @@ static void ServeSchedPage(FILE * stream_file)
 	{
 		LoadSchedule(iSchedNum, &sched);
 		fprintf_P(stream_file, PSTR("<hr/>Schedule #%d<br/>"), iSchedNum);
-		if (sched.type & 0x01)
+		if (sched.IsEnabled())
 			fprintf_P(stream_file, PSTR("Enabled"));
 		else
 			fprintf_P(stream_file, PSTR("Not Enabled"));
 		fprintf_P(stream_file, PSTR("<br/>Name:%s<br/>"), sched.name);
-		if (sched.type & 0x02)
+		if (sched.IsInterval())
 			fprintf_P(stream_file, PSTR("Interval : %d"), sched.interval);
 		else
 		{

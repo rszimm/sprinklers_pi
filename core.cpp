@@ -204,7 +204,7 @@ void TurnOnZone(int iValve)
 static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 {
 	runStateClass::DurationAdjustments adj(100);
-	if (sched->type & 0x04)
+	if (sched->IsWAdj())
 	{
 		Weather w;
 		char key[17];
@@ -223,9 +223,9 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 // return true if the schedule is enabled and runs today.
 static inline bool IsRunToday(const Schedule & sched, time_t time_now)
 {
-	if ((sched.type & 0x01)
-			&& (((sched.type & 0x02) && ((elapsedDays(time_now) % sched.interval) == 0))
-					|| (!(sched.type & 0x02) && (sched.day & (0x01 << (weekday(time_now) - 1))))))
+	if ((sched.IsEnabled())
+			&& (((sched.IsInterval()) && ((elapsedDays(time_now) % sched.interval) == 0))
+					|| (!(sched.IsInterval()) && (sched.day & (0x01 << (weekday(time_now) - 1))))))
 		return true;
 	return false;
 }

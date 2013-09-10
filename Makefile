@@ -2,7 +2,7 @@
 # Makefile for the Sprinkling System
 # $Id: Makefile 578 2012-10-08 22:42:44Z rzimmerman $
 
-VERSION=1.0.4
+VERSION=1.0.5
 
 BUILD_DIR=build
 CC=gcc

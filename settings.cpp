@@ -44,6 +44,15 @@
 #error Number of Schedules is too large
 #endif
 
+Schedule::Schedule() : m_type(0), day(0)
+{
+	name[0] = 0;
+	for (uint8_t i=0; i<sizeof(time)/sizeof(time[0]); i++)
+		time[i] = -1;
+	for (uint8_t i=0; i<sizeof(zone_duration)/sizeof(zone_duration[0]); i++)
+		zone_duration[i] = 0;
+}
+
 void LoadSchedule(uint8_t num, Schedule * pSched)
 {
 	if (num < 0 || num >= MAX_SCHEDULES)
@@ -146,9 +155,8 @@ static IPAddress decodeIP(const char * value)
 bool SetSchedule(const KVPairs & key_value_pairs)
 {
 	freeMemory();
-	Schedule sched = {0};
+	Schedule sched;
 	int sched_num = -1;
-	sched.type = 0;
 	sched.day = 0;
 	sched.time[0] = -1;
 	sched.time[1] = -1;
@@ -166,36 +174,21 @@ bool SetSchedule(const KVPairs & key_value_pairs)
 			sched_num = atoi(value);
 		}
 		else if (strcmp(key, "type") == 0)
-		{
-			if (strcmp(value, "on") == 0)
-				sched.type &= ~0x02;
-			else
-				sched.type |= 0x02;
-		}
+			sched.SetInterval(strcmp(value, "on") != 0);
 		else if (strcmp(key, "enable") == 0)
-		{
-			if (strcmp(value, "on") == 0)
-				sched.type |= 0x01;
-			else
-				sched.type &= ~0x01;
-		}
+			sched.SetEnabled(strcmp(value, "on") == 0);
 		else if (strcmp(key, "wadj") == 0)
-		{
-			if (strcmp(value, "on") == 0)
-				sched.type |= 0x04;
-			else
-				sched.type &= ~0x04;
-		}
+			sched.SetWAdj(strcmp(value, "on") == 0);
 		else if (strcmp(key, "name") == 0)
 		{
 			decode(sched.name, value, sizeof(sched.name));
 		}
 		else if (strcmp(key, "interval") == 0)
 		{
-			if (sched.type & 0x02)
+			if (sched.IsInterval())
 				sched.interval = atoi(value);
 		}
-		else if ((key[0] == 'd') && (key[2] == 0) && ((key[1] >= '1') && (key[1] <= '7')) && !(sched.type & 0x02))
+		else if ((key[0] == 'd') && (key[2] == 0) && ((key[1] >= '1') && (key[1] <= '7')) && !(sched.IsInterval()))
 		{
 			if (strcmp(value, "on") == 0)
 				sched.day = sched.day | 0x01 << (key[1] - '1');
@@ -286,7 +279,7 @@ bool DeleteSchedule(const KVPairs & key_value_pairs)
 	if ((sched_num < 0) || (sched_num >= iNumSchedules))
 		return false;
 
-	Schedule sched = {0};
+	Schedule sched;
 	for (int i = sched_num; i < (iNumSchedules - 1); i++)
 	{
 		LoadSchedule(i + 1, &sched);

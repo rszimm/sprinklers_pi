@@ -15,9 +15,11 @@
 #include "web.h"
 #include "port.h"
 
-struct Schedule
+class Schedule
 {
-	uint8_t type;
+private:
+	uint8_t m_type;
+public:
 	union
 	{
 		uint8_t day;
@@ -26,6 +28,13 @@ struct Schedule
 	char name[20];
 	short time[4];
 	uint8_t zone_duration[15];
+	Schedule();
+	bool IsEnabled() const { return m_type & 0x01; }
+	bool IsInterval() const { return m_type & 0x02; }
+	bool IsWAdj() const { return m_type & 0x04; }
+	void SetEnabled(bool val) { m_type = val ? (m_type | 0x01) : (m_type & ~0x01); }
+	void SetInterval(bool val) { m_type = val ? (m_type | 0x02) : (m_type & ~0x02); }
+	void SetWAdj(bool val) { m_type = val ? (m_type | 0x04) : (m_type & ~0x04); }
 };
 
 struct FullZone
