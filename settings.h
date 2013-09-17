@@ -98,7 +98,7 @@ bool SetSettings(const KVPairs & key_value_pairs);
 // Misc
 bool IsFirstBoot();
 void ResetEEPROM();
-int GetNumZones();
+int GetNumEnabledZones();
 
 // For storing info related to the Quick Schedule
 extern Schedule quickSchedule;

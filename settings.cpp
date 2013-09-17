@@ -605,9 +605,17 @@ bool IsFirstBoot()
 	return true;
 }
 
-int GetNumZones()
+int GetNumEnabledZones()
 {
-	return NUM_ZONES;
+	ShortZone sz;
+	int retval = 0;
+	for (int i=0; i<NUM_ZONES; i++)
+	{
+		LoadShortZone(i, &sz);
+		if (sz.bEnabled)
+			retval++;
+	}
+	return retval;
 }
 
 Schedule quickSchedule;

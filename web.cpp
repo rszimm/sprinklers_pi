@@ -253,7 +253,7 @@ static void JSONState(const KVPairs & key_value_pairs, FILE * stream_file)
 	ServeHeader(stream_file, 200, "OK", false, "text/plain");
 	fprintf_P(stream_file,
 			PSTR("{\n\t\"version\" : \"%s\",\n\t\"run\" : \"%s\",\n\t\"zones\" : \"%d\",\n\t\"schedules\" : \"%d\",\n\t\"timenow\" : \"%lu\",\n\t\"events\" : \"%d\""),
-			VERSION, GetRunSchedules() ? "on" : "off", NUM_ZONES, GetNumSchedules(), nntpTimeServer.LocalNow(), iNumEvents);
+			VERSION, GetRunSchedules() ? "on" : "off", GetNumEnabledZones(), GetNumSchedules(), nntpTimeServer.LocalNow(), iNumEvents);
 	if (runState.isSchedule() || runState.isManual())
 	{
 		FullZone zone;
