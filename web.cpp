@@ -527,13 +527,32 @@ static void ServeFile(FILE * stream_file, const char * fname, SdFile & theFile, 
 	}
 }
 
+// change a character represented hex digit (0-9, a-f, A-F) to the numeric value
+static inline char hex2int(const char ch)
+{
+	if (ch < 48)
+		return 0;
+	else if (ch <=57) // 0-9
+		return (ch - 48);
+	else if (ch < 65)
+		return 0;
+	else if (ch <=70) // A-F
+		return (ch - 55);
+	else if (ch < 97)
+		return 0;
+	else if (ch <=102) // a-f
+		return ch - 87;
+	else
+		return 0;
+}
+
 //  Pass in a connected client, and this function will parse the HTTP header and return the requested page 
 //   and a KV pairs structure for the variable assignments.
 static bool ParseHTTPHeader(EthernetClient & client, KVPairs * key_value_pairs, char * sPage, int iPageSize)
 {
 	enum
 	{
-		INITIALIZED = 0, PARSING_PAGE, PARSING_KEY, PARSING_VALUE, LOOKING_FOR_BLANKLINE, FOUND_BLANKLINE, DONE, ERROR
+		INITIALIZED = 0, PARSING_PAGE, PARSING_KEY, PARSING_VALUE, PARSING_VALUE_PERCENT, PARSING_VALUE_PERCENT1, LOOKING_FOR_BLANKLINE, FOUND_BLANKLINE, DONE, ERROR
 	} current_state = INITIALIZED;
 	// an http request ends with a blank line
 	static const char get_text[] = "GET /";
@@ -632,6 +651,8 @@ static bool ParseHTTPHeader(EthernetClient & client, KVPairs * key_value_pairs, 
 			}
 			break;
 		case PARSING_VALUE:
+		case PARSING_VALUE_PERCENT:
+		case PARSING_VALUE_PERCENT1:
 			if ((c == ' ') || c == '&')
 			{
 				*value_ptr = 0;
@@ -663,9 +684,40 @@ static bool ParseHTTPHeader(EthernetClient & client, KVPairs * key_value_pairs, 
 					current_state = ERROR;
 					break;
 				}
-				*value_ptr++ = c;
+				switch (current_state)
+				{
+				case PARSING_VALUE_PERCENT:
+					if (isxdigit(c))
+					{
+						*value_ptr = hex2int(c) << 4;
+						current_state = PARSING_VALUE_PERCENT1;
+					}
+					else
+						current_state = PARSING_VALUE;
+					break;
+				case PARSING_VALUE_PERCENT1:
+					if (isxdigit(c))
+					{
+						*value_ptr += hex2int(c);
+						// let's check this value to see if it's legal
+						if (((*value_ptr >= 0 ) && (*value_ptr < 32)) || (*value_ptr == 127) || (*value_ptr == '"') || (*value_ptr == '\\'))
+							*value_ptr = ' ';
+						value_ptr++;
+					}
+					current_state = PARSING_VALUE;
+					break;
+				default:
+					if (c == '+')
+						*value_ptr++ = ' ';
+					else if (c == '%')
+						current_state = PARSING_VALUE_PERCENT;
+					else
+						*value_ptr++ = c;
+					break;
+				}
 			}
-
+			else
+				current_state = ERROR;
 			break;
 		case LOOKING_FOR_BLANKLINE:
 			if (c == '\n')

@@ -27,7 +27,7 @@
           var zone_id = String.fromCharCode(97+j);
           var new_ctl = $('<div data-role="collapsible" data-collapsed="true">' +
             '<h3>Zone ' + j + '</h3><label for="z' + zone_id + 'name">Name</label>' +
-            '<input name="z' + zone_id + 'name" id="z' + zone_id + 'name" placeholder="" value="' + name + '" type="text" maxlength=20/>' +
+            '<input name="z' + zone_id + 'name" id="z' + zone_id + 'name" placeholder="" value="' + name + '" type="text" maxlength=19/>' +
             '<fieldset data-role="controlgroup" data-type="vertical">' +
             '<input id="cb' + zone_id + 'e" name="z' + zone_id + 'e" type="checkbox" ' + ((enabled == 'on') ? 'checked="on"' : '') + '/>' +
             '<label for="cb' + zone_id + 'e">Enabled</label>' +

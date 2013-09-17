@@ -95,37 +95,6 @@ void LoadShortZone(uint8_t num, ShortZone * pZone)
 		*((char*) pZone + i) = EEPROM.read(ZONE_OFFSET + i + ZONE_INDEX * num);
 }
 
-// decode an input character string one byte at a time
-void decode(char * dest, const char * source, int buflen)
-{
-	if (buflen < 1)
-		return;
-	char * dest_end = dest;
-	char c = 0;
-	do
-	{
-		switch (*source)
-		{
-		case '+':
-			source++;
-			c = ' ';
-			break;
-		case '%':
-			if (isdigit(source[1]) && isdigit(source[2]))
-			{
-				source += 3;
-				c = source[1] * 10 + source[2];
-			}
-			break;
-		default:
-			c = *source;
-			source++;
-			break;
-		}
-	} while ((*(dest_end++) = c) && (dest_end - dest < buflen));
-	dest[buflen - 1] = 0;
-}
-
 // Decode an IP address in dotted decimal format.
 static IPAddress decodeIP(const char * value)
 {
@@ -180,9 +149,7 @@ bool SetSchedule(const KVPairs & key_value_pairs)
 		else if (strcmp(key, "wadj") == 0)
 			sched.SetWAdj(strcmp(value, "on") == 0);
 		else if (strcmp(key, "name") == 0)
-		{
-			decode(sched.name, value, sizeof(sched.name));
-		}
+			strncpy(sched.name, value, sizeof(sched.name));
 		else if (strcmp(key, "interval") == 0)
 		{
 			if (sched.IsInterval())
@@ -301,9 +268,7 @@ bool SetZones(const KVPairs & key_value_pairs)
 		{
 			int zone_num = key[1] - 'b';
 			if (memcmp(key + 2, "name", 5) == 0)
-			{
-				decode(zones[zone_num].name, value, sizeof(zones[zone_num].name));
-			}
+				strncpy(zones[zone_num].name, value, sizeof(zones[zone_num].name));
 			else if ((key[2] == 'e') && (key[3] == 0))
 			{
 				if (strcmp(value, "on") == 0)
