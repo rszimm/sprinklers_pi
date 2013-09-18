@@ -2,7 +2,6 @@
 // This file constitutes the core functions that run the scheduling for the Sprinkler system.
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: core.h 609 2013-06-28 00:25:31Z rzimmerman $
 //
 
 #ifndef _CORE_h

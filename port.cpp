@@ -3,7 +3,6 @@
 //  AVR (e.g. Arduino) system to a more standard Linux based (e.g. Raspberry Pi) system.
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: $
 //
 
 #include "port.h"

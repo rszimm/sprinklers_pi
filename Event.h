@@ -2,7 +2,6 @@
 // This defines the Event Object used for timing in the Sprinkling System.
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: Event.h 609 2013-06-28 00:25:31Z rzimmerman $
 //
 
 #ifndef _EVENT_h

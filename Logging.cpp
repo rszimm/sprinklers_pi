@@ -2,7 +2,6 @@
 // This manages the Logging to SQL for the Sprinkling System.
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: $
 //
 
 #define __STDC_FORMAT_MACROS

@@ -2,7 +2,6 @@
 // This file manages the storage of data to a non volatile structure (e.g. EEPROM or filesystem)
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: settings.cpp 614 2013-08-27 22:31:13Z rzimmerman $
 //
 
 #include "settings.h"

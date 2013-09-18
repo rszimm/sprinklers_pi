@@ -1,6 +1,5 @@
 #
 # Makefile for the Sprinkling System
-# $Id: Makefile 578 2012-10-08 22:42:44Z rzimmerman $
 
 VERSION=1.0.6
 

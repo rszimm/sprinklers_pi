@@ -2,7 +2,6 @@
 // Main entry point
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: $
 //
 
 #include "core.h"

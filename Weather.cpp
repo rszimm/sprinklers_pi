@@ -3,7 +3,6 @@
 //   from Weather Underground
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: Weather.cpp 613 2013-06-30 23:11:59Z rzimmerman $
 //
 
 #include "Weather.h"

@@ -3,7 +3,6 @@
 //   from Weather Underground
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: Weather.h 609 2013-06-28 00:25:31Z rzimmerman $
 //
 
 #ifndef _WEATHER_h

@@ -2,7 +2,6 @@
 // This file manages the web server for the Sprinkler System
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
-//  $Id: web.h 609 2013-06-28 00:25:31Z rzimmerman $
 //
 
 #ifndef _WEB_h
