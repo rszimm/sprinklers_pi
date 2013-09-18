@@ -163,11 +163,11 @@ bool SetSchedule(const KVPairs & key_value_pairs)
 		}
 		else if ((key[0] == 't') && (key[2] == 0) && ((key[1] >= '1') && (key[1] <= '4')))
 		{
-			const char * colon_loc = strstr(value, "%3A");
+			const char * colon_loc = strstr(value, ":");
 			if (colon_loc > 0)
 			{
 				int hour = strtol(value, NULL, 10);
-				int minute = strtol(colon_loc + 3, NULL, 10);
+				int minute = strtol(colon_loc + 1, NULL, 10);
 				bool bIsPM = strstr(value, "PM") || strstr(value, "pm");
 				if (bIsPM)
 					hour += 12;
