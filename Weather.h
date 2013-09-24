@@ -22,6 +22,8 @@ public:
 		short meantempi;
 		short precip_today;
 		short precipi;
+		short windmph;
+		short UV;
 	};
 public:
 	Weather(void);

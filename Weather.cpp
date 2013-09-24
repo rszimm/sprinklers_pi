@@ -93,7 +93,7 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 			}
 			break;
 		case PARSING_VALUE:
-			if ((c >= '0') && (c <= '9'))
+			if (((c >= '0') && (c <= '9')) || (c == '.'))
 			{
 				*valptr = c;
 				valptr++;
@@ -102,7 +102,6 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 			{
 				current_state = FIND_QUOTE1;
 				*valptr = 0;
-				// TODO:  Parse things here.
 			}
 			break;
 		case PARSING_QVALUE:
@@ -132,6 +131,14 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 				else if (strcmp(key, "precipi") == 0)
 				{
 					ret->precipi = (atof(val) * 100.0);
+				}
+				else if (strcmp(key, "UV") == 0)
+				{
+					ret->UV = (atof(val) * 10.0);
+				}
+				else if (strcmp(key, "meanwindspdi") == 0)
+				{
+					ret->windmph = (atof(val) * 10.0);
 				}
 				else if (strcmp(key, "type") == 0)
 				{

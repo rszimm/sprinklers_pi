@@ -26,6 +26,8 @@
               $('#wuText').append("<br/>Mean Temp: " + data.meantempi + "&deg;F");
               $('#wuText').append("<br/>Precip Today: " + data.precip_today/100 + "\"");
               $('#wuText').append("<br/>Precip Yesterday: " + data.precip/100 + "\"");
+              $('#wuText').append("<br/>Wind Yesterday: " + data.wind_mph/10 + "mph");
+              $('#wuText').append("<br/>UV Now: " + data.UV/10 + " ");
               $('#wuText').append("<br/>Overall Scale: " + data.scale + "%");
             }
           }}); // ajax
