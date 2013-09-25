@@ -11,8 +11,32 @@
    <rect width="287.424" x="0.288" y="0.288" fill="none" height="215.424" stroke="black" fill-opacity="0.5" id="boardoutline" stroke-width="0.5"/>
   </g>
  </g>
+ <g partID="792572">
+  <g transform="translate(159.339,125.43)">
+   <g gorn="0.2" id="silkscreen">
+    <line stroke="black" y1="3.096" x1="5.4" y2="3.096" stroke-width="0.72" x2="10.584"/>
+    <line stroke="black" y1="3.096" x1="24.984" y2="3.096" stroke-width="0.72" x2="28.8"/>
+    <line stroke="black" y1="0.72" x1="10.584" y2="0.72" stroke-width="0.72" x2="24.984"/>
+    <line stroke="black" y1="0.72" x1="24.984" y2="5.472" stroke-width="0.72" x2="24.984"/>
+    <line stroke="black" y1="5.472" x1="24.984" y2="5.472" stroke-width="0.72" x2="10.584"/>
+    <line stroke="black" y1="5.472" x1="10.584" y2="0.72" stroke-width="0.72" x2="10.584"/>
+   </g>
+  </g>
+ </g>
+ <g partID="792882">
+  <g transform="translate(123.339,125.43)">
+   <g gorn="0.2" id="silkscreen">
+    <line stroke="black" y1="3.096" x1="5.4" y2="3.096" stroke-width="0.72" x2="10.584"/>
+    <line stroke="black" y1="3.096" x1="24.984" y2="3.096" stroke-width="0.72" x2="28.8"/>
+    <line stroke="black" y1="0.72" x1="10.584" y2="0.72" stroke-width="0.72" x2="24.984"/>
+    <line stroke="black" y1="0.72" x1="24.984" y2="5.472" stroke-width="0.72" x2="24.984"/>
+    <line stroke="black" y1="5.472" x1="24.984" y2="5.472" stroke-width="0.72" x2="10.584"/>
+    <line stroke="black" y1="5.472" x1="10.584" y2="0.72" stroke-width="0.72" x2="10.584"/>
+   </g>
+  </g>
+ </g>
  <g partID="784242">
-  <g transform="translate(148.536,50.2006)">
+  <g transform="translate(148.535,50.2008)">
    <g id="silkscreen">
     <line class="other" stroke="black" stroke-linecap="round" y1="0.288" x1="0.288" y2="0.288" stroke-width="0.576" x2="33.1699"/>
     <line class="other" stroke="black" stroke-linecap="round" y1="0.288" x1="33.1699" y2="17.8628" stroke-width="0.576" x2="33.1699"/>
@@ -27,6 +51,17 @@
  <g partID="19232">
   <g id="silkscreen">
    <rect width="287.424" x="0.288" y="0.288" fill="none" height="215.424" stroke="black" stroke-width="0.576"/>
+  </g>
+ </g>
+ <g partID="793622">
+  <g transform="translate(17.4632,175.766)">
+   <g id="silkscreen">
+    <line stroke="black" id="vertical-left" y1="1.44" stroke-width="0.72" x1="1.44" y2="31.9238" x2="1.44"/>
+    <line stroke="black" id="bottom" y1="31.9238" stroke-width="0.72" x1="1.44" y2="31.9238" x2="16.992"/>
+    <line stroke="black" id="vertical-right" y1="31.9238" stroke-width="0.72" x1="16.992" y2="1.44" x2="16.992"/>
+    <line stroke="black" id="top" y1="1.44" stroke-width="0.72" x1="16.992" y2="1.44" x2="1.44"/>
+    <line stroke="black" id="mid-vertical" y1="31.9238" stroke-width="0.36" x1="14.112" y2="1.44" x2="14.112"/>
+   </g>
   </g>
  </g>
  <g partID="677682">
@@ -162,66 +197,31 @@
    </g>
   </g>
  </g>
- <g partID="792572">
-  <g transform="translate(159.339,125.43)">
-   <g gorn="0.2" id="silkscreen">
-    <line stroke="black" y1="3.096" x1="5.4" y2="3.096" stroke-width="0.72" x2="10.584"/>
-    <line stroke="black" y1="3.096" x1="24.984" y2="3.096" stroke-width="0.72" x2="28.8"/>
-    <line stroke="black" y1="0.72" x1="10.584" y2="0.72" stroke-width="0.72" x2="24.984"/>
-    <line stroke="black" y1="0.72" x1="24.984" y2="5.472" stroke-width="0.72" x2="24.984"/>
-    <line stroke="black" y1="5.472" x1="24.984" y2="5.472" stroke-width="0.72" x2="10.584"/>
-    <line stroke="black" y1="5.472" x1="10.584" y2="0.72" stroke-width="0.72" x2="10.584"/>
-   </g>
-  </g>
- </g>
- <g partID="792882">
-  <g transform="translate(123.339,125.43)">
-   <g gorn="0.2" id="silkscreen">
-    <line stroke="black" y1="3.096" x1="5.4" y2="3.096" stroke-width="0.72" x2="10.584"/>
-    <line stroke="black" y1="3.096" x1="24.984" y2="3.096" stroke-width="0.72" x2="28.8"/>
-    <line stroke="black" y1="0.72" x1="10.584" y2="0.72" stroke-width="0.72" x2="24.984"/>
-    <line stroke="black" y1="0.72" x1="24.984" y2="5.472" stroke-width="0.72" x2="24.984"/>
-    <line stroke="black" y1="5.472" x1="24.984" y2="5.472" stroke-width="0.72" x2="10.584"/>
-    <line stroke="black" y1="5.472" x1="10.584" y2="0.72" stroke-width="0.72" x2="10.584"/>
-   </g>
-  </g>
- </g>
- <g partID="793622">
-  <g transform="translate(17.4632,175.766)">
-   <g id="silkscreen">
-    <line stroke="black" id="vertical-left" y1="1.44" stroke-width="0.72" x1="1.44" y2="31.9238" x2="1.44"/>
-    <line stroke="black" id="bottom" y1="31.9238" stroke-width="0.72" x1="1.44" y2="31.9238" x2="16.992"/>
-    <line stroke="black" id="vertical-right" y1="31.9238" stroke-width="0.72" x1="16.992" y2="1.44" x2="16.992"/>
-    <line stroke="black" id="top" y1="1.44" stroke-width="0.72" x1="16.992" y2="1.44" x2="1.44"/>
-    <line stroke="black" id="mid-vertical" y1="31.9238" stroke-width="0.36" x1="14.112" y2="1.44" x2="14.112"/>
-   </g>
-  </g>
- </g>
  <g id="partLabel" partID="67220">
-  <g transform="translate(72.9896,47.7915)">
+  <g transform="translate(72.9896,47.7912)">
    <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
     <text x="0" y="3.75">Raspberry Pi</text>
    </g>
   </g>
  </g>
  <g id="partLabel" partID="784240">
-  <g transform="translate(158.527,45.1339)">
+  <g transform="translate(158.527,45.1336)">
    <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
     <text x="0" y="3.75">JP1</text>
    </g>
   </g>
  </g>
- <g id="partLabel" partID="792570">
-  <g transform="translate(173.628,119.83)">
+ <g id="partLabel" partID="677680">
+  <g transform="translate(23.0952,58.6688)">
    <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
-    <text x="0" y="3.75">R2</text>
+    <text x="0" y="3.75">J2</text>
    </g>
   </g>
  </g>
- <g id="partLabel" partID="677680">
-  <g transform="translate(23.0952,58.6691)">
+ <g id="partLabel" partID="793620">
+  <g transform="translate(23.4504,170.521)">
    <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
-    <text x="0" y="3.75">J2</text>
+    <text x="0" y="3.75">J1</text>
    </g>
   </g>
  </g>
@@ -232,10 +232,10 @@
    </g>
   </g>
  </g>
- <g id="partLabel" partID="793620">
-  <g transform="translate(23.4508,170.521)">
+ <g id="partLabel" partID="792570">
+  <g transform="translate(173.628,119.83)">
    <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
-    <text x="0" y="3.75">J1</text>
+    <text x="0" y="3.75">R2</text>
    </g>
   </g>
  </g>
@@ -247,37 +247,9 @@
   </g>
  </g>
  <g id="partLabel" partID="772680">
-  <g transform="translate(73.2036,119.584)">
+  <g transform="translate(73.204,119.584)">
    <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
     <text x="0" y="3.75">SSR1</text>
-   </g>
-  </g>
- </g>
- <g id="partLabel" partID="772840">
-  <g transform="translate(186.626,170.695)">
-   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
-    <text x="0" y="3.75">SSR10</text>
-   </g>
-  </g>
- </g>
- <g id="partLabel" partID="772760">
-  <g transform="translate(107.426,119.051)">
-   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
-    <text x="0" y="3.75">SSR2</text>
-   </g>
-  </g>
- </g>
- <g id="partLabel" partID="772720">
-  <g transform="translate(230.715,119.762)">
-   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
-    <text x="0" y="3.75">SSR5</text>
-   </g>
-  </g>
- </g>
- <g id="partLabel" partID="772780">
-  <g transform="translate(151.87,170.518)">
-   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
-    <text x="0" y="3.75">SSR9</text>
    </g>
   </g>
  </g>
@@ -295,8 +267,15 @@
    </g>
   </g>
  </g>
+ <g id="partLabel" partID="772780">
+  <g transform="translate(151.87,170.518)">
+   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
+    <text x="0" y="3.75">SSR9</text>
+   </g>
+  </g>
+ </g>
  <g id="partLabel" partID="772740">
-  <g transform="translate(72.8481,171.051)">
+  <g transform="translate(72.848,171.051)">
    <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
     <text x="0" y="3.75">SSR7</text>
    </g>
@@ -309,8 +288,47 @@
    </g>
   </g>
  </g>
+ <g id="partLabel" partID="772720">
+  <g transform="translate(230.715,119.762)">
+   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
+    <text x="0" y="3.75">SSR5</text>
+   </g>
+  </g>
+ </g>
+ <g id="partLabel" partID="772840">
+  <g transform="translate(186.626,170.695)">
+   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
+    <text x="0" y="3.75">SSR10</text>
+   </g>
+  </g>
+ </g>
+ <g id="partLabel" partID="772760">
+  <g transform="translate(107.426,119.051)">
+   <g fill="#000000" font-family="'OCRA'" stroke="none" font-style="normal" fill-opacity="1" font-weight="normal" id="silkscreenLabel" font-size="5">
+    <text x="0" y="3.75">SSR2</text>
+   </g>
+  </g>
+ </g>
+ <g partID="792571">
+  <g transform="translate(159.339,125.43)">
+   <g gorn="0.3.0" id="copper1">
+    <rect width="3.96" x="0.72" y="1.116" fill="white" height="3.96" stroke="white" stroke-width="2.16"/>
+    <circle fill="white" cx="2.7" gorn="0.3.0.1" cy="3.096" stroke="white" r="1.98" id="connector0pin" stroke-width="2.16"/>
+    <circle fill="white" cx="31.5" gorn="0.3.0.2" cy="3.096" stroke="white" r="1.98" id="connector1pin" stroke-width="2.16"/>
+   </g>
+  </g>
+ </g>
+ <g partID="792881">
+  <g transform="translate(123.339,125.43)">
+   <g gorn="0.3.0" id="copper1">
+    <rect width="3.96" x="0.72" y="1.116" fill="white" height="3.96" stroke="white" stroke-width="2.16"/>
+    <circle fill="white" cx="2.7" gorn="0.3.0.1" cy="3.096" stroke="white" r="1.98" id="connector0pin" stroke-width="2.16"/>
+    <circle fill="white" cx="31.5" gorn="0.3.0.2" cy="3.096" stroke="white" r="1.98" id="connector1pin" stroke-width="2.16"/>
+   </g>
+  </g>
+ </g>
  <g partID="784241">
-  <g transform="translate(148.536,50.2006)">
+  <g transform="translate(148.535,50.2008)">
    <g id="copper1">
     <circle fill="white" cx="6.30369" cy="9.92581" connectorname="1" stroke="white" id="connector0pad" r="2.29039" stroke-width="1.89921"/>
     <path fill="white" stroke="white" stroke-width="0.72" d="m3.42369,7.04581,5.76,0,0,5.76001,-5.76,0,0,-8.50395zM4.6029,9.92581a1.70079,1.70079,0,1,0,3.40158,0,1.70079,1.70079,0,1,0,-3.40158,0z"/>
@@ -336,6 +354,18 @@
   <g transform="translate(85.6704,70.184)">
    <g id="copper1">
     <circle fill="white" cx="3.01733" cy="3.01733" stroke="white" r="0.992124" id="connector0pin" stroke-width="1.57039"/>
+   </g>
+  </g>
+ </g>
+ <g partID="793621">
+  <g transform="translate(17.4632,175.766)">
+   <g id="copper1">
+    <g id="copper0">
+     <rect width="4.32" x="5.616" y="4.60063" fill="white" height="4.32" stroke="white" id="square" stroke-width="2.16"/>
+     <circle fill="white" cx="7.776" cy="6.76063" stroke="white" id="connector0pin" r="2.16" stroke-width="2.16"/>
+     <circle fill="white" cx="7.776" cy="16.6819" stroke="white" id="connector1pin" r="2.16" stroke-width="2.16"/>
+     <circle fill="white" cx="7.776" cy="26.6031" stroke="white" id="connector2pin" r="2.16" stroke-width="2.16"/>
+    </g>
    </g>
   </g>
  </g>
@@ -570,36 +600,6 @@
       <circle fill="white" cx="4.32" gorn="0.3.0.7" cy="25.92" stroke="white" id="connector3pin" r="1.98" stroke-width="2.16"/>
       <circle fill="white" cx="25.92" gorn="0.3.0.8" cy="25.92" stroke="white" id="connector4pin" r="1.98" stroke-width="2.16"/>
      </g>
-    </g>
-   </g>
-  </g>
- </g>
- <g partID="792571">
-  <g transform="translate(159.339,125.43)">
-   <g gorn="0.3.0" id="copper1">
-    <rect width="3.96" x="0.72" y="1.116" fill="white" height="3.96" stroke="white" stroke-width="2.16"/>
-    <circle fill="white" cx="2.7" gorn="0.3.0.1" cy="3.096" stroke="white" r="1.98" id="connector0pin" stroke-width="2.16"/>
-    <circle fill="white" cx="31.5" gorn="0.3.0.2" cy="3.096" stroke="white" r="1.98" id="connector1pin" stroke-width="2.16"/>
-   </g>
-  </g>
- </g>
- <g partID="792881">
-  <g transform="translate(123.339,125.43)">
-   <g gorn="0.3.0" id="copper1">
-    <rect width="3.96" x="0.72" y="1.116" fill="white" height="3.96" stroke="white" stroke-width="2.16"/>
-    <circle fill="white" cx="2.7" gorn="0.3.0.1" cy="3.096" stroke="white" r="1.98" id="connector0pin" stroke-width="2.16"/>
-    <circle fill="white" cx="31.5" gorn="0.3.0.2" cy="3.096" stroke="white" r="1.98" id="connector1pin" stroke-width="2.16"/>
-   </g>
-  </g>
- </g>
- <g partID="793621">
-  <g transform="translate(17.4632,175.766)">
-   <g id="copper1">
-    <g id="copper0">
-     <rect width="4.32" x="5.616" y="4.60063" fill="white" height="4.32" stroke="white" id="square" stroke-width="2.16"/>
-     <circle fill="white" cx="7.776" cy="6.76063" stroke="white" id="connector0pin" r="2.16" stroke-width="2.16"/>
-     <circle fill="white" cx="7.776" cy="16.6819" stroke="white" id="connector1pin" r="2.16" stroke-width="2.16"/>
-     <circle fill="white" cx="7.776" cy="26.6031" stroke="white" id="connector2pin" r="2.16" stroke-width="2.16"/>
     </g>
    </g>
   </g>

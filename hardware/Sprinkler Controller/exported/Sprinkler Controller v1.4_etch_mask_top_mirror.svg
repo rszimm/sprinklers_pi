@@ -7,8 +7,26 @@
     <rect width="287.424" x="0.288" y="0.288" fill="none" height="215.424" stroke="black" fill-opacity="0.5" id="boardoutline" stroke-width="0.5"/>
    </g>
   </g>
+  <g partID="792571">
+   <g transform="translate(159.339,125.43)">
+    <g gorn="0.3.0"  id="copper1">
+     <rect width="3.96" x="0.72" y="1.116" fill="black"  height="3.96" stroke="black" stroke-width="2.16"/>
+     <circle fill="black" cx="2.7" gorn="0.3.0.1"  cy="3.096" stroke="black" r="1.98" id="connector0pin" stroke-width="2.16"/>
+     <circle fill="black" cx="31.5" gorn="0.3.0.2"  cy="3.096" stroke="black" r="1.98" id="connector1pin" stroke-width="2.16"/>
+    </g>
+   </g>
+  </g>
+  <g partID="792881">
+   <g transform="translate(123.339,125.43)">
+    <g gorn="0.3.0"  id="copper1">
+     <rect width="3.96" x="0.72" y="1.116" fill="black"  height="3.96" stroke="black" stroke-width="2.16"/>
+     <circle fill="black" cx="2.7" gorn="0.3.0.1"  cy="3.096" stroke="black" r="1.98" id="connector0pin" stroke-width="2.16"/>
+     <circle fill="black" cx="31.5" gorn="0.3.0.2"  cy="3.096" stroke="black" r="1.98" id="connector1pin" stroke-width="2.16"/>
+    </g>
+   </g>
+  </g>
   <g partID="784241">
-   <g transform="translate(148.536,50.2006)">
+   <g transform="translate(148.535,50.2008)">
     <g  id="copper1">
      <circle fill="black" cx="6.30369"  cy="9.92581" connectorname="1" stroke="black" id="connector0pad" r="2.29039" stroke-width="1.89921"/>
      <path fill="black"  stroke="black" stroke-width="0.72" d="m3.42369,7.04581,5.76,0,0,5.76001,-5.76,0,0,-8.50395zM4.6029,9.92581a1.70079,1.70079,0,1,0,3.40158,0,1.70079,1.70079,0,1,0,-3.40158,0z"/>
@@ -34,6 +52,18 @@
    <g transform="translate(85.6704,70.184)">
     <g  id="copper1">
      <circle fill="black" cx="3.01733"  cy="3.01733" stroke="black" r="0.992124" id="connector0pin" stroke-width="1.57039"/>
+    </g>
+   </g>
+  </g>
+  <g partID="793621">
+   <g transform="translate(17.4632,175.766)">
+    <g id="copper1">
+     <g id="copper0">
+      <rect width="4.32" x="5.616" y="4.60063" fill="black" height="4.32" stroke="black" id="square" stroke-width="2.16"/>
+      <circle fill="black" cx="7.776" cy="6.76063" stroke="black" id="connector0pin" r="2.16" stroke-width="2.16"/>
+      <circle fill="black" cx="7.776" cy="16.6819" stroke="black" id="connector1pin" r="2.16" stroke-width="2.16"/>
+      <circle fill="black" cx="7.776" cy="26.6031" stroke="black" id="connector2pin" r="2.16" stroke-width="2.16"/>
+     </g>
     </g>
    </g>
   </g>
@@ -268,36 +298,6 @@
        <circle fill="black" cx="4.32" gorn="0.3.0.7"  cy="25.92" stroke="black" id="connector3pin" r="1.98" stroke-width="2.16"/>
        <circle fill="black" cx="25.92" gorn="0.3.0.8"  cy="25.92" stroke="black" id="connector4pin" r="1.98" stroke-width="2.16"/>
       </g>
-     </g>
-    </g>
-   </g>
-  </g>
-  <g partID="792571">
-   <g transform="translate(159.339,125.43)">
-    <g gorn="0.3.0"  id="copper1">
-     <rect width="3.96" x="0.72" y="1.116" fill="black"  height="3.96" stroke="black" stroke-width="2.16"/>
-     <circle fill="black" cx="2.7" gorn="0.3.0.1"  cy="3.096" stroke="black" r="1.98" id="connector0pin" stroke-width="2.16"/>
-     <circle fill="black" cx="31.5" gorn="0.3.0.2"  cy="3.096" stroke="black" r="1.98" id="connector1pin" stroke-width="2.16"/>
-    </g>
-   </g>
-  </g>
-  <g partID="792881">
-   <g transform="translate(123.339,125.43)">
-    <g gorn="0.3.0"  id="copper1">
-     <rect width="3.96" x="0.72" y="1.116" fill="black"  height="3.96" stroke="black" stroke-width="2.16"/>
-     <circle fill="black" cx="2.7" gorn="0.3.0.1"  cy="3.096" stroke="black" r="1.98" id="connector0pin" stroke-width="2.16"/>
-     <circle fill="black" cx="31.5" gorn="0.3.0.2"  cy="3.096" stroke="black" r="1.98" id="connector1pin" stroke-width="2.16"/>
-    </g>
-   </g>
-  </g>
-  <g partID="793621">
-   <g transform="translate(17.4632,175.766)">
-    <g id="copper1">
-     <g id="copper0">
-      <rect width="4.32" x="5.616" y="4.60063" fill="black" height="4.32" stroke="black" id="square" stroke-width="2.16"/>
-      <circle fill="black" cx="7.776" cy="6.76063" stroke="black" id="connector0pin" r="2.16" stroke-width="2.16"/>
-      <circle fill="black" cx="7.776" cy="16.6819" stroke="black" id="connector1pin" r="2.16" stroke-width="2.16"/>
-      <circle fill="black" cx="7.776" cy="26.6031" stroke="black" id="connector2pin" r="2.16" stroke-width="2.16"/>
      </g>
     </g>
    </g>
