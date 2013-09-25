@@ -6,7 +6,7 @@ The layout was created in Fritzing (http://fritzing.org/) a free, open source, c
 
 Materials List:
 1 3"x4" Dual sided PCB (I used photoresist boards from Jameco)
-10 SSR with at least 0.8A 24V capacity, that can be switched by 3.3V. I used: Sharp PR29MF21NSZF http://www.digikey.com/product-search/en?WT.z_header=search_go&lang=en&site=us&keywords=425-2365-5-ND&x=0&y=0&formaction=on
+10 SSR with at least 0.8A 24VAC capacity, that can be switched by 3.3V. I used: Sharp PR29MF21NSZF http://www.digikey.com/product-search/en?WT.z_header=search_go&lang=en&site=us&keywords=425-2365-5-ND&x=0&y=0&formaction=on
 Snap together screw terminals with 3.5mm pitch:
  1 block of 10 (I did 4+4+2 but it doesn't matter)
  1 block of 3.
