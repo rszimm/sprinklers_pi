@@ -153,10 +153,24 @@ void io_setup()
 			trace("Failed to Setup Outputs\n");
 		}
 #endif
-		for (uint8_t i=0; i<sizeof(ZoneToIOMap); i++)
+		if (eot == OT_OPEN_SPRINKLER)
 		{
-			pinMode(ZoneToIOMap[i], OUTPUT);
-			digitalWrite(ZoneToIOMap[i], (eot==OT_DIRECT_NEG)?1:0);
+			pinMode(SR_CLK_PIN, OUTPUT);
+			digitalWrite(SR_CLK_PIN, 0);
+			pinMode(SR_NOE_PIN, OUTPUT);
+			digitalWrite(SR_NOE_PIN, 0);
+			pinMode(SR_DAT_PIN, OUTPUT);
+			digitalWrite(SR_DAT_PIN, 0);
+			pinMode(SR_LAT_PIN, OUTPUT);
+			digitalWrite(SR_LAT_PIN, 0);
+		}
+		else
+		{
+			for (uint8_t i=0; i<sizeof(ZoneToIOMap); i++)
+			{
+				pinMode(ZoneToIOMap[i], OUTPUT);
+				digitalWrite(ZoneToIOMap[i], (eot==OT_DIRECT_NEG)?1:0);
+			}
 		}
 	}
 	outState = 0;
