@@ -1,6 +1,29 @@
 #!/bin/bash
 
+if ! hash bc 2>/dev/null ; then
+  echo bc is required. Try "sudo apt-get install bc".
+  exit 2
+fi
+
+if [ $# -lt 1 -o $# -gt 2 ] ; then
+  echo "Usage: $0 [hours] [email]"
+  echo "hours: (required) number of hours in the past to report for."
+  echo "email: (optional) email address to send report to. If no email then prints to screen."
+  exit 1
+fi
+
 HOURS=$1
+
+if [ $# -eq 2 ] ; then
+  if ! hash mail 2>/dev/null ; then
+    echo mail program is required to send email
+    exit 2
+  fi
+  EMAIL=$2
+else
+  EMAIL=ECHO
+fi
+
 DB=/usr/local/etc/sprinklers_pi/db.sql
 TMPFILE=/tmp/spriklerreport.txt
 
@@ -31,3 +54,11 @@ for i in {1..15} ; do
     echo "Zone $i: $LOG seconds." >> $TMPFILE
   fi
 done
+
+if [ "$EMAIL" == "ECHO" ] ; then
+  cat $TMPFILE
+else
+  cat $TMPFILE | mail -s "Sprinkler Report `date`" $EMAIL
+fi
+
+rm $TMPFILE
