@@ -189,7 +189,7 @@ Weather::ReturnVals Weather::GetVals(const IPAddress & ip, const char * key, uin
 		char getstring[90];
 		trace(F("Connected\n"));
 		if (usePws)
-			snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/pws:%s.json HTTP/1.0\n\n", key, pws);
+			snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/zmw:%s.json HTTP/1.0\n\n", key, pws);
 		else
 			snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/%ld.json HTTP/1.0\n\n", key, (long) zip);
 		//trace(getstring);

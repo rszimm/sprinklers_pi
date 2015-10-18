@@ -29,6 +29,7 @@
 #define ADDR_SADJ				1011
 #define ADDR_PWS				1012
 #define ADDR_					1023
+#define PWS_LEN					15
 
 #define SCHEDULE_OFFSET 1200
 #define SCHEDULE_INDEX 60
@@ -472,13 +473,13 @@ void SetZip(const uint32_t zip)
 
 void GetPWS(char * key)
 {
-	for (int i=0; i<11; i++)
+	for (int i=0; i < PWS_LEN; i++)
 		key[i] = EEPROM.read(ADDR_PWS+i);
 }
 
 void SetPWS(const char * key)
 {
-	for (int i=0; i<11; i++)
+	for (int i=0; i < PWS_LEN; i++)
 		EEPROM.write(ADDR_PWS+i, key[i]);
 }
 
