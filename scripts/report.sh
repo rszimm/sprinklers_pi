@@ -7,7 +7,7 @@ SUPPRESS_EMAIL=1
 DB=/usr/local/etc/sprinklers_pi/db.sql
 
 #temporary file to write output to for sending email
-TMPFILE=/tmp/spriklerreport.txt
+TMPFILE=/tmp/sprinklerreport.txt
 
 
 if ! hash bc 2>/dev/null ; then
