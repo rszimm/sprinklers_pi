@@ -51,7 +51,7 @@ ifneq  ($(IUSER),root)
 endif
 	@cp -f $(LIBNAME) /usr/local/sbin
 	mkdir -p /web
-	-@cp -f web/* /web/
+	-@cp -rf web/* /web/
 	cp -f sprinklers_init.d.sh /etc/init.d/sprinklers_pi
 	chmod a+x /etc/init.d/sprinklers_pi
 	mkdir -p /usr/local
