@@ -761,7 +761,7 @@ void web::ProcessWebClients()
 		trace(F("Got a client\n"));
 		//ShowSockStatus();
 		KVPairs key_value_pairs;
-		char sPage[35];
+		char sPage[55];
 
 		if (!ParseHTTPHeader(client, &key_value_pairs, sPage, sizeof(sPage)))
 		{
