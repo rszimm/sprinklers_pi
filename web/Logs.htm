@@ -139,10 +139,10 @@
           if (data.logs.length == 0)
             list.html("<p align='center'>No entries in the selected date range</p>");
           else {
-            var tbl_html = "<div data-role='collapsible-set' data-inset='true' data-theme='b' data-collapsed-icon='arrow-d' data-expanded-icon='arrow-u'>";
+            var tbl_html = "<div data-role='collapsible-set' data-inset='true' data-theme='a' data-collapsed-icon='arrow-d' data-expanded-icon='arrow-u'>";
             for (var i=0; i<data.logs.length; i++) {
-              tbl_html += "<div data-role='collapsible' data-theme='b' data-content-theme='d' data-inset='true' data-collapsed='true'>" +
-                  "<h2><div class='ui-btn-up-c ui-btn-corner-all custom-count-pos'>" + data.logs[i].entries.length + 
+              tbl_html += "<div data-role='collapsible' data-theme='a' data-content-theme='a' data-inset='true' data-collapsed='true'>" +
+                  "<h2><div class='ui-btn ui-btn-corner-all custom-count-pos'>" + data.logs[i].entries.length +
                   ((data.logs[i].entries.length > 1)?" entries":" entry") + "</div>" + zonestorage[data.logs[i].zone-1].name + 
                   "</h2><table><thead><tr><th data-priority='1'>Time</th><th data-priority='2'>Runtime</th><th data-priority='3'>Sched</th>" +
                   "<th data-priority='4'>SAdj</th><th data-priority='5'>WUnd</th></tr></thead><tbody>";
