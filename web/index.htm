@@ -4,10 +4,10 @@
   <head>
     <title>Main Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="jquery/jquery.mobile-1.3.1.min.css" type="text/css">
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" type="text/css">
     <link rel="stylesheet" href="custom.css" />
     <script src="jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script src="jquery/jquery.mobile-1.3.1.min.js" type="text/javascript"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
   </head>
   
   <body>
@@ -70,7 +70,7 @@
       <div data-role="content">
         <div data-role="fieldcontain">
           <label for="systemz">Run Schedules</label>
-          <select name="systemz" id="systemz" data-mini="true" data-role="slider">
+          <select name="systemz" id="systemz" data-role="slider">
             <option value="off">Off</option>
             <option value="on" selected>On</option>
           </select>
@@ -79,24 +79,24 @@
           <img src="rainbird.gif" height="70" width="90"><br/>
           <span id="szone"></span> <span id="spantime">00:00</span>
         </div>
-        <ul data-role="listview" data-divider-theme="b" data-inset="true" data-split-theme="b">
-          <li data-theme="c"><a href="Scheds.htm" data-transition="slide" id="schedules_lv" name="schedules_lv">Schedules
+        <ul data-role="listview" data-divider-theme="a" data-inset="true" data-split-theme="a">
+          <li data-theme="a"><a href="Scheds.htm" data-transition="slide" id="schedules_lv" name="schedules_lv">Schedules
         <span class="ui-li-count">0</span></a>
           </li>
-          <li data-theme="c"><a href="Manual.htm" data-transition="slide">Manual</a></li>
-          <li data-theme="c"><a href="QSched.htm" data-transition="slide">Quick Schedule</a>
+          <li data-theme="a"><a href="Manual.htm" data-transition="slide">Manual</a></li>
+          <li data-theme="a"><a href="QSched.htm" data-transition="slide">Quick Schedule</a>
           </li>
-          <li data-theme="c"><a href="Zones.htm" data-transition="slide" id="zones_lv" name="zones_lv">Zones <span class=
+          <li data-theme="a"><a href="Zones.htm" data-transition="slide" id="zones_lv" name="zones_lv">Zones <span class=
         "ui-li-count">0</span></a>
           </li>
-          <li data-theme="c"><a href="Logs.htm" data-transition="slide">Logs</a>
+          <li data-theme="a"><a href="Logs.htm" data-transition="slide">Logs</a>
           </li>
-          <li data-theme="c"><a href="Advanced.htm" data-transition="slide">Advanced</a>
+          <li data-theme="a"><a href="Advanced.htm" data-transition="slide">Advanced</a>
           </li>
         </ul>
         <div id="timediv"></div>
       </div> <!-- /content -->
-      <div data-role="footer" class="footer-docs" data-theme="c">
+      <div data-role="footer" class="footer-docs" data-theme="a">
         <p><span id="version"></span> &copy; 2013 Richard Zimmerman</p>
       </div>
     </div><!-- /page -->
