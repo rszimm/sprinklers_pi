@@ -66,9 +66,7 @@ void runStateClass::ContinueSchedule(int8_t zone, short endTime)
 void runStateClass::SetManual(bool val, int8_t zone)
 {
 	LogSchedule();
-	// uncomment next line if you want the old functionality of
-	// disabling schedule when starting manual control
-	//m_bSchedule = false;
+	m_bSchedule = false;
 	m_bManual = val;
 	m_zone = zone;
 	m_endTime = 0;
