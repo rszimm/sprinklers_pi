@@ -224,7 +224,7 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 		GetApiKey(key);
 		char pws[12] = {0};
 		GetPWS(pws);
-		adj.wunderground = w.GetScale(GetWUIP(), key, GetZip(), pws, GetUsePWS());   // factor to adjust times by.  100 = 100% (i.e. no adjustment)
+		adj.wunderground = w.GetScale(key, GetZip(), pws, GetUsePWS());   // factor to adjust times by.  100 = 100% (i.e. no adjustment)
 	}
 	adj.seasonal = GetSeasonalAdjust();
 	long scale = ((long)adj.seasonal * (long)adj.wunderground) / 100;

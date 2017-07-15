@@ -154,6 +154,7 @@ public:
 	EthernetClient(int sock);
 	~EthernetClient();
 	int connect(IPAddress ip, uint16_t port);
+	int connect(const char* host, uint16_t port);
 	bool connected();
 	void stop();
 	int read(uint8_t *buf, size_t size);
@@ -163,7 +164,12 @@ public:
 	{
 		return m_sock;
 	}
+	char* GetIpAddress()
+	{
+		return m_ipAddress;
+	}
 private:
+	char* m_ipAddress;
 	int m_sock;
 	bool m_connected;
 	friend class EthernetServer;
