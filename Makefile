@@ -1,7 +1,7 @@
 #
 # Makefile for the Sprinkling System
 
-VERSION=1.1.0
+VERSION=1.1.1
 
 BUILD_DIR=build
 CC=gcc
