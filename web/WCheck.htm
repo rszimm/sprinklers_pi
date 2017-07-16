@@ -21,7 +21,8 @@
             } else if (data.valid == "false") {
               $('#wuText').empty().append("Invalid Response from WUnderground server!");
             } else {
-              $('#wuText').empty().append("Min Humidity: " + data.minhumidity + "%");
+              $('#wuText').empty().append("Resolved WUnderground IP: " + data.resolvedIP);
+              $('#wuText').append("<br/>Min Humidity: " + data.minhumidity + "%");
               $('#wuText').append("<br/>Max Humidity: " + data.maxhumidity + "%");
               $('#wuText').append("<br/>Mean Temp: " + data.meantempi + "&deg;F");
               $('#wuText').append("<br/>Precip Today: " + data.precip_today/100 + "\"");

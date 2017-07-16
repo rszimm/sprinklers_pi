@@ -232,12 +232,13 @@ static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
 	GetApiKey(key);
 	char pws[12] = {0};
 	GetPWS(pws);
-	const Weather::ReturnVals vals = w.GetVals(GetWUIP(), key, GetZip(), pws, GetUsePWS());
+	const Weather::ReturnVals vals = w.GetVals(key, GetZip(), pws, GetUsePWS());
 	const int scale = w.GetScale(vals);
 
 	fprintf(stream_file, "{\n");
 	fprintf_P(stream_file, PSTR("\t\"valid\" : \"%s\",\n"), vals.valid ? "true" : "false");
 	fprintf_P(stream_file, PSTR("\t\"keynotfound\" : \"%s\",\n"), vals.keynotfound ? "true" : "false");
+	fprintf_P(stream_file, PSTR("\t\"resolvedIP\" : \"%s\",\n"), vals.resolvedIP);
 	fprintf_P(stream_file, PSTR("\t\"minhumidity\" : \"%d\",\n"), vals.minhumidity);
 	fprintf_P(stream_file, PSTR("\t\"maxhumidity\" : \"%d\",\n"), vals.maxhumidity);
 	fprintf_P(stream_file, PSTR("\t\"meantempi\" : \"%d\",\n"), vals.meantempi);
