@@ -5,8 +5,8 @@
 // Copyright (c) 2013 Richard Zimmerman
 //
 
-#ifndef _PORT_H_
-#define _PORT_H_
+#ifndef _SP_PORT_H_
+#define _SP_PORT_H_
 #include <stdio.h>
 #include <inttypes.h>
 #include <ctype.h>
@@ -203,4 +203,4 @@ private:
 	FILE * m_fid;
 };
 
-#endif /* PORT_H_ */
+#endif /* _SP_PORT_H_ */
