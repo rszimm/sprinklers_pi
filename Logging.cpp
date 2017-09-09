@@ -132,9 +132,9 @@ bool Logging::GraphZone(FILE* stream_file, time_t start, time_t end, GROUPING gr
 {
 	if (start == 0)
 		start = nntpTimeServer.LocalNow();
-	end = max(start,end) + 24*3600;  // add 1 day to end time.
+	end = spi_max(start,end) + 24*3600;  // add 1 day to end time.
 
-	grouping = max(NONE, min(grouping, MONTHLY));
+	grouping = spi_max(NONE, spi_min(grouping, MONTHLY));
 	char sSQL[200];
 	uint16_t bins = 0;
 	uint32_t bin_offset = 0;
@@ -226,7 +226,7 @@ bool Logging::TableZone(FILE* stream_file, time_t start, time_t end)
 {
 	if (start == 0)
 		start = nntpTimeServer.LocalNow();
-	end = max(start,end) + 24*3600;  // add 1 day to end time.
+	end = spi_max(start,end) + 24*3600;  // add 1 day to end time.
 	char sSQL[200];
 	snprintf(sSQL, sizeof(sSQL),
 			"SELECT zone, date, duration, schedule, seasonal, wunderground"

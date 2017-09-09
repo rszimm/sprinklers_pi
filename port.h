@@ -16,11 +16,11 @@
 
 void trace(const char * fmt, ...);
 
-#ifndef max
-#define max(a,b) (((a) > (b)) ? (a) : (b))
+#ifndef spi_max
+#define spi_max(a,b) (((a) > (b)) ? (a) : (b))
 #endif
-#ifndef min
-#define min(a,b) (((a) < (b)) ? (a) : (b))
+#ifndef spi_min
+#define spi_min(a,b) (((a) < (b)) ? (a) : (b))
 #endif
 
 static inline void freeMemory()

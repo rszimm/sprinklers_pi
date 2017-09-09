@@ -588,7 +588,7 @@ uint8_t GetSeasonalAdjust()
 
 void SetSeasonalAdjust(uint8_t val)
 {
-	EEPROM.write(ADDR_SADJ, min(val, 200));
+	EEPROM.write(ADDR_SADJ, spi_min(val, 200));
 }
 
 bool IsFirstBoot()
