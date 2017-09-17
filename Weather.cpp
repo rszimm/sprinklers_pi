@@ -119,10 +119,18 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 					ret->valid = true;
 					ret->keynotfound = false;
 					ret->maxhumidity = atoi(val);
+					// prevent invalid humidity from getting through
+					if (ret->maxhumidity > 100 || ret->maxhumidity < 0) {
+						ret->maxhumidity = NEUTRAL_HUMIDITY;
+					}
 				}
 				else if (strcmp(key, "minhumidity") == 0)
 				{
 					ret->minhumidity = atoi(val);
+					// prevent invalid humidity from getting through
+					if (ret->minhumidity > 100 || ret->minhumidity < 0) {
+						ret->minhumidity = NEUTRAL_HUMIDITY;
+					}
 				}
 				else if (strcmp(key, "meantempi") == 0)
 				{
@@ -176,7 +184,7 @@ int Weather::GetScale(const ReturnVals & vals) const
 {
 	if (!vals.valid)
 		return 100;
-	const int humid_factor = 30 - (vals.maxhumidity + vals.minhumidity) / 2;
+	const int humid_factor = NEUTRAL_HUMIDITY - (vals.maxhumidity + vals.minhumidity) / 2;
 	const int temp_factor = (vals.meantempi - 70) * 4;
 	const int rain_factor = (vals.precipi + vals.precip_today) * -2;
 	const int adj = spi_min(spi_max(0, 100+humid_factor+temp_factor+rain_factor), 200);
