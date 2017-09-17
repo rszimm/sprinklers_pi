@@ -10,6 +10,8 @@
 
 #include "port.h"
 
+#define NEUTRAL_HUMIDITY 30
+
 class Weather
 {
 public:
