@@ -11,6 +11,15 @@
 #include <string.h>
 #include <stdlib.h>
 
+static float str_to_float(const char * s,float def)
+{
+	char *  endp;
+	float r = strtod(s,&endp);
+	if( s == endp) r = def;
+	return r;
+}
+
+
 Weather::Weather(void)
 {
 	 m_wundergroundAPIHost="api.wunderground.com";
@@ -118,7 +127,7 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 				{
 					ret->valid = true;
 					ret->keynotfound = false;
-					ret->maxhumidity = atoi(val);
+					ret->maxhumidity = str_to_float(val,30);
 					// prevent invalid humidity from getting through
 					if (ret->maxhumidity > 100 || ret->maxhumidity < 0) {
 						ret->maxhumidity = NEUTRAL_HUMIDITY;
@@ -126,7 +135,7 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 				}
 				else if (strcmp(key, "minhumidity") == 0)
 				{
-					ret->minhumidity = atoi(val);
+					ret->minhumidity = str_to_float(val,30);
 					// prevent invalid humidity from getting through
 					if (ret->minhumidity > 100 || ret->minhumidity < 0) {
 						ret->minhumidity = NEUTRAL_HUMIDITY;
@@ -134,23 +143,27 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 				}
 				else if (strcmp(key, "meantempi") == 0)
 				{
-					ret->meantempi = atoi(val);
+					ret->meantempi = str_to_float(val,70);
 				}
 				else if (strcmp(key, "precip_today_in") == 0)
 				{
-					ret->precip_today = (atof(val) * 100.0);
+					float v = str_to_float(val,0);
+					if( v < 0) v = 0;
+					ret->precip_today = v * 100;
 				}
 				else if (strcmp(key, "precipi") == 0)
 				{
-					ret->precipi = (atof(val) * 100.0);
+					float v = str_to_float(val,0);
+					if( v < 0) v = 0;
+					ret->precipi = v * 100.0;
 				}
 				else if (strcmp(key, "UV") == 0)
 				{
-					ret->UV = (atof(val) * 10.0);
+					ret->UV = (str_to_float(val,0) * 10.0);
 				}
 				else if (strcmp(key, "meanwindspdi") == 0)
 				{
-					ret->windmph = (atof(val) * 10.0);
+					ret->windmph = (str_to_float(val,0) * 10.0);
 				}
 				else if (strcmp(key, "type") == 0)
 				{
