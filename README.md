@@ -18,4 +18,13 @@ Sprinklers Pi is a sophisticated Irrigation control system for the Raspberry Pi.
 * Very simple installation
 * Seasonal adjustment.
 
+## Building
+```Shell
+make -lwiringPi
+sudo make install
+```
+
+## Running
+`sudo /etc/init.d/sprinklers_pi start`
+
 See the wiki for more information: https://github.com/rszimm/sprinklers_pi/wiki

@@ -9,6 +9,7 @@
 #define MAX_SCHEDULES 10
 #define NUM_ZONES 15
 #include <inttypes.h>
+#include <string.h>
 
 #include "core.h"
 #include "web.h"
@@ -31,6 +32,61 @@ public:
 	bool IsEnabled() const { return m_type & 0x01; }
 	bool IsInterval() const { return m_type & 0x02; }
 	bool IsWAdj() const { return m_type & 0x04; }
+	bool IsRunToday(time_t time_now) {
+		if ((IsEnabled())
+			&& (((IsInterval()) && ((elapsedDays(time_now) % interval) == 0))
+				|| (!(IsInterval()) && (day & (0x01 << (weekday(time_now) - 1))))))
+			return true;
+		return false;
+	}
+	bool IsRunTomorrow(time_t time_now) {
+		return IsRunToday(time_now+SECS_PER_DAY);
+	}
+	int NextRun(time_t time_now, char* str) {
+		char scheduledTimes[100];
+
+		if (GetEnabledTimes(scheduledTimes) == -1) {
+			return sprintf(str, "n/a");
+		}
+		if (!IsRunToday(time_now) && !IsRunTomorrow(time_now)) {
+			return sprintf(str, "2+ days");
+		}
+
+		return sprintf(str, "%s %s",
+				 IsRunToday(time_now) ? "Today" : "Tomorrow",
+				 scheduledTimes);
+	}
+	int GetEnabledTimes(char* str) {
+		if (!IsEnabled()) {
+			return -1;
+		}
+		char buff[10];
+		int h;
+        short x;
+		bool enabled = false;
+        str[0] = '\0';
+
+		for (int i=0; i<4; i++) {
+            x = time[i];
+			if (x != -1) {
+				if (enabled) {
+					strcat(str, ", ");
+				} else {
+					enabled = true;
+				}
+				h = x/60;
+				sprintf(buff, "%d:%.2d %s",
+						 (h%12 == 0 ? 12 : h%12),
+						 x%60,
+						 (h < 12 ? "AM" : "PM"));
+				strcat(str, buff);
+			}
+		}
+		if (!enabled) {
+			return -1;
+		}
+		return 1;
+	}
 	void SetEnabled(bool val) { m_type = val ? (m_type | 0x01) : (m_type & ~0x01); }
 	void SetInterval(bool val) { m_type = val ? (m_type | 0x02) : (m_type & ~0x02); }
 	void SetWAdj(bool val) { m_type = val ? (m_type | 0x04) : (m_type & ~0x04); }

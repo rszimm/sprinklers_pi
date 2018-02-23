@@ -44,6 +44,9 @@ bool web::Init()
 #endif
 }
 
+const short WEB_LEN = 4;
+const char* WEB_PREFIX = "web/";
+
 static char sendbuf[512];
 
 #ifdef ARDUINO
@@ -102,15 +105,24 @@ static void ServeError(FILE * stream_file)
 
 static void JSONSchedules(const KVPairs & key_value_pairs, FILE * stream_file)
 {
+	const time_t local_now = nntpTimeServer.LocalNow();
 	ServeHeader(stream_file, 200, "OK", false, "text/plain");
 	int iNumSchedules = GetNumSchedules();
 	fprintf(stream_file, "{\n\"Table\" : [\n");
 	Schedule sched;
+    char buff[128];
 	for (int i = 0; i < iNumSchedules; i++)
 	{
 		LoadSchedule(i, &sched);
-		fprintf_P(stream_file, PSTR("%s\t{\"id\" : %d, \"name\" : \"%s\", \"e\" : \"%s\" }"), (i == 0) ? "" : ",\n", i, sched.name,
-				(sched.IsEnabled()) ? "on" : "off");
+        sched.NextRun(local_now, buff);
+		fprintf_P(stream_file, PSTR("%s\t{\"id\": %d, \"name\": \"%s\", \"e\": \"%s\", \"td\": %s, \"tm\": %s, \"next\": \"%s\"}"),
+                  (i == 0) ? "" : ",\n",
+                  i,
+                  sched.name,
+                  sched.IsEnabled() ? "on" : "off",
+                  GetRunSchedules() && sched.IsRunToday(local_now) ? "true" : "false",
+                  GetRunSchedules() && sched.IsRunTomorrow(local_now) ? "true" : "false",
+                  buff);
 	}
 	fprintf(stream_file, "\n]}");
 }
@@ -915,8 +927,8 @@ void web::ProcessWebClients()
 				if (strlen(sPage) == 0)
 					strcpy(sPage, "index.htm");
 				// prepend path
-				memmove(sPage + 5, sPage, sizeof(sPage) - 5);
-				memcpy(sPage, "/web/", 5);
+				memmove(sPage + WEB_LEN, sPage, sizeof(sPage) - WEB_LEN);
+				memcpy(sPage, WEB_PREFIX, WEB_LEN);
 				sPage[sizeof(sPage)-1] = 0;
 				trace(F("Serving Page: %s\n"), sPage);
 				SdFile theFile;

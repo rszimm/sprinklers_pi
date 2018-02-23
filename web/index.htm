@@ -14,11 +14,32 @@
     <!-- Home -->
     <div data-role="page" id="page1">
       <script language="javascript" type="text/javascript">
+        var getUpcomingSched = function() {
+          $.ajax("json/schedules", {async: false, dataType: "json", success: function (data) {
+            var output = '';
+            var found = false;
+            for (var i = 0; i < data.Table.length; i++) {
+              if (data.Table[i].e == 'on' && (data.Table[i].td || data.Table[i].tm)) {
+                found = true;
+                output += '<li><a href="ShSched.htm?id=' + data.Table[i].id + '" data-transition="slide">';
+                output += data.Table[i].name;
+                output += ': ';
+                output += data.Table[i].next;
+                output += '</a></li>';
+              }
+            }
+            if (found) {
+              $('#upcoming').show().find('ul').empty().append(output);
+            } else {
+              $('#upcoming').hide();
+            }
+          }});
+        };
         $(document).bind('pageinit', function () {
           $('#systemz').bind('change', function (e) {
             $.get("bin/run", {
               system: this.value
-            });
+            }).then(getUpcomingSched);
           });
         });
         var timeout = 0;
@@ -29,14 +50,16 @@
         }
         $('#page1').on('pagebeforeshow', function () {
           $.ajax("json/state", {async: false, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
-            $('#zones_lv span').text(data.zones);
-            $('#schedules_lv span').text(data.schedules);
+            $('#zones_lv').find('span').text(data.zones);
+            $('#schedules_lv').find('span').text(data.schedules);
             var dt = new Date(data.timenow*1000);
             $('#version').text("V"+data.version);
             $('#timediv').empty().append('' + pad(dt.getUTCHours(),2) + ':' + pad(dt.getUTCMinutes(),2) + ':' + pad(dt.getUTCSeconds(),2) + ' ' + pad(dt.getUTCFullYear(),4) + '/' + pad(dt.getUTCMonth()+1,2) + '/' + pad(dt.getUTCDate(),2) );
             checkAnim(data);
+            getUpcomingSched();
           }});
         });
+
         function checkAnim(data) {
             $('#systemz').val(data.run).slider('refresh');
             if (data.offtime != null) {
@@ -78,6 +101,10 @@
         <div id="sgif" style="display:none">
           <img src="rainbird.gif" height="70" width="90"><br/>
           <span id="szone"></span> <span id="spantime">00:00</span>
+        </div>
+        <div id="upcoming" style="display:none">
+          <h3>Upcoming Schedules:</h3>
+          <ul></ul>
         </div>
         <ul data-role="listview" data-divider-theme="a" data-inset="true" data-split-theme="a">
           <li data-theme="a"><a href="Scheds.htm" data-transition="slide" id="schedules_lv" name="schedules_lv">Schedules

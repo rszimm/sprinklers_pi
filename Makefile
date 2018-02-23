@@ -1,7 +1,7 @@
 #
 # Makefile for the Sprinkling System
 
-VERSION=1.1.3
+VERSION := $(shell cat version.txt )
 
 BUILD_DIR=build
 CC=gcc
