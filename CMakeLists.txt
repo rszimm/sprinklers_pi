@@ -7,6 +7,7 @@ file (STRINGS "version.txt" BUILD_VERSION)
 
 add_definitions(-DLOGGING)
 add_definitions(-DVERSION=\"${BUILD_VERSION}\")
+add_definitions(-DRELPATH)
 
 add_executable(sprinklers_pi
     core.cpp

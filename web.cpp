@@ -44,8 +44,13 @@ bool web::Init()
 #endif
 }
 
+#ifdef RELPATH
 const short WEB_LEN = 4;
 const char* WEB_PREFIX = "web/";
+#else
+const short WEB_LEN = 5;
+const char* WEB_PREFIX = "/web/";
+#endif
 
 static char sendbuf[512];
 
