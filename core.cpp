@@ -6,7 +6,11 @@
 
 #include "core.h"
 #include "settings.h"
-#include "Weather.h"
+
+#ifdef WEATHER_WUNDERGROUND
+#include "Wunderground.h"
+#endif
+
 #include "web.h"
 #include "Event.h"
 #include "port.h"
@@ -219,7 +223,11 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 	runStateClass::DurationAdjustments adj(100);
 	if (sched->IsWAdj())
 	{
-		Weather w;
+#ifdef WEATHER_WUNDERGROUND
+		Wunderground w;
+#else
+		return adj;
+#endif
 		char key[17];
 		GetApiKey(key);
 		char pws[12] = {0};

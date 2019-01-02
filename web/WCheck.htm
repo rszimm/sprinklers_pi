@@ -14,14 +14,14 @@
     <div data-role="page" id="wcheck">
       <script language="javascript">
         $('#wcheck').on('pagebeforeshow', function () {
-          $('#wuText').empty().append("Requesting Data from WUnderground...");
+          $('#wuText').empty().append("Requesting Data from Weather Provider...");
           $.ajax("json/wcheck", {async: true, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
             if (data.keynotfound == "true") {
-              $('#wuText').empty().append("WUnderground API Key is invalid!");
+              $('#wuText').empty().append("Weather Provider API Key is invalid!");
             } else if (data.valid == "false") {
-              $('#wuText').empty().append("Invalid Response from WUnderground server!");
+              $('#wuText').empty().append("Invalid Response from Weather Provider server!");
             } else {
-              $('#wuText').empty().append("Resolved WUnderground IP: " + data.resolvedIP);
+              $('#wuText').empty().append("Resolved Weather Provider IP: " + data.resolvedIP);
               $('#wuText').append("<br/>Min Humidity: " + data.minhumidity + "%");
               $('#wuText').append("<br/>Max Humidity: " + data.maxhumidity + "%");
               $('#wuText').append("<br/>Mean Temp: " + data.meantempi + "&deg;F");
@@ -36,7 +36,7 @@
 
       </script>
       <div data-role="header">
-         <h1>WUnderground Check</h1>
+         <h1>Weather Provider Check</h1>
  <a data-role="button" data-rel="back" href="#page1" data-icon="back" data-iconpos="left" class="ui-btn-left">
             Back
         </a>

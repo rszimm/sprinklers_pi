@@ -10,7 +10,10 @@
 #include "nntp.h"
 #endif
 
-#include "Weather.h"
+#ifdef WEATHER_WUNDERGROUND
+#include "Wunderground.h"
+#endif
+
 #include "sysreset.h"
 #include <string.h>
 #include <stdlib.h>
@@ -243,7 +246,12 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 
 static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
 {
-	Weather w;
+#ifdef WEATHER_WUNDERGROUND
+	Wunderground w;
+#else
+	fprintf(stream_file, "No Weather Provider defined in settings.h");
+	return;
+#endif
 	ServeHeader(stream_file, 200, "OK", false, "text/plain");
 	char key[17];
 	GetApiKey(key);

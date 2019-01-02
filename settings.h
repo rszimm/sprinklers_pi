@@ -6,8 +6,24 @@
 
 #ifndef _SETTINGS_h
 #define _SETTINGS_h
+
+// max number of schedules you will be allowed to create
 #define MAX_SCHEDULES 10
+// maximum number of zones allowed
 #define NUM_ZONES 15
+
+/*************************************************
+ * Weather Provider Section
+ * Only uncomment one weather provider below.
+ *************************************************/
+
+// Weather Underground
+// WARNING: this API may stop working at any moment.
+#define WEATHER_WUNDERGROUND
+
+
+// END WEATHER PROVIDER SECTION
+
 #include <inttypes.h>
 #include <string.h>
 

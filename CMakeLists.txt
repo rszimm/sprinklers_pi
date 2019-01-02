@@ -10,23 +10,25 @@ add_definitions(-DVERSION=\"${BUILD_VERSION}\")
 add_definitions(-DRELPATH)
 
 add_executable(sprinklers_pi
-    core.cpp
-    core.h
-    Event.cpp
-    Event.h
-    Logging.cpp
-    Logging.h
-    port.cpp
-    port.h
-    settings.cpp
-    settings.h
-    sprinklers_pi.cpp
-    sysreset.cpp
-    sysreset.h
-    Weather.cpp
-    Weather.h
-    web.cpp
-    web.h)
+        core.cpp
+        core.h
+        Event.cpp
+        Event.h
+        Logging.cpp
+        Logging.h
+        port.cpp
+        port.h
+        settings.cpp
+        settings.h
+        sprinklers_pi.cpp
+        sysreset.cpp
+        sysreset.h
+        Weather.cpp
+        Weather.h
+        Wunderground.cpp
+        Wunderground.h
+        web.cpp
+        web.h)
 
 TARGET_LINK_LIBRARIES(sprinklers_pi
         sqlite3

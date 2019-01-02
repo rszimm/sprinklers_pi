@@ -11,6 +11,7 @@ CPP_SRCS += \
 Event.cpp \
 Logging.cpp \
 Weather.cpp \
+Wunderground.cpp \
 core.cpp \
 port.cpp \
 settings.cpp \

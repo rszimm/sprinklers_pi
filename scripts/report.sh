@@ -61,7 +61,7 @@ if [ $ROWS -gt 1 ] ; then
   #get average wunderground adjustment
   WUN=`sqlite3 $DB "SELECT AVG(wunderground) FROM zonelog WHERE date > $TIME AND wunderground >= 0" | tr -d '\n'`
   if [ "x$WUN" != "x" ] ; then
-    echo "Wunderground Adjustment: $WUN%" >> $TMPFILE
+    echo "Weather Adjustment: $WUN%" >> $TMPFILE
   fi
   
   #print each zones runtime

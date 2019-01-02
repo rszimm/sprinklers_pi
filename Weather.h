@@ -29,12 +29,9 @@ public:
 		const char* resolvedIP;
 	};
 public:
-	Weather(void);
 	int GetScale(const char * key, uint32_t zip, const char * pws, bool usePws) const;
 	int GetScale(const ReturnVals & vals) const;
-	ReturnVals GetVals(const char * key, uint32_t zip, const char * pws, bool usePws) const;
-private:
-	const char* m_wundergroundAPIHost;
+    virtual ReturnVals GetVals(const char * key, uint32_t zip, const char * pws, bool usePws) const = 0;
 };
 
 #endif
