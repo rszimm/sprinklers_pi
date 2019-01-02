@@ -1,140 +1,156 @@
 <!DOCTYPE html>
 <html>
-  
-  <head>
-    <title>Settings</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" type="text/css">
-    <link rel="stylesheet" href="custom.css" />
-    <script src="jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script src="jquery/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
-  </head>
-  
-  <body>
-    <div data-role="page" id="settings">
-      <script type="text/javascript">
 
-        $('#settings').on('pagebeforeshow', function () {
-            $.ajax("json/settings", {async: false, dataType: "json", success: function (data) {
-	      $('#settings div[data-role="fieldcontain"]').css('display','none');
-	      NV(data, 'ip');
-	      NV(data, 'netmask');
-	      NV(data, 'gateway');
-	      NV(data, 'wuip');
-	      NV(data, 'apikey');
-              NV(data, 'wutype');
-              NV(data, 'zip');
-              NV(data, 'pws');
-	      NV(data, 'NTPip');
-	      NV(data, 'NTPoffset');
-	      NV(data, 'ot');
-	      NV(data, 'webport');
-	      NV(data, 'sadj');
-            }});
-        });
-        
-        function NV(data, e) {
-          if (e in data) {
-            $('#settings #'+e+'div').css('display','block');
-            if ((e=='ot') || (e=='wutype')) {
-              $('#'+e+'div input[type="radio"]').prop("checked",false).checkboxradio("refresh");
-              $("#settings #"+e+data[e]).prop("checked", true).checkboxradio("refresh");
-            } else if (e=='sadj') 
-              $('#settings #'+e).val(data[e]).slider('refresh');
-            else
-	      $('#settings #'+e).val(data[e]);
-          }
-        }
+<head>
+  <title>Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" type="text/css">
+  <link rel="stylesheet" href="custom.css" />
+  <script src="jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+  <script src="jquery/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+</head>
 
-        function settingsSubmitForm() {
-          $.ajax({
-            data: $('#setForm').serialize(),
-            type: 'get',
-            url: 'bin/settings',
-            success: function (d) {
-              window.history.back();
-            },
-            error: function (xhr, st, e) {
-              alert(st);
-              window.history.back();
-            }
-          });
+<body>
+<div data-role="page" id="settings">
+  <script type="text/javascript">
+
+    $('#settings').on('pagebeforeshow', function () {
+      $.ajax("json/settings", {async: false, dataType: "json", success: function (data) {
+          $('#settings div[data-role="fieldcontain"]').css('display','none');
+          NV(data, 'ip');
+          NV(data, 'netmask');
+          NV(data, 'gateway');
+          NV(data, 'wuip');
+          NV(data, 'apikey');
+          NV(data, 'apiid');
+          NV(data, 'apisecret');
+          NV(data, 'wutype');
+          NV(data, 'zip');
+          NV(data, 'pws');
+          NV(data, 'loc');
+          NV(data, 'NTPip');
+          NV(data, 'NTPoffset');
+          NV(data, 'ot');
+          NV(data, 'webport');
+          NV(data, 'sadj');
+        }});
+    });
+
+    function NV(data, e) {
+      if (e in data) {
+        $('#settings #'+e+'div').css('display','block');
+        if ((e=='ot') || (e=='wutype')) {
+          $('#'+e+'div input[type="radio"]').prop("checked",false).checkboxradio("refresh");
+          $("#settings #"+e+data[e]).prop("checked", true).checkboxradio("refresh");
+        } else if (e=='sadj')
+          $('#settings #'+e).val(data[e]).slider('refresh');
+        else
+          $('#settings #'+e).val(data[e]);
+      }
+    }
+
+    function settingsSubmitForm() {
+      $.ajax({
+        data: $('#setForm').serialize(),
+        type: 'get',
+        url: 'bin/settings',
+        success: function (d) {
+          window.history.back();
+        },
+        error: function (xhr, st, e) {
+          alert(st);
+          window.history.back();
         }
-      </script>
-      <div data-theme="a" data-role="header">	<a data-role="button" href="javascript:settingsSubmitForm();" data-icon="check" data-iconpos="left" class="ui-btn-right">OK</a>
-	<a data-role="button" data-rel="back" href="#page1" data-icon="back" data-iconpos="left" class="ui-btn-left">Cancel</a>
-        	<h1>Settings</h1>
-      </div> <!-- /header -->
-      <div data-role="content">
-        <form id="setForm" action="#">
-          <div id="ipdiv" data-role="fieldcontain">
-            <label for="ip">IP:</label>
-            <input type="text" name="ip" id="ip" value="" maxlength=15 />
-          </div>
-          <div id="netmaskdiv" data-role="fieldcontain">
-            <label for="netmask">Netmask:</label>
-            <input type="text" name="netmask" id="netmask" value="" maxlength=15 />
-          </div>
-          <div id="gatewaydiv" data-role="fieldcontain">
-            <label for="gateway">Gateway:</label>
-            <input type="text" name="gateway" id="gateway" value="" maxlength=15 />
-          </div>
-          <div id="apikeydiv" data-role="fieldcontain">
-            <label for="apikey">API Key:</label>
-            <input type="text" name="apikey" id="apikey" value="" maxlength=16 />
-          </div>
-          <div id="wutypediv" data-role="fieldcontain">
-            <fieldset data-role="controlgroup" data-type="horizontal">
-              <legend>Location Type:</legend>
-              <input type="radio" name="wutype" id="wutypezip" value="zip"/>
-              <label for="wutypezip">Zip</label>
-              <input type="radio" name="wutype" id="wutypepws" value="pws" />
-              <label for="wutypepws">PWS</label>
-            </fieldset>
-          </div>
-          <div id="zipdiv" data-role="fieldcontain">
-            <label for="zip">Zip Code:</label>
-            <input type="number" name="zip" id="zip" value="" min="0" max="99999" />
-          </div>
-          <div id="pwsdiv" data-role="fieldcontain">
-            <label for="pws">PWS ID:</label>
-            <input type="text" name="pws" id="pws" value="" maxlength=11 />
-          </div>
-          <div id="NTPipdiv" data-role="fieldcontain">
-            <label for="NTPip">NTP IP:</label>
-            <input type="text" name="NTPip" id="NTPip" value="" maxlength=15 />
-          </div>
-          <div id="NTPoffsetdiv" data-role="fieldcontain">
-            <label for="NTPoffset">Timezone Offset:</label>
-            <input type="number" name="NTPoffset" id="NTPoffset" value="" min="-12" max="14"/>
-          </div>
-          <div id="webportdiv" data-role="fieldcontain">
-            <label for="zip">Web Port:</label>
-            <input type="number" name="webport" id="webport" value="" min="0" max="32767" />
-          </div>
-          <div id="sadjdiv" data-role="fieldcontain">
-            <label for="sadj">Seasonal Adjust %</label>
-            <input type="range" name="sadj" id="sadj" value="" min="0" max="200" />
-          </div>
-	  <div id="otdiv" data-role="fieldcontain">
-            <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
-              <legend>Output:</legend>
-              <input type="radio" name="ot" id="ot0" value="0"/>
-              <label for="ot0">None</label>
-              <input type="radio" name="ot" id="ot1" value="1" />
-              <label for="ot1">Direct Positive</label>
-              <input type="radio" name="ot" id="ot2" value="2" />
-              <label for="ot2">Direct Negative</label>
-              <input type="radio" name="ot" id="ot3" value="3" />
-              <label for="ot3">OpenSprinkler</label>
-            </fieldset>
-          </div>
-        </form>
-      </div> <!-- /content -->
-      <div data-role="footer" class="footer-docs" data-theme="a">
-          <p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
+      });
+    }
+  </script>
+  <div data-theme="a" data-role="header">	<a data-role="button" href="javascript:settingsSubmitForm();" data-icon="check" data-iconpos="left" class="ui-btn-right">OK</a>
+    <a data-role="button" data-rel="back" href="#page1" data-icon="back" data-iconpos="left" class="ui-btn-left">Cancel</a>
+    <h1>Settings</h1>
+  </div> <!-- /header -->
+  <div data-role="content">
+    <form id="setForm" action="#">
+      <div id="ipdiv" data-role="fieldcontain">
+        <label for="ip">IP:</label>
+        <input type="text" name="ip" id="ip" value="" maxlength=15 />
       </div>
-    </div> <!-- /page -->
-  </body>
+      <div id="netmaskdiv" data-role="fieldcontain">
+        <label for="netmask">Netmask:</label>
+        <input type="text" name="netmask" id="netmask" value="" maxlength=15 />
+      </div>
+      <div id="gatewaydiv" data-role="fieldcontain">
+        <label for="gateway">Gateway:</label>
+        <input type="text" name="gateway" id="gateway" value="" maxlength=15 />
+      </div>
+      <div id="apikeydiv" data-role="fieldcontain">
+        <label for="apikey">API Key:</label>
+        <input type="text" name="apikey" id="apikey" value="" maxlength=16 />
+      </div>
+      <div id="apiiddiv" data-role="fieldcontain">
+        <label for="apiid">API Id:</label>
+        <input type="text" name="apiid" id="apiid" value="" maxlength=32 />
+      </div>
+      <div id="apisecretdiv" data-role="fieldcontain">
+        <label for="apisecret">API Secret:</label>
+        <input type="text" name="apisecret" id="apisecret" value="" maxlength=64 />
+      </div>
+      <div id="wutypediv" data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+          <legend>Location Type:</legend>
+          <input type="radio" name="wutype" id="wutypezip" value="zip"/>
+          <label for="wutypezip">Zip</label>
+          <input type="radio" name="wutype" id="wutypepws" value="pws" />
+          <label for="wutypepws">PWS</label>
+        </fieldset>
+      </div>
+      <div id="zipdiv" data-role="fieldcontain">
+        <label for="zip">Zip Code:</label>
+        <input type="number" name="zip" id="zip" value="" min="0" max="99999" />
+      </div>
+      <div id="pwsdiv" data-role="fieldcontain">
+        <label for="pws">PWS ID:</label>
+        <input type="text" name="pws" id="pws" value="" maxlength=11 />
+      </div>
+      <div id="locdiv" data-role="fieldcontain">
+        <label for="loc">Location:</label>
+        <input type="text" name="loc" id="loc" value="" maxlength=50 />
+      </div>
+      <div id="NTPipdiv" data-role="fieldcontain">
+        <label for="NTPip">NTP IP:</label>
+        <input type="text" name="NTPip" id="NTPip" value="" maxlength=15 />
+      </div>
+      <div id="NTPoffsetdiv" data-role="fieldcontain">
+        <label for="NTPoffset">Timezone Offset:</label>
+        <input type="number" name="NTPoffset" id="NTPoffset" value="" min="-12" max="14"/>
+      </div>
+      <div id="webportdiv" data-role="fieldcontain">
+        <label for="zip">Web Port:</label>
+        <input type="number" name="webport" id="webport" value="" min="0" max="32767" />
+      </div>
+      <div id="sadjdiv" data-role="fieldcontain">
+        <label for="sadj">Seasonal Adjust %</label>
+        <input type="range" name="sadj" id="sadj" value="" min="0" max="200" />
+      </div>
+      <div id="otdiv" data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+          <legend>Output:</legend>
+          <input type="radio" name="ot" id="ot0" value="0"/>
+          <label for="ot0">None</label>
+          <input type="radio" name="ot" id="ot1" value="1" />
+          <label for="ot1">Direct Positive</label>
+          <input type="radio" name="ot" id="ot2" value="2" />
+          <label for="ot2">Direct Negative</label>
+          <input type="radio" name="ot" id="ot3" value="3" />
+          <label for="ot3">OpenSprinkler</label>
+        </fieldset>
+      </div>
+    </form>
+    <p>Note: Settings do not save until you click "OK" at the top.</p>
+  </div> <!-- /content -->
+  <div data-role="footer" class="footer-docs" data-theme="a">
+    <p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
+  </div>
+</div> <!-- /page -->
+</body>
 
 </html>

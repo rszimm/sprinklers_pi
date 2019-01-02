@@ -174,25 +174,33 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 	} // while (true)
 }
 
-Weather::ReturnVals Wunderground::GetVals(const char * key, uint32_t zip, const char * pws, bool usePws) const
+Weather::ReturnVals Wunderground::GetVals(void) const
+{
+	return Weather::GetVals();
+}
+
+Weather::ReturnVals Wunderground::GetVals(const Weather::Settings & settings) const
 {
 	ReturnVals vals = {0};
 	EthernetClient client;
+
+	//trace("Settings:\nKey: %s\nPWS: %s\nZIP: %ld\nUse PWS: %d\n", settings.key, settings.pws, settings.zip, settings.usePws);
+
 	if (client.connect(m_wundergroundAPIHost, 80))
 	{
 		char getstring[255];
 		trace(F("Connected\n"));
-		if (usePws)
-			snprintf(getstring, sizeof(getstring), "GET http://%s/api/%s/yesterday/conditions/q/pws:%s.json HTTP/1.1\r\n",m_wundergroundAPIHost, key, pws);
+		if (settings.usePws)
+			snprintf(getstring, sizeof(getstring), "GET http://%s/api/%s/yesterday/conditions/q/pws:%s.json HTTP/1.1\r\n",m_wundergroundAPIHost, settings.key, settings.pws);
 		else
-			snprintf(getstring, sizeof(getstring), "GET http://%s/api/%s/yesterday/conditions/q/%ld.json HTTP/1.1\r\n",m_wundergroundAPIHost, key, (long) zip);
+			snprintf(getstring, sizeof(getstring), "GET http://%s/api/%s/yesterday/conditions/q/%ld.json HTTP/1.1\r\n",m_wundergroundAPIHost, settings.key, (long) settings.zip);
 
-		//trace("GetString:%s\n",getstring);
+		//trace("GetString: %s\n",getstring);
 		client.write((uint8_t*) getstring, strlen(getstring));
 		
 		//send host header
 		snprintf(getstring, sizeof(getstring), "Host: %s\r\nConnection: close\r\n\r\n",m_wundergroundAPIHost);
-		//trace("GetString:%s\n",getstring);
+		//trace("GetString: %s\n",getstring);
 		client.write((uint8_t*) getstring, strlen(getstring));
 
 		ParseResponse(client, &vals);

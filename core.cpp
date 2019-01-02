@@ -221,23 +221,19 @@ void TurnOnZone(int iValve)
 static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 {
 	runStateClass::DurationAdjustments adj(100);
-	if (sched->IsWAdj())
-	{
+	if (sched->IsWAdj()) {
+		// get factor to adjust times by.  100 = 100% (i.e. no adjustment)
 #ifdef WEATHER_WUNDERGROUND
 		Wunderground w;
+		adj.wunderground = w.GetScale();
 #else
-		return adj;
+		adj.wunderground = 100;
 #endif
-		char key[17];
-		GetApiKey(key);
-		char pws[12] = {0};
-		GetPWS(pws);
-		adj.wunderground = w.GetScale(key, GetZip(), pws, GetUsePWS());   // factor to adjust times by.  100 = 100% (i.e. no adjustment)
 	}
 	adj.seasonal = GetSeasonalAdjust();
 	long scale = ((long)adj.seasonal * (long)adj.wunderground) / 100;
 	for (uint8_t k = 0; k < NUM_ZONES; k++)
-		sched->zone_duration[k] = spi_min(((long)sched->zone_duration[k] * scale + 50) / 100, 254);
+		sched->zone_duration[k] = (uint8_t)spi_min(((long)sched->zone_duration[k] * scale + 50) / 100, 254);
 	return adj;
 }
 
@@ -252,7 +248,7 @@ static inline bool IsRunToday(const Schedule & sched, time_t time_now)
 }
 
 // Load the on/off events for a specific schedule/time or the quick schedule
-void LoadSchedTimeEvents(int8_t sched_num, bool bQuickSchedule)
+void LoadSchedTimeEvents(uint8_t sched_num, bool bQuickSchedule)
 {
 	Schedule sched;
 	runStateClass::DurationAdjustments adj;

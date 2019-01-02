@@ -23,7 +23,7 @@ extern Logging log;
 
 void mainLoop();
 void ClearEvents();
-void LoadSchedTimeEvents(int8_t sched_num, bool bQuickSchedule = false);
+void LoadSchedTimeEvents(uint8_t sched_num, bool bQuickSchedule = false);
 void ReloadEvents(bool bAllEvents = false);
 bool isZoneOn(int iNum);
 void TurnOnZone(int iValve);

@@ -12,6 +12,8 @@
 
 #ifdef WEATHER_WUNDERGROUND
 #include "Wunderground.h"
+#else
+#include "Weather.h"
 #endif
 
 #include "sysreset.h"
@@ -216,6 +218,7 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 {
 	ServeHeader(stream_file, 200, "OK", false, "text/plain");
 	IPAddress ip;
+	Weather::Settings settings = Weather::GetSettings();
 	fprintf(stream_file, "{\n");
 #ifdef ARDUINO
 	ip = GetIP();
@@ -232,15 +235,19 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 	fprintf_P(stream_file, PSTR("\t\"ot\" : \"%d\",\n"), GetOT());
 	ip = GetWUIP();
 	fprintf_P(stream_file, PSTR("\t\"wuip\" : \"%d.%d.%d.%d\",\n"), ip[0], ip[1], ip[2], ip[3]);
-	fprintf_P(stream_file, PSTR("\t\"wutype\" : \"%s\",\n"), GetUsePWS() ? "pws" : "zip");
-	fprintf_P(stream_file, PSTR("\t\"zip\" : \"%ld\",\n"), (long) GetZip());
-	fprintf_P(stream_file, PSTR("\t\"sadj\" : \"%ld\",\n"), (long) GetSeasonalAdjust());
-	char ak[17];
-	GetApiKey(ak);
-	fprintf_P(stream_file, PSTR("\t\"apikey\" : \"%s\",\n"), ak);
-	GetPWS(ak);
-	ak[11] = 0;
-	fprintf_P(stream_file, PSTR("\t\"pws\" : \"%s\"\n"), ak);
+#ifdef WEATHER_WUNDERGROUND
+	fprintf_P(stream_file, PSTR("\t\"apikey\" : \"%s\",\n"), settings.key);
+	fprintf_P(stream_file, PSTR("\t\"wutype\" : \"%s\",\n"), settings.usePws ? "pws" : "zip");
+	fprintf_P(stream_file, PSTR("\t\"zip\" : \"%ld\",\n"), (long) settings.zip);
+	fprintf_P(stream_file, PSTR("\t\"pws\" : \"%s\",\n"), settings.pws);
+#endif
+#ifdef WEATHER_AERIS
+	fprintf_P(stream_file, PSTR("\t\"apiid\" : \"%s\",\n"), settings.apiId);
+	fprintf_P(stream_file, PSTR("\t\"apisecret\" : \"%s\",\n"), settings.apiSecret);
+	fprintf_P(stream_file, PSTR("\t\"loc\" : \"%s\",\n"), settings.location);
+#endif
+	// leave this value last, it has no comma after the value
+	fprintf_P(stream_file, PSTR("\t\"sadj\" : \"%ld\"\n"), (long) GetSeasonalAdjust());
 	fprintf(stream_file, "}");
 }
 
@@ -249,15 +256,12 @@ static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
 #ifdef WEATHER_WUNDERGROUND
 	Wunderground w;
 #else
+	Weather w;
 	fprintf(stream_file, "No Weather Provider defined in settings.h");
 	return;
 #endif
 	ServeHeader(stream_file, 200, "OK", false, "text/plain");
-	char key[17];
-	GetApiKey(key);
-	char pws[12] = {0};
-	GetPWS(pws);
-	const Weather::ReturnVals vals = w.GetVals(key, GetZip(), pws, GetUsePWS());
+	const Weather::ReturnVals vals = w.GetVals();
 	const int scale = w.GetScale(vals);
 
 	fprintf(stream_file, "{\n");

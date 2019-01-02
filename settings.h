@@ -21,8 +21,53 @@
 // WARNING: this API may stop working at any moment.
 #define WEATHER_WUNDERGROUND
 
+// Aeris Weather https://www.aerisweather.com
+//#define WEATHER_AERIS
+
 
 // END WEATHER PROVIDER SECTION
+
+// EEPROM Memory locations
+#define ADDR_SCHEDULE_COUNT		4
+#define ADDR_OP1				5
+#define END_OF_ZONE_BLOCK		950
+#define END_OF_SCHEDULE_BLOCK	2048
+#define ADDR_NTP_IP				950
+#define ADDR_NTP_OFFSET			954
+#define ADDR_HOST				955 // NOT USED
+#define MAX_HOST_LEN			20  // NOT USED
+#define ADDR_IP					976
+#define ADDR_NETMASK			980
+#define ADDR_GATEWAY			984
+#define ADDR_DHCP				988 // NOT USED
+#define ADDR_WUIP				992
+#define ADDR_ZIP				996
+#define ADDR_APIKEY				1000
+#define ADDR_OTYPE				1008
+#define ADDR_WEB				1009
+#define ADDR_SADJ				1011
+#define ADDR_PWS				1012
+#define LEN_PWS					11
+#define ADDR_APIID				1023
+#define LEN_APIID				32
+#define ADDR_APISECRET			1055
+#define LEN_APISECRET			64
+#define ADDR_LOC				1119
+#define LEN_LOC					50
+#define ADDR_					1169
+
+#define SCHEDULE_OFFSET 1200
+#define SCHEDULE_INDEX 60
+#define ZONE_OFFSET 20
+#define ZONE_INDEX 25
+
+#if ZONE_OFFSET + (ZONE_INDEX * NUM_ZONES) > END_OF_ZONE_BLOCK
+#error Number of Zones is too large
+#endif
+
+#if SCHEDULE_OFFSET + (SCHEDULE_INDEX * MAX_SCHEDULES) > END_OF_SCHEDULE_BLOCK
+#error Number of Schedules is too large
+#endif
 
 #include <inttypes.h>
 #include <string.h>
@@ -141,6 +186,10 @@ uint32_t GetZip();
 void SetZip(const uint32_t zip);
 void GetApiKey(char * key);
 void SetApiKey(const char * key);
+void GetApiId(char * key);
+void SetApiId(const char * key);
+void GetApiSecret(char * key);
+void SetApiSecret(const char * key);
 bool GetRunSchedules();
 void SetRunSchedules(bool value);
 bool GetDHCP();
@@ -154,6 +203,8 @@ uint8_t GetSeasonalAdjust();
 void SetSeasonalAdjust(uint8_t);
 void GetPWS(char * key);
 void SetPWS(const char * key);
+void GetLoc(char * key);
+void SetLoc(const char * key);
 bool GetUsePWS();
 void SetUsePWS(bool value);
 void LoadSchedule(uint8_t num, Schedule * pSched);

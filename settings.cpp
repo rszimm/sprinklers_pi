@@ -9,40 +9,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define ADDR_SCHEDULE_COUNT		4
-#define ADDR_OP1				5
-#define END_OF_ZONE_BLOCK		950
-#define END_OF_SCHEDULE_BLOCK	2048
-#define ADDR_NTP_IP				950
-#define ADDR_NTP_OFFSET			954
-#define ADDR_HOST				955 // NOT USED
-#define MAX_HOST_LEN			20  // NOT USED
-#define ADDR_IP					976
-#define ADDR_NETMASK			980
-#define ADDR_GATEWAY			984
-#define ADDR_DHCP				988 // NOT USED
-#define ADDR_WUIP				992
-#define ADDR_ZIP				996
-#define ADDR_APIKEY				1000
-#define ADDR_OTYPE				1008
-#define ADDR_WEB				1009
-#define ADDR_SADJ				1011
-#define ADDR_PWS				1012
-#define ADDR_					1023
-
-#define SCHEDULE_OFFSET 1200
-#define SCHEDULE_INDEX 60
-#define ZONE_OFFSET 20
-#define ZONE_INDEX 25
-
-#if ZONE_OFFSET + (ZONE_INDEX * NUM_ZONES) > END_OF_ZONE_BLOCK
-#error Number of Zones is too large
-#endif
-
-#if SCHEDULE_OFFSET + (SCHEDULE_INDEX * MAX_SCHEDULES) > END_OF_SCHEDULE_BLOCK
-#error Number of Schedules is too large
-#endif
-
 Schedule::Schedule() : m_type(0), day(0)
 {
 	name[0] = 0;
@@ -164,7 +130,7 @@ bool SetSchedule(const KVPairs & key_value_pairs)
 		else if ((key[0] == 't') && (key[2] == 0) && ((key[1] >= '1') && (key[1] <= '4')))
 		{
 			const char * colon_loc = strstr(value, ":");
-			if (colon_loc > 0)
+			if ((uint64_t)colon_loc > 0)
 			{
 				int hour = strtol(value, NULL, 10);
 				int minute = strtol(colon_loc + 1, NULL, 10);
@@ -315,6 +281,14 @@ bool SetSettings(const KVPairs & key_value_pairs)
 		{
 			SetApiKey(value);
 		}
+		else if (strcmp(key, "apiid") == 0)
+		{
+			SetApiId(value);
+		}
+		else if (strcmp(key, "apisecret") == 0)
+		{
+			SetApiSecret(value);
+		}
 		else if (strcmp(key, "zip") == 0)
 		{
 			SetZip(strtoul(value, 0, 10));
@@ -342,6 +316,10 @@ bool SetSettings(const KVPairs & key_value_pairs)
 		else if (strcmp(key, "pws") == 0)
 		{
 			SetPWS(value);
+		}
+		else if (strcmp(key, "loc") == 0)
+		{
+			SetLoc(value);
 		}
 		else if (strcmp(key, "wutype") == 0)
 		{
@@ -371,6 +349,8 @@ void ResetEEPROM()
 	SetNTPIP(INADDR_NONE);
 	SetWUIP(INADDR_NONE);
 	SetApiKey("");
+	SetApiId("");
+	SetApiSecret("");
 	SetZip(0);
 	SetIP(IPAddress(192, 168, 10, 20));
 	SetNetmask(IPAddress(255, 255, 255, 0));
@@ -379,6 +359,7 @@ void ResetEEPROM()
 	SetWebPort(8080);
 	SetSeasonalAdjust(100);
 	SetPWS("");
+	SetLoc("");
 	SetUsePWS(false);
 	SetOT(OT_NONE);
 }
@@ -470,16 +451,56 @@ void SetZip(const uint32_t zip)
 		EEPROM.write(ADDR_ZIP + i, zip >> (8 * (3 - i)));
 }
 
-void GetPWS(char * key)
+void GetPWS(char * val)
 {
-	for (int i=0; i<11; i++)
-		key[i] = EEPROM.read(ADDR_PWS+i);
+	for (int i=0; i<LEN_PWS; i++)
+		val[i] = EEPROM.read(ADDR_PWS+i);
+	val[LEN_PWS] = 0;
 }
 
-void SetPWS(const char * key)
+void SetPWS(const char * val)
 {
-	for (int i=0; i<11; i++)
-		EEPROM.write(ADDR_PWS+i, key[i]);
+	for (int i=0; i<LEN_PWS; i++)
+		EEPROM.write(ADDR_PWS+i, val[i]);
+}
+
+void GetApiId(char * val)
+{
+	for (int i=0; i<LEN_APIID; i++)
+		val[i] = EEPROM.read(ADDR_APIID+i);
+	val[LEN_APIID] = 0;
+}
+
+void SetApiId(const char * val)
+{
+	for (int i=0; i<LEN_APIID; i++)
+		EEPROM.write(ADDR_APIID+i, val[i]);
+}
+
+void GetApiSecret(char * val)
+{
+	for (int i=0; i<LEN_APISECRET; i++)
+		val[i] = EEPROM.read(ADDR_APISECRET+i);
+	val[LEN_APISECRET] = 0;
+}
+
+void SetApiSecret(const char * val)
+{
+	for (int i=0; i<LEN_APISECRET; i++)
+		EEPROM.write(ADDR_APISECRET+i, val[i]);
+}
+
+void GetLoc(char * val)
+{
+	for (int i=0; i<LEN_LOC; i++)
+		val[i] = EEPROM.read(ADDR_LOC+i);
+	val[LEN_LOC] = 0;
+}
+
+void SetLoc(const char * val)
+{
+	for (int i=0; i<LEN_LOC; i++)
+		EEPROM.write(ADDR_LOC+i, val[i]);
 }
 
 void GetApiKey(char * key)

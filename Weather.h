@@ -9,6 +9,7 @@
 #define _WEATHER_h
 
 #include "port.h"
+#include "settings.h"
 
 #define NEUTRAL_HUMIDITY 30
 
@@ -28,10 +29,23 @@ public:
 		short UV;
 		const char* resolvedIP;
 	};
+	struct Settings
+	{
+		char key[17]; //16 character hex
+		char apiId[LEN_APIID+1]; // 32 character string
+		char apiSecret[LEN_APISECRET+1]; // 64 character string
+		uint32_t zip;
+		char pws[LEN_PWS+1]; // 11 character string
+		bool usePws;
+		char location[LEN_LOC+1]; // 50 character string
+	};
 public:
-	int GetScale(const char * key, uint32_t zip, const char * pws, bool usePws) const;
-	int GetScale(const ReturnVals & vals) const;
-    virtual ReturnVals GetVals(const char * key, uint32_t zip, const char * pws, bool usePws) const = 0;
+	static Settings GetSettings(void);
+	int16_t GetScale(void) const;
+	int16_t GetScale(const Settings & settings) const;
+	int16_t GetScale(const ReturnVals & vals) const;
+	ReturnVals GetVals(void) const;
+    ReturnVals GetVals(const Settings & settings) const;
 };
 
 #endif
