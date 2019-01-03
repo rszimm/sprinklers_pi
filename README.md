@@ -23,7 +23,7 @@ Sprinklers Pi is a sophisticated Irrigation control system for the Raspberry Pi.
 By default, we now ship with no weather provider enabled, and therefore no adjustment performed.
 Follow the directions below to enable a weather provider.
 
-### Aeris Weather (default)
+### Aeris Weather
 Uncomment `#define WEATHER_AERIS` in settings.h before building.
 
 Once you have built and started the server fill out the API Id, API Secret, and Location in the Settings page.
