@@ -19,7 +19,7 @@
 
 // Weather Underground
 // WARNING: this API may stop working at any moment.
-#define WEATHER_WUNDERGROUND
+//#define WEATHER_WUNDERGROUND
 
 // Aeris Weather https://www.aerisweather.com
 //#define WEATHER_AERIS

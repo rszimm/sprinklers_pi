@@ -10,8 +10,10 @@
 #include "nntp.h"
 #endif
 
-#ifdef WEATHER_WUNDERGROUND
+#if defined(WEATHER_WUNDERGROUND)
 #include "Wunderground.h"
+#elif defined(WEATHER_AERIS)
+#include "Aeris.h"
 #else
 #include "Weather.h"
 #endif
@@ -235,13 +237,13 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 	fprintf_P(stream_file, PSTR("\t\"ot\" : \"%d\",\n"), GetOT());
 	ip = GetWUIP();
 	fprintf_P(stream_file, PSTR("\t\"wuip\" : \"%d.%d.%d.%d\",\n"), ip[0], ip[1], ip[2], ip[3]);
-#ifdef WEATHER_WUNDERGROUND
+#if defined(WEATHER_WUNDERGROUND)
 	fprintf_P(stream_file, PSTR("\t\"apikey\" : \"%s\",\n"), settings.key);
 	fprintf_P(stream_file, PSTR("\t\"wutype\" : \"%s\",\n"), settings.usePws ? "pws" : "zip");
 	fprintf_P(stream_file, PSTR("\t\"zip\" : \"%ld\",\n"), (long) settings.zip);
 	fprintf_P(stream_file, PSTR("\t\"pws\" : \"%s\",\n"), settings.pws);
 #endif
-#ifdef WEATHER_AERIS
+#if defined(WEATHER_AERIS)
 	fprintf_P(stream_file, PSTR("\t\"apiid\" : \"%s\",\n"), settings.apiId);
 	fprintf_P(stream_file, PSTR("\t\"apisecret\" : \"%s\",\n"), settings.apiSecret);
 	fprintf_P(stream_file, PSTR("\t\"loc\" : \"%s\",\n"), settings.location);
@@ -253,8 +255,10 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 
 static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
 {
-#ifdef WEATHER_WUNDERGROUND
+#if defined(WEATHER_WUNDERGROUND)
 	Wunderground w;
+#elif defined(WEATHER_AERIS)
+	Aeris w;
 #else
 	Weather w;
 	fprintf(stream_file, "No Weather Provider defined in settings.h");

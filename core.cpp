@@ -7,8 +7,10 @@
 #include "core.h"
 #include "settings.h"
 
-#ifdef WEATHER_WUNDERGROUND
+#if defined(WEATHER_WUNDERGROUND)
 #include "Wunderground.h"
+#elif defined(WEATHER_AERIS)
+#include "Aeris.h"
 #endif
 
 #include "web.h"
@@ -222,13 +224,16 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 {
 	runStateClass::DurationAdjustments adj(100);
 	if (sched->IsWAdj()) {
-		// get factor to adjust times by.  100 = 100% (i.e. no adjustment)
-#ifdef WEATHER_WUNDERGROUND
+#if defined(WEATHER_WUNDERGROUND)
 		Wunderground w;
-		adj.wunderground = w.GetScale();
+#elif defined(WEATHER_AERIS)
+		Aeris w;
 #else
-		adj.wunderground = 100;
+		// this is a dummy provider which will just result in 100
+		Weather w;
 #endif
+		// get factor to adjust times by.  100 = 100% (i.e. no adjustment)
+		adj.wunderground = w.GetScale();
 	}
 	adj.seasonal = GetSeasonalAdjust();
 	long scale = ((long)adj.seasonal * (long)adj.wunderground) / 100;

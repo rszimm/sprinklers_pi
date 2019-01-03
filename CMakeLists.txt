@@ -27,6 +27,8 @@ add_executable(sprinklers_pi
         Weather.h
         Wunderground.cpp
         Wunderground.h
+        Aeris.cpp
+        Aeris.h
         web.cpp
         web.h)
 

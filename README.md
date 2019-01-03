@@ -18,6 +18,33 @@ Sprinklers Pi is a sophisticated Irrigation control system for the Raspberry Pi.
 * Very simple installation
 * Seasonal adjustment.
 
+
+## Weather Setup
+By default, we now ship with no weather provider enabled, and therefore no adjustment performed.
+Follow the directions below to enable a weather provider.
+
+### Aeris Weather (default)
+Uncomment `#define WEATHER_AERIS` in settings.h before building.
+
+Once you have built and started the server fill out the API Id, API Secret, and Location in the Settings page.
+Your API Id and Secret can be found here: https://www.aerisweather.com/account/apps (account required, free).
+Location can be any of the following:
+  * GPS Latitude,Longitude (eg. "40.749748,-73.991618")
+  * City, State (eg. "New York, NY")
+  * City, Country (eg. "London, United Kingdom")
+  * ZIP Code (eg. 10001)
+
+### Wunderground
+Wunderground setup requires you to have previously created an API Key, and for them to have not shut it down yet.
+
+Uncomment `#define WEATHER_WUNDERGROUND` in settings.h before building.
+
+### Testing Weather Data
+You can click on Advanced -> Weather Provider Diagnostics to verify your setup is working.
+
+See the wiki for more information: https://github.com/rszimm/sprinklers_pi/wiki/Weather-adjustments
+
+
 ## Building
 ```Shell
 make -lwiringPi

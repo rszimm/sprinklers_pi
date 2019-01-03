@@ -6,7 +6,7 @@
 	Weather::ReturnVals GetVals(const Weather::Settings & settings) const override;
 ```
 2. Add commented out #define WEATHER_YOUR_PROVIDER line to settings.h
-3. Add #elif WEATHER_YOUR_PROVIDER blocks to the following places:
+3. Add #elif defined(WEATHER_YOUR_PROVIDER) blocks to the following places:
   * core.cpp includes
   * core.cpp `static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)` function
   * web.cpp includes

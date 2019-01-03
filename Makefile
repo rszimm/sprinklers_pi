@@ -12,6 +12,7 @@ Event.cpp \
 Logging.cpp \
 Weather.cpp \
 Wunderground.cpp \
+Aeris.cpp \
 core.cpp \
 port.cpp \
 settings.cpp \
