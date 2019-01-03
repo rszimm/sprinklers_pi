@@ -1,54 +1,56 @@
 <!DOCTYPE html>
 <html>
-  
-  <head>
+
+<head>
     <title>WCheck</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" type="text/css">
     <link rel="stylesheet" href="custom.css" />
     <script src="jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="jquery/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
-  </head>
-  
-  <body>
-    <div data-role="page" id="wcheck">
-      <script language="javascript">
+</head>
+
+<body>
+<div data-role="page" id="wcheck">
+    <script language="javascript">
         $('#wcheck').on('pagebeforeshow', function () {
-          $('#wuText').empty().append("Requesting Data from Weather Provider...");
-          $.ajax("json/wcheck", {async: true, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
-            if (data.keynotfound == "true") {
-              $('#wuText').empty().append("Weather Provider API Key is invalid!");
-            } else if (data.valid == "false") {
-              $('#wuText').empty().append("Invalid Response from Weather Provider server!");
-            } else {
-              $('#wuText').empty().append("Resolved Weather Provider IP: " + data.resolvedIP);
-              $('#wuText').append("<br/>Min Humidity: " + data.minhumidity + "%");
-              $('#wuText').append("<br/>Max Humidity: " + data.maxhumidity + "%");
-              $('#wuText').append("<br/>Mean Temp: " + data.meantempi + "&deg;F");
-              $('#wuText').append("<br/>Precip Today: " + data.precip_today/100 + "\"");
-              $('#wuText').append("<br/>Precip Yesterday: " + data.precip/100 + "\"");
-              $('#wuText').append("<br/>Wind Yesterday: " + data.wind_mph/10 + "mph");
-              $('#wuText').append("<br/>UV Now: " + data.UV/10 + " ");
-              $('#wuText').append("<br/>Overall Scale: " + data.scale + "%");
-            }
-          }}); // ajax
+            $('#wuText').empty().append("Requesting Data from Weather Provider...");
+            $.ajax("json/wcheck", {async: true, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
+                    if (data.noprovider == "true") {
+                        $('#wuText').empty().append("No Weather Provider defined in settings.h");
+                    } else if (data.keynotfound == "true") {
+                        $('#wuText').empty().append("Weather Provider API Key is invalid!");
+                    } else if (data.valid == "false") {
+                        $('#wuText').empty().append("Invalid Response from Weather Provider server!");
+                    } else {
+                        $('#wuText').empty().append("Resolved Weather Provider IP: " + data.resolvedIP);
+                        $('#wuText').append("<br/>Min Humidity: " + data.minhumidity + "%");
+                        $('#wuText').append("<br/>Max Humidity: " + data.maxhumidity + "%");
+                        $('#wuText').append("<br/>Mean Temp: " + data.meantempi + "&deg;F");
+                        $('#wuText').append("<br/>Precip Today: " + data.precip_today/100 + "\"");
+                        $('#wuText').append("<br/>Precip Yesterday: " + data.precip/100 + "\"");
+                        $('#wuText').append("<br/>Wind Yesterday: " + data.wind_mph/10 + "mph");
+                        $('#wuText').append("<br/>UV Now: " + data.UV/10 + " ");
+                        $('#wuText').append("<br/>Overall Scale: " + data.scale + "%");
+                    }
+                }}); // ajax
         }); // on pagebeforeshow handler
 
-      </script>
-      <div data-role="header">
-         <h1>Weather Provider Check</h1>
- <a data-role="button" data-rel="back" href="#page1" data-icon="back" data-iconpos="left" class="ui-btn-left">
+    </script>
+    <div data-role="header">
+        <h1>Weather Provider Check</h1>
+        <a data-role="button" data-rel="back" href="#page1" data-icon="back" data-iconpos="left" class="ui-btn-left">
             Back
         </a>
 
-      </div>
-      <!-- /header -->
-      <div data-role="content" id="wuText"></div>
-      <!-- /content -->
-      <div data-role="footer" class="footer-docs" data-theme="a">
-          <p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
-      </div>
     </div>
-    <!-- /page -->
-  </body>
+    <!-- /header -->
+    <div data-role="content" id="wuText"></div>
+    <!-- /content -->
+    <div data-role="footer" class="footer-docs" data-theme="a">
+        <p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
+    </div>
+</div>
+<!-- /page -->
+</body>
 </html>

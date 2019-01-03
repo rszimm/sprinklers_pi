@@ -11,6 +11,8 @@
 #include "Wunderground.h"
 #elif defined(WEATHER_AERIS)
 #include "Aeris.h"
+#else
+#include "Weather.h"
 #endif
 
 #include "web.h"

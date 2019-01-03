@@ -255,21 +255,24 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 
 static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
 {
+	bool noprovider = false;
+	ServeHeader(stream_file, 200, "OK", false, "text/plain");
+
 #if defined(WEATHER_WUNDERGROUND)
 	Wunderground w;
 #elif defined(WEATHER_AERIS)
 	Aeris w;
 #else
 	Weather w;
-	fprintf(stream_file, "No Weather Provider defined in settings.h");
-	return;
+	noprovider = true;
 #endif
-	ServeHeader(stream_file, 200, "OK", false, "text/plain");
+
 	const Weather::ReturnVals vals = w.GetVals();
 	const int scale = w.GetScale(vals);
 
 	fprintf(stream_file, "{\n");
 	fprintf_P(stream_file, PSTR("\t\"valid\" : \"%s\",\n"), vals.valid ? "true" : "false");
+	fprintf_P(stream_file, PSTR("\t\"noprovider\" : \"%s\",\n"), noprovider ? "true" : "false");
 	fprintf_P(stream_file, PSTR("\t\"keynotfound\" : \"%s\",\n"), vals.keynotfound ? "true" : "false");
 	fprintf_P(stream_file, PSTR("\t\"resolvedIP\" : \"%s\",\n"), vals.resolvedIP);
 	fprintf_P(stream_file, PSTR("\t\"minhumidity\" : \"%d\",\n"), vals.minhumidity);
