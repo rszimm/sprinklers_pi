@@ -12,6 +12,15 @@
 // maximum number of zones allowed
 #define NUM_ZONES 15
 
+// Uncomment the next line if you want schedules to turn off when you use manual control
+//#define DISABLE_SCHED_ON_MANUAL
+
+// Set the on/off delay for "ChatterBox" (in microseconds)
+// If your relay/solenoid isn't click-clacking try increasing this
+#define CHATTERBOX_DELAY 100000
+// Number of on/off cycles to execute per button press
+#define CHATTERBOX_CYCLES 10
+
 /*************************************************
  * Weather Provider Section
  * Only uncomment one weather provider below.

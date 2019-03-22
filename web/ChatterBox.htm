@@ -2,7 +2,7 @@
 <html lang="en">
   
   <head>
-    <title>Manual Control</title>
+    <title>Chatter Box</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" type="text/css">
     <link rel="stylesheet" href="custom.css" />
@@ -11,9 +11,9 @@
   </head>
   
   <body>
-    <div data-role="page" id="manual">
+    <div data-role="page" id="chatterbox">
       <script language="javascript">
-        $('#manual').on('pagebeforeshow', function () {
+        $('#chatterbox').on('pagebeforeshow', function () {
           $.ajax("json/zones", {async: false, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
             $('#valves').empty();
             for (var i = 0; i < data.zones.length; i++) {
@@ -21,36 +21,32 @@
                 addValve(i + 1, data.zones[i].name, data.zones[i].state);
             }
             $('#valves').trigger('create');
-            $('.valves').bind('slidestop', function (e) {
-              if (this.value == 'on') {
-                $('.valves').val('off').slider('refresh');
-                $(this).val('on').slider('refresh');
-              }
-              $.get("bin/manual", {
+            $('.valves').bind('click', function (e) {
+              $.get("bin/chatter", {
                 zone: this.name,
                 state: this.value
               });
-            }); // slidestop
+            }); // click
           }}); // getJSON
         }); // on pagebeforeshow handler
 
         function addValve(j, name, state) {
           var zone_id = 'z' + String.fromCharCode(97+j);
-          var new_ctl = $('<label for="' + zone_id + '">' + name + ':</label>' +
-            '<select class="valves" name="' + zone_id + '" id="' + zone_id + '" data-role="slider" data-mini="true">' +
-            ' <option value="off">Off</option><option value="on"' + ((state == 'on') ? ' selected' : ' ') + '>On</option></select>');
+          var new_ctl = $('<button class="valves" name="' + zone_id + '" id="' + zone_id + '">' + name + '</button>');
           new_ctl.appendTo('#valves');
         }
       </script>
       <div data-role="header">
-         <h1>Manual Control</h1>
+         <h1>Chatter Box</h1>
  <a data-role="button" data-rel="back" href="#page1" data-icon="back" data-iconpos="left" class="ui-btn-left">
             Back
         </a>
-
       </div>
       <!-- /header -->
-      <div data-role="content" id="valves"></div>
+      <div data-role="content">
+          <p>This will turn the relay/solenoid selected off and on rapidly (which you should be able to hear/feel) to aid in identifying what is connected where.</p>
+          <div id="valves"></div>
+      </div>
       <!-- /content -->
       <div data-role="footer" class="footer-docs" data-theme="a">
           <p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>

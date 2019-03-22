@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Event.h"
+#include <unistd.h>
+#include "core.h"
 
 web::web(void)
 		: m_server(0)
@@ -486,9 +488,10 @@ static bool ManualZone(const KVPairs & key_value_pairs)
 {
 	freeMemory();
 
-	// If you uncomment the following line it will
+#ifdef DISABLE_SCHED_ON_MANUAL
     // turn off the current schedules when you use manual control.
-	//SetRunSchedules(false);
+	SetRunSchedules(false);
+#endif
 
 	bool bOn = false;
 	int iZoneNum = -1;
@@ -519,6 +522,42 @@ static bool ManualZone(const KVPairs & key_value_pairs)
 	{
 		TurnOffZones();
 		runState.SetManual(false);
+	}
+	return true;
+}
+
+static bool ChatterZone(const KVPairs & key_value_pairs)
+{
+	freeMemory();
+
+#ifdef DISABLE_SCHED_ON_MANUAL
+    // turn off the current schedules when you use manual control.
+	SetRunSchedules(false);
+#endif
+	
+	int iZoneNum = -1;
+
+	// Iterate through the kv pairs and update the appropriate structure values.
+	for (int i = 0; i < key_value_pairs.num_pairs; i++)
+	{
+		const char * key = key_value_pairs.keys[i];
+		const char * value = key_value_pairs.values[i];
+		if ((strcmp(key, "zone") == 0) && (value[0] == 'z') && (value[1] > 'a') && (value[1] <= ('a' + NUM_ZONES)))
+		{
+			iZoneNum = value[1] - 'a';
+		}
+	}
+	if (iZoneNum >= 0)
+	{
+		for(int i=0;i<CHATTERBOX_CYCLES; i++)
+		{
+			TurnOnZone(iZoneNum);
+			io_latchNow();
+			usleep(CHATTERBOX_DELAY);
+			TurnOffZones();
+			io_latchNow();
+			usleep(CHATTERBOX_DELAY);
+		}
 	}
 	return true;
 }
@@ -866,6 +905,15 @@ void web::ProcessWebClients()
 			else if (strcmp(sPage, "bin/manual") == 0)
 			{
 				if (ManualZone(key_value_pairs))
+				{
+					ServeHeader(pFile, 200, "OK", false);
+				}
+				else
+					ServeError(pFile);
+			}
+			else if (strcmp(sPage, "bin/chatter") == 0)
+			{
+				if (ChatterZone(key_value_pairs))
 				{
 					ServeHeader(pFile, 200, "OK", false);
 				}

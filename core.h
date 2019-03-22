@@ -29,6 +29,7 @@ bool isZoneOn(int iNum);
 void TurnOnZone(int iValve);
 void TurnOffZones();
 void io_setup();
+void io_latchNow();
 
 class runStateClass
 {

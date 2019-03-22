@@ -186,6 +186,10 @@ void io_setup()
 	io_latch();
 }
 
+void io_latchNow()
+{
+	io_latch();
+}
 
 void TurnOffZones()
 {
