@@ -14,7 +14,7 @@
     <div data-role="page" id="qsched">
       <script type="text/javascript">
         $('#qsched').on('pagebeforeshow', function () {
-          $.ajax("json/schedules", {async: false, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
+          $.ajax("json/schedules", {dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
             $('#schedsel').empty();
             for (var i=0; i< data.Table.length; i++) {
               if (data.Table[i].e == "on")

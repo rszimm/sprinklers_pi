@@ -35,7 +35,7 @@
             return b;
           })(window.location.search.substr(1).split('&'));
           if (qs["id"] != null) { // we're editing an existing schedule
-            $.ajax("json/schedule?id="+qs["id"], {async: false, dataType: "json", success: function (data) {
+            $.ajax("json/schedule?id="+qs["id"], {dataType: "json", success: function (data) {
               var output = '';
               $('#id').val(qs["id"]);
               $('#name').val(data.name);
@@ -96,7 +96,7 @@
             $('#id').val(-1);
             $('#enable').val('on').slider('refresh');
             $('#delButton').hide();
-            $.ajax("json/zones", {async: false, dataType: "json", success: function (data) {
+            $.ajax("json/zones", {dataType: "json", success: function (data) {
               $('#zones').empty();
               for (var i = 0; i < data.zones.length; i++)
                 if (data.zones[i].enabled == 'on')

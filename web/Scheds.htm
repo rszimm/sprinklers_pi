@@ -15,7 +15,7 @@
     <div data-role="page" id="schedules">
       <script language="javascript">
         $('#schedules').on('pagebeforeshow', function () {
-          $.ajax("json/schedules", {async: false, dataType: "json", success: function (data) {
+          $.ajax("json/schedules", {dataType: "json", success: function (data) {
             var output = '';
             for (var i = 0; i < data.Table.length; i++) {
               output += '<li><a href="ShSched.htm?id=' + data.Table[i].id + '" data-transition="slide">';

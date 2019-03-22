@@ -15,7 +15,7 @@
     <script language="javascript">
         $('#wcheck').on('pagebeforeshow', function () {
             $('#wuText').empty().append("Requesting Data from Weather Provider...");
-            $.ajax("json/wcheck", {async: true, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
+            $.ajax("json/wcheck", {dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
                 var wuText = $('#wuText');
                     if (data.noprovider == "true") {
                         wuText.empty().append("No Weather Provider defined in settings.h");

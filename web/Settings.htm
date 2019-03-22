@@ -15,7 +15,7 @@
   <script type="text/javascript">
 
     $('#settings').on('pagebeforeshow', function () {
-      $.ajax("json/settings", {async: false, dataType: "json", success: function (data) {
+      $.ajax("json/settings", {dataType: "json", success: function (data) {
           $('#settings div[data-role="fieldcontain"]').css('display','none');
           NV(data, 'ip');
           NV(data, 'netmask');

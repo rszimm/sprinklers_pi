@@ -14,7 +14,7 @@
     <div data-role="page" id="manual">
       <script language="javascript">
         $('#manual').on('pagebeforeshow', function () {
-          $.ajax("json/zones", {async: false, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
+          $.ajax("json/zones", {dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
             $('#valves').empty();
             for (var i = 0; i < data.zones.length; i++) {
               if (data.zones[i].enabled == 'on')
