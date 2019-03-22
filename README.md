@@ -31,7 +31,7 @@ DarkSky is currently unsupported on Arduino/AVR Platforms due to a dependence on
 
 Once you have built and started the server fill out the API Secret Key in the Settings page (API Id is unused).
 Your Secret can be found here: https://darksky.net/dev (account required, free).
-Location most be (without the quotes):
+Location must be (without the quotes):
   * GPS Latitude,Longitude (eg. "40.749748,-73.991618")
 
 ### Aeris Weather
@@ -47,7 +47,7 @@ Location can be any of the following:
   * ZIP Code (eg. 10001)
 
 ### Wunderground
-Wunderground setup requires you to have previously created an API Key, and for them to have not shut it down yet.
+Wunderground setup requires you to have previously created an API Key, and for them to have not shut it down yet (As of 2019/03/15 it's no longer working for me).
 
 Uncomment `#define WEATHER_WUNDERGROUND` in settings.h before building.
 
