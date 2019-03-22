@@ -21,7 +21,8 @@ Sprinklers Pi is a sophisticated Irrigation control system for the Raspberry Pi.
 
 ## Weather Setup
 By default, we now ship with no weather provider enabled, and therefore no adjustment performed.
-Follow the directions below to enable a weather provider.
+Follow the directions below to enable a weather provider. If you change weather providers be sure to run "make clean"
+before rebuilding.
 
 ### DarkSky Weather
 Uncomment `#define WEATHER_DARKSKY` in settings.h before building.
@@ -58,7 +59,7 @@ See the wiki for more information: https://github.com/rszimm/sprinklers_pi/wiki/
 
 ## Building
 ```Shell
-make -lwiringPi
+make
 sudo make install
 ```
 
