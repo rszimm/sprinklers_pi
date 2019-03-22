@@ -2,6 +2,9 @@
 // This file manages the retrieval of Weather related information and adjustment of durations
 //   from DarkSky
 
+#include "settings.h"
+#ifdef WEATHER_DARKSKY
+
 #include "DarkSky.h"
 #include "core.h"
 #include "port.h"
@@ -137,3 +140,5 @@ Weather::ReturnVals DarkSky::GetVals(const Weather::Settings & settings) const
 	
 	return vals;
 }
+
+#endif

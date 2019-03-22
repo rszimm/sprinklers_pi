@@ -5,6 +5,9 @@
 // Copyright (c) 2013 Richard Zimmerman
 //
 
+#include "settings.h"
+#ifdef WEATHER_WUNDERGROUND
+
 #include "Wunderground.h"
 #include "core.h"
 #include "port.h"
@@ -223,3 +226,5 @@ Weather::ReturnVals Wunderground::GetVals(const Weather::Settings & settings) co
 	}
 	return vals;
 }
+
+#endif

@@ -2,7 +2,9 @@
 // This file manages the retrieval of Weather related information and adjustment of durations
 //   from Aeris Weather
 // Author: Nick Horvath
-//
+
+#include "settings.h"
+#ifdef WEATHER_AERIS
 
 #include "Aeris.h"
 #include "core.h"
@@ -144,25 +146,25 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 						if (strcmp(parentKey, "precip") == 0) {
 							ret->valid = true;
 							ret->keynotfound = false;
-							ret->precipi = (short) std::round(atof(val) * PRECIP_FACTOR);
+							ret->precipi = (short) round(atof(val) * PRECIP_FACTOR);
 							trace("Precip Yesterday: %d\n", ret->precipi);
 						}
 					} else if (strcmp(key, "avgMPH") == 0) {
 						if (strcmp(parentKey, "wind") == 0) {
 							ret->valid = true;
 							ret->keynotfound = false;
-							ret->windmph = (short) std::round(atof(val) * WIND_FACTOR);
+							ret->windmph = (short) round(atof(val) * WIND_FACTOR);
 							trace("Wind Yesterday: %d\n", ret->windmph);
 						}
 					} else if (strcmp(key, "precipIN") == 0) {
 						ret->valid = true;
 						ret->keynotfound = false;
-						ret->precip_today = (short) std::round(atof(val) * PRECIP_FACTOR);
+						ret->precip_today = (short) round(atof(val) * PRECIP_FACTOR);
 						trace("Precip Today: %d\n", ret->precip_today);
 					} else if (strcmp(key, "uvi") == 0) {
 						ret->valid = true;
 						ret->keynotfound = false;
-						ret->UV = (short) std::round(atof(val) * UV_FACTOR);
+						ret->UV = (short) round(atof(val) * UV_FACTOR);
 						trace("UV Today: %d\n", ret->UV);
 					}
 				}
@@ -296,3 +298,5 @@ Weather::ReturnVals Aeris::GetVals(const Weather::Settings & settings) const
 
 	return vals;
 }
+
+#endif
