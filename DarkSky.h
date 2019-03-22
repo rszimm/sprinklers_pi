@@ -1,22 +1,22 @@
-// Aeris.h
+// DarkSky.h
 // This file manages the retrieval of Weather related information and adjustment of durations
-//   from Aeris (www.aerisweather.com)
+//   from DarkSky
 //
 
-#ifndef _AERIS_h
-#define _AERIS_h
+#ifndef _DS_h
+#define _DS_h
 
 #include "port.h"
 #include "Weather.h"
 
-class Aeris : public Weather
+class DarkSky : public Weather
 {
 public:
-	Aeris(void);
+	DarkSky(void);
 	Weather::ReturnVals GetVals(void) const;
 	Weather::ReturnVals GetVals(const Weather::Settings & settings) const;
 private:
-	const char* m_aerisAPIHost;
+	const char* m_darkSkyAPIHost;
 };
 
 #endif

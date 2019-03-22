@@ -14,7 +14,7 @@
 #include "port.h"
 #ifdef LOGGING
 #include "Logging.h"
-extern Logging log;
+extern Logging logger;
 #endif
 
 #ifndef VERSION

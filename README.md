@@ -23,11 +23,22 @@ Sprinklers Pi is a sophisticated Irrigation control system for the Raspberry Pi.
 By default, we now ship with no weather provider enabled, and therefore no adjustment performed.
 Follow the directions below to enable a weather provider.
 
+### DarkSky Weather
+Uncomment `#define WEATHER_DARKSKY` in settings.h before building.
+
+DarkSky is currently unsupported on Arduino/AVR Platforms due to a dependence on curl and a JSON library that is currently untested on Arduino.
+
+Once you have built and started the server fill out the API Secret Key in the Settings page (API Id is unused).
+Your Secret can be found here: https://darksky.net/dev (account required, free).
+Location most be (without the quotes):
+  * GPS Latitude,Longitude (eg. "40.749748,-73.991618")
+
 ### Aeris Weather
 Uncomment `#define WEATHER_AERIS` in settings.h before building.
 
 Once you have built and started the server fill out the API Id, API Secret, and Location in the Settings page.
-Your API Id and Secret can be found here: https://www.aerisweather.com/account/apps (account required, free).
+Your API Id and Secret can be found here: https://www.aerisweather.com/account/apps (account required, free,
+must be renewed every 2 months).
 Location can be any of the following:
   * GPS Latitude,Longitude (eg. "40.749748,-73.991618")
   * City, State (eg. "New York, NY")

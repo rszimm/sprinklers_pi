@@ -29,8 +29,11 @@ add_executable(sprinklers_pi
         Wunderground.h
         Aeris.cpp
         Aeris.h
+        DarkSky.cpp
+        DarkSky.h
         web.cpp
-        web.h)
+        web.h
+        json.hpp)
 
 TARGET_LINK_LIBRARIES(sprinklers_pi
         sqlite3

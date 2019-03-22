@@ -11,6 +11,8 @@
 #include "Wunderground.h"
 #elif defined(WEATHER_AERIS)
 #include "Aeris.h"
+#elif defined(WEATHER_DARKSKY)
+#include "DarkSky.h"
 #else
 #include "Weather.h"
 #endif
@@ -28,7 +30,7 @@ static tftp tftpServer;
 #endif
 
 #ifdef LOGGING
-Logging log;
+Logging logger;
 #endif
 static web webServer;
 nntp nntpTimeServer;
@@ -45,7 +47,7 @@ void runStateClass::LogSchedule()
 {
 #ifdef LOGGING
 	if ((m_eventTime > 0) && (m_zone >= 0))
-		log.LogZoneEvent(m_eventTime, m_zone, nntpTimeServer.LocalNow() - m_eventTime, m_bSchedule ? m_iSchedule+1:-1, m_adj.seasonal, m_adj.wunderground);
+		logger.LogZoneEvent(m_eventTime, m_zone, nntpTimeServer.LocalNow() - m_eventTime, m_bSchedule ? m_iSchedule+1:-1, m_adj.seasonal, m_adj.wunderground);
 #endif
 }
 
@@ -234,6 +236,8 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 		Wunderground w;
 #elif defined(WEATHER_AERIS)
 		Aeris w;
+#elif defined(WEATHER_DARKSKY)
+		DarkSky w;
 #else
 		// this is a dummy provider which will just result in 100
 		Weather w;
@@ -416,7 +420,7 @@ void mainLoop()
 		io_setup();
 
 #ifdef LOGGING
-		if (!log.Init())
+		if (!logger.Init())
 			exit(EXIT_FAILURE);
 #endif
 

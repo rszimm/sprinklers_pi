@@ -14,6 +14,8 @@
 #include "Wunderground.h"
 #elif defined(WEATHER_AERIS)
 #include "Aeris.h"
+#elif defined(WEATHER_DARKSKY)
+#include "DarkSky.h"
 #else
 #include "Weather.h"
 #endif
@@ -188,7 +190,7 @@ static void JSONLogs(const KVPairs & key_value_pairs, FILE * stream_file)
 		}
 	}
 
-	log.GraphZone(stream_file, sdate, edate, grouping);
+	logger.GraphZone(stream_file, sdate, edate, grouping);
 	fprintf(stream_file, "}");
 }
 
@@ -212,7 +214,7 @@ static void JSONtLogs(const KVPairs & key_value_pairs, FILE * stream_file)
 			edate = strtol(value, 0, 10);
 		}
 	}
-	log.TableZone(stream_file, sdate, edate);
+	logger.TableZone(stream_file, sdate, edate);
 	fprintf(stream_file, "\t]\n}");
 }
 
@@ -250,6 +252,10 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 	fprintf_P(stream_file, PSTR("\t\"apisecret\" : \"%s\",\n"), settings.apiSecret);
 	fprintf_P(stream_file, PSTR("\t\"loc\" : \"%s\",\n"), settings.location);
 #endif
+#if defined(WEATHER_DARKSKY)
+	fprintf_P(stream_file, PSTR("\t\"apisecret\" : \"%s\",\n"), settings.apiSecret);
+	fprintf_P(stream_file, PSTR("\t\"loc\" : \"%s\",\n"), settings.location);
+#endif
 	// leave this value last, it has no comma after the value
 	fprintf_P(stream_file, PSTR("\t\"sadj\" : \"%ld\"\n"), (long) GetSeasonalAdjust());
 	fprintf(stream_file, "}");
@@ -264,6 +270,8 @@ static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
 	Wunderground w;
 #elif defined(WEATHER_AERIS)
 	Aeris w;
+#elif defined(WEATHER_DARKSKY)
+	DarkSky w;
 #else
 	Weather w;
 	noprovider = true;

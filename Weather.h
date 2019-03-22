@@ -13,6 +13,10 @@
 
 #define NEUTRAL_HUMIDITY 30
 
+#define PRECIP_FACTOR 100.0
+#define WIND_FACTOR 10.0
+#define UV_FACTOR 10.0
+
 class Weather
 {
 public:
@@ -20,14 +24,16 @@ public:
 	{
 		bool valid;
 		bool keynotfound;
+		const char* resolvedIP;
+		// Yesterday's Values
 		short minhumidity;
 		short maxhumidity;
 		short meantempi;
-		short precip_today;
 		short precipi;
 		short windmph;
+		// Today's Values
+		short precip_today;
 		short UV;
-		const char* resolvedIP;
 	};
 	struct Settings
 	{

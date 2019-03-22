@@ -13,6 +13,7 @@ Logging.cpp \
 Weather.cpp \
 Wunderground.cpp \
 Aeris.cpp \
+DarkSky.cpp \
 core.cpp \
 port.cpp \
 settings.cpp \

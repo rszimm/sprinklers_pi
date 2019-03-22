@@ -33,6 +33,9 @@
 // Aeris Weather https://www.aerisweather.com
 //#define WEATHER_AERIS
 
+// DarkSky Weather https://darksky.net/dev
+//#define WEATHER_DARKSKY
+
 
 // END WEATHER PROVIDER SECTION
 

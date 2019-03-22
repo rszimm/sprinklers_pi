@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctime>
+#include <math.h>
 
 Aeris::Aeris(void)
 {
@@ -114,14 +115,14 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 						if (strcmp(parentKey, "temp") == 0) {
 							ret->valid = true;
 							ret->keynotfound = false;
-							ret->meantempi = atoi(val);
+							ret->meantempi = (short) atoi(val);
 							trace("Avg Temp Yesterday: %d\n", ret->meantempi);
 						}
 					} else if (strcmp(key, "max") == 0) {
 						if (strcmp(parentKey, "rh") == 0) {
 							ret->valid = true;
 							ret->keynotfound = false;
-							ret->maxhumidity = atoi(val);
+							ret->maxhumidity = (short) atoi(val);
 							// prevent invalid humidity from getting through
 							if (ret->maxhumidity > 100 || ret->maxhumidity < 0) {
 								ret->maxhumidity = NEUTRAL_HUMIDITY;
@@ -132,7 +133,7 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 						if (strcmp(parentKey, "rh") == 0) {
 							ret->valid = true;
 							ret->keynotfound = false;
-							ret->minhumidity = atoi(val);
+							ret->minhumidity = (short) atoi(val);
 							// prevent invalid humidity from getting through
 							if (ret->minhumidity > 100 || ret->minhumidity < 0) {
 								ret->minhumidity = NEUTRAL_HUMIDITY;
@@ -143,25 +144,25 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 						if (strcmp(parentKey, "precip") == 0) {
 							ret->valid = true;
 							ret->keynotfound = false;
-							ret->precipi = (atof(val) * 100.0);
+							ret->precipi = (short) std::round(atof(val) * PRECIP_FACTOR);
 							trace("Precip Yesterday: %d\n", ret->precipi);
 						}
 					} else if (strcmp(key, "avgMPH") == 0) {
 						if (strcmp(parentKey, "wind") == 0) {
 							ret->valid = true;
 							ret->keynotfound = false;
-							ret->windmph = (atof(val) * 10.0);
+							ret->windmph = (short) std::round(atof(val) * WIND_FACTOR);
 							trace("Wind Yesterday: %d\n", ret->windmph);
 						}
 					} else if (strcmp(key, "precipIN") == 0) {
 						ret->valid = true;
 						ret->keynotfound = false;
-						ret->precip_today = (atof(val) * 100.0);
+						ret->precip_today = (short) std::round(atof(val) * PRECIP_FACTOR);
 						trace("Precip Today: %d\n", ret->precip_today);
 					} else if (strcmp(key, "uvi") == 0) {
 						ret->valid = true;
 						ret->keynotfound = false;
-						ret->UV = (atof(val) * 10.0);
+						ret->UV = (short) std::round(atof(val) * UV_FACTOR);
 						trace("UV Today: %d\n", ret->UV);
 					}
 				}
