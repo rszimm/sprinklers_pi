@@ -67,3 +67,7 @@ sudo make install
 `sudo /etc/init.d/sprinklers_pi start`
 
 See the wiki for more information: https://github.com/rszimm/sprinklers_pi/wiki
+
+## Live Demo
+A live demo site is available here: http://kilby.kewlshells.com:8080/
+Please keep it clean.
