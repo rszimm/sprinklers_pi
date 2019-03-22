@@ -114,7 +114,7 @@ bool SetSchedule(const KVPairs & key_value_pairs)
 		else if (strcmp(key, "wadj") == 0)
 			sched.SetWAdj(strcmp(value, "on") == 0);
 		else if (strcmp(key, "restrict") == 0)
-			sched.restrictions = atoi(value);
+			sched.SetRestriction((uint8_t)atoi(value));
 		else if (strcmp(key, "name") == 0)
 			strncpy(sched.name, value, sizeof(sched.name));
 		else if (strcmp(key, "interval") == 0)

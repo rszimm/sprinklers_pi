@@ -344,7 +344,7 @@ static void JSONSchedule(const KVPairs & key_value_pairs, FILE * stream_file)
 	LoadSchedule(sched_num, &sched);
 	fprintf_P(stream_file,
 			PSTR("{\n\t\"name\" : \"%s\",\n\t\"restrict\" : \"%d\",\n\t\"enabled\" : \"%s\",\n\t\"wadj\" : \"%s\",\n\t\"type\" : \"%s\",\n\t\"d1\" : \"%s\",\n\t\"d2\" : \"%s\""),
-			sched.name, sched.restrictions, sched.IsEnabled() ? "on" : "off", sched.IsWAdj() ? "on" : "off", sched.IsInterval() ? "off" : "on", sched.day & 0x01 ? "on" : "off",
+			sched.name, sched.GetRestriction(), sched.IsEnabled() ? "on" : "off", sched.IsWAdj() ? "on" : "off", sched.IsInterval() ? "off" : "on", sched.day & 0x01 ? "on" : "off",
 			sched.day & 0x02 ? "on" : "off");
 	fprintf_P(stream_file,
 			PSTR(",\n\t\"d3\" : \"%s\",\n\t\"d4\" : \"%s\",\n\t\"d5\" : \"%s\",\n\t\"d6\" : \"%s\",\n\t\"d7\" : \"%s\",\n\t\"interval\" : \"%d\",\n\t\"times\" : [\n"),

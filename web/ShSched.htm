@@ -86,6 +86,7 @@
                 $('#e' + j).prop('checked', (data.times[i].e == 'on') ? true : false).checkboxradio('refresh');
                 $('#t' + j).textinput((data.times[i].e == 'on')?'enable':'disable');
               }
+              $('#zones').empty();
               for (var i = 0; i < data.zones.length; i++)
                 if (data.zones[i].e == 'on')
                   addZone(i + 1, data.zones[i].name, data.zones[i].e, data.zones[i].duration);
@@ -96,6 +97,7 @@
             $('#enable').val('on').slider('refresh');
             $('#delButton').hide();
             $.ajax("json/zones", {async: false, dataType: "json", success: function (data) {
+              $('#zones').empty();
               for (var i = 0; i < data.zones.length; i++)
                 if (data.zones[i].enabled == 'on')
                   addZone(i + 1, data.zones[i].name, data.zones[i].enabled, 0);

@@ -98,7 +98,6 @@ public:
 		uint8_t day;
 		uint8_t interval;
 	};
-	uint8_t restrictions;
 	char name[20];
 	short time[4];
 	uint8_t zone_duration[15];
@@ -106,7 +105,19 @@ public:
 	bool IsEnabled() const { return m_type & 0x01; }
 	bool IsInterval() const { return m_type & 0x02; }
 	bool IsWAdj() const { return m_type & 0x04; }
+	bool IsRestricted() const { return m_type & 0x08; }
+	uint8_t GetRestriction() const {
+		if (IsRestricted()) {
+			if (m_type & 0x10) {
+				return 2;
+			} else {
+				return 1;
+			}
+		}
+		return 0;
+	}
 	bool IsRunToday(time_t time_now) {
+		uint8_t restrictions = GetRestriction();
 		if ((IsEnabled())	// do nothing if not enabled
 			&& (((IsInterval()) && ((elapsedDays(time_now) % interval) == 0))	// if interval is enabled, check days since last run
 				|| (!(IsInterval())
@@ -166,6 +177,15 @@ public:
 	void SetEnabled(bool val) { m_type = val ? (m_type | 0x01) : (m_type & ~0x01); }
 	void SetInterval(bool val) { m_type = val ? (m_type | 0x02) : (m_type & ~0x02); }
 	void SetWAdj(bool val) { m_type = val ? (m_type | 0x04) : (m_type & ~0x04); }
+	void SetRestriction(uint8_t val) {
+		if (val == 1) {
+			m_type = (m_type | 0x08) & ~0x10;
+		} else if (val == 2) {
+			m_type = (m_type | 0x18);
+		} else {
+			m_type = (m_type & ~0x18);
+		}
+	}
 };
 
 struct FullZone
