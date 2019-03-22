@@ -82,7 +82,7 @@ static void GetData(const Weather::Settings & settings,const char *m_darkSkyAPIH
 	buf[0]=0;
 	
 	if ((fh = popen(cmd, "r")) != NULL) {
-	    size_t byte_count = fread(buf, 1, BUFSIZ - 1, fh);
+	    size_t byte_count = fread(buf, 1, sizeof(buf) - 1, fh);
 	    buf[byte_count] = 0;
 	}
 	
