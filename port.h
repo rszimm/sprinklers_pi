@@ -138,6 +138,13 @@ static inline int day(time_t t)
 	return ptm->tm_mday;
 }
 
+static inline int mday(time_t t)
+{
+	struct tm * ptm;
+	ptm = gmtime(&t);
+	return ptm->tm_mday;
+}
+
 static inline int weekday(time_t t)
 {
 	struct tm * ptm;

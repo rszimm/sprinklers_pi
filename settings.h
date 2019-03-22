@@ -86,6 +86,7 @@ public:
 		uint8_t day;
 		uint8_t interval;
 	};
+	uint8_t restrictions;
 	char name[20];
 	short time[4];
 	uint8_t zone_duration[15];
@@ -94,9 +95,11 @@ public:
 	bool IsInterval() const { return m_type & 0x02; }
 	bool IsWAdj() const { return m_type & 0x04; }
 	bool IsRunToday(time_t time_now) {
-		if ((IsEnabled())
-			&& (((IsInterval()) && ((elapsedDays(time_now) % interval) == 0))
-				|| (!(IsInterval()) && (day & (0x01 << (weekday(time_now) - 1))))))
+		if ((IsEnabled())	// do nothing if not enabled
+			&& (((IsInterval()) && ((elapsedDays(time_now) % interval) == 0))	// if interval is enabled, check days since last run
+				|| (!(IsInterval())
+					&& ((restrictions == 0) || ((mday(time_now)%2) == (restrictions%2)))	// if even/odd restrictions are enabled check day of month number
+					&& (day & (0x01 << (weekday(time_now) - 1))))))	// if day of week schedule check day of week
 			return true;
 		return false;
 	}
@@ -114,8 +117,8 @@ public:
 		}
 
 		return sprintf(str, "%s %s",
-				 IsRunToday(time_now) ? "Today" : "Tomorrow",
-				 scheduledTimes);
+					   IsRunToday(time_now) ? "Today" : "Tomorrow",
+					   scheduledTimes);
 	}
 	int GetEnabledTimes(char* str) {
 		if (!IsEnabled()) {
@@ -123,12 +126,12 @@ public:
 		}
 		char buff[10];
 		int h;
-        short x;
+		short x;
 		bool enabled = false;
-        str[0] = '\0';
+		str[0] = '\0';
 
 		for (int i=0; i<4; i++) {
-            x = time[i];
+			x = time[i];
 			if (x != -1) {
 				if (enabled) {
 					strcat(str, ", ");
@@ -137,9 +140,9 @@ public:
 				}
 				h = x/60;
 				sprintf(buff, "%d:%.2d %s",
-						 (h%12 == 0 ? 12 : h%12),
-						 x%60,
-						 (h < 12 ? "AM" : "PM"));
+						(h%12 == 0 ? 12 : h%12),
+						x%60,
+						(h < 12 ? "AM" : "PM"));
 				strcat(str, buff);
 			}
 		}

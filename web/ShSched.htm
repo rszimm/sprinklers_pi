@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   
   <head>
     <title>Edit Schedule</title>
@@ -47,6 +47,21 @@
               } else {
                 $('#radio-choice-c').prop('checked', false).checkboxradio('refresh');
                 $('#radio-choice-d').prop('checked', true).checkboxradio('refresh');
+              }
+              if (data.restrict == '0') {
+                $('#radio-choice-e').prop('checked', true).checkboxradio('refresh');
+                $('#radio-choice-f').prop('checked', false).checkboxradio('refresh');
+                $('#radio-choice-g').prop('checked', false).checkboxradio('refresh');
+              }
+              else if (data.restrict == '1') {
+                $('#radio-choice-e').prop('checked', false).checkboxradio('refresh');
+                $('#radio-choice-f').prop('checked', true).checkboxradio('refresh');
+                $('#radio-choice-g').prop('checked', false).checkboxradio('refresh');
+              }
+              else if (data.restrict == '2') {
+                $('#radio-choice-e').prop('checked', false).checkboxradio('refresh');
+                $('#radio-choice-f').prop('checked', false).checkboxradio('refresh');
+                $('#radio-choice-g').prop('checked', true).checkboxradio('refresh');
               }
               ToggleState();
               if (data.d1 == 'on')
@@ -135,7 +150,8 @@
       <!-- /header -->
       <div data-role="content">
         <form id="sForm" action="#" method="get" data-ajax="false">
-          <div style="display:none">
+          <div data-role="fieldcontain" style="display:none">
+            <label for="id">ID:</label>
             <input type="text" name="id" id="id" value="" />
           </div>
           <div data-role="fieldcontain">
@@ -167,15 +183,26 @@
                 <input type="checkbox" name="d2" id="d2" class="custom" data-mini="true" />
                 <label for="d2">M</label>
                 <input type="checkbox" name="d3" id="d3" class="custom" data-mini="true" />
-                <label for="d3">T</label>
+                <label for="d3">Tu</label>
                 <input type="checkbox" name="d4" id="d4" class="custom" data-mini="true" />
                 <label for="d4">W</label>
                 <input type="checkbox" name="d5" id="d5" class="custom" data-mini="true" />
-                <label for="d5">R</label>
+                <label for="d5">Th</label>
                 <input type="checkbox" name="d6" id="d6" class="custom" data-mini="true" />
                 <label for="d6">F</label>
                 <input type="checkbox" name="d7" id="d7" class="custom" data-mini="true" />
                 <label for="d7">Sa</label>
+              </fieldset>
+            </div>
+            <div data-role="fieldcontain">
+              <fieldset data-role="controlgroup" data-type="horizontal">
+                <legend>Restrictions:</legend>
+                <input type="radio" name="restrict" id="radio-choice-e" value="0" onclick="ToggleState()" checked="checked" />
+                <label for="radio-choice-e">None</label>
+                <input type="radio" name="restrict" id="radio-choice-f" value="1" onclick="ToggleState()" />
+                <label for="radio-choice-f">Odd Days only</label>
+                <input type="radio" name="restrict" id="radio-choice-g" value="2" onclick="ToggleState()" />
+                <label for="radio-choice-g">Even Days only</label>
               </fieldset>
             </div>
           </div>
@@ -192,7 +219,7 @@
             </div>
             <div class="ui-block-c">
               <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                <input id="e1" name="e1" type="checkbox" onchange="javascript:$('#t1').textinput(this.checked?'enable':'disable');" checked="true">
+                <input id="e1" name="e1" type="checkbox" onchange="$('#t1').textinput(this.checked?'enable':'disable');" checked="true">
                 <label for="e1">Enable</label>
               </fieldset>
             </div>
@@ -204,7 +231,7 @@
             </div>
             <div class="ui-block-c">
               <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                <input id="e2" name="e2" type="checkbox" onchange="javascript:$('#t2').textinput(this.checked?'enable':'disable');">
+                <input id="e2" name="e2" type="checkbox" onchange="$('#t2').textinput(this.checked?'enable':'disable');">
                 <label for="e2">Enable</label>
               </fieldset>
             </div>
@@ -216,7 +243,7 @@
             </div>
             <div class="ui-block-c">
               <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                <input id="e3" name="e3" type="checkbox" onchange="javascript:$('#t3').textinput(this.checked?'enable':'disable');">
+                <input id="e3" name="e3" type="checkbox" onchange="$('#t3').textinput(this.checked?'enable':'disable');">
                 <label for="e3">Enable</label>
               </fieldset>
             </div>
@@ -228,7 +255,7 @@
             </div>
             <div class="ui-block-c">
               <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                <input id="e4" name="e4" type="checkbox" onchange="javascript:$('#t4').textinput(this.checked?'enable':'disable');">
+                <input id="e4" name="e4" type="checkbox" onchange="$('#t4').textinput(this.checked?'enable':'disable');">
                 <label for="e4">Enable</label>
               </fieldset>
             </div>
@@ -241,7 +268,7 @@
               <option value="on">On</option>
             </select>
           </div>
-          <a data-role="button" class="ui-btn-active ui-corner-all" href='#' onClick="javascript:mySubmitForm();">Save</a>
+          <a data-role="button" class="ui-btn-active ui-corner-all" href='#' onClick="mySubmitForm();">Save</a>
         </form>
       </div>
       <!-- /content -->
