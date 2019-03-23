@@ -62,6 +62,7 @@ See the wiki for more information: https://github.com/rszimm/sprinklers_pi/wiki/
 make
 sudo make install
 ```
+NOTE: If you are running an older version of g++ compiler you may see the error `cc1plus: error: unrecognized command line option '-std=c++11'`. You should either update to g++ version 4.8+ or if you are not using DarkSky as a weather provider you can remove `-std=c++0x` at the end of line 8 in the Makefile. You can see what version of g++ you have by running `g++ --version`.
 
 ## Running
 `sudo /etc/init.d/sprinklers_pi start`
