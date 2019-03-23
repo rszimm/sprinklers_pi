@@ -16,11 +16,17 @@
 # add to the shared library search path
 #export LD_LIBRARY_PATH=/lib:/usr/local/lib:/usr/lib
 NAME=sprinklers_pi
+RUN_USER=root
 RUN_DIRECTORY=/usr/local/etc/$NAME
 INSTALL_DIR=/usr/local/sbin
 DAEMON_PID=/var/run/$NAME.pid
 DAEMON=$INSTALL_DIR/$NAME
 LOGDIR=/var/log
+DEFAULTS=/etc/default/sprinklers_pi
+
+if [ -f $DEFAULTS ] ; then
+    . $DEFAULTS
+fi
 
 . /lib/lsb/init-functions
 
@@ -33,11 +39,11 @@ do_start()
         start-stop-daemon --start --quiet --background --make-pidfile --pidfile $DAEMON_PID --exec $DAEMON --test > /dev/null \
                 || return 1
 		if [ "$1" -eq 1 ] ; then
-			start-stop-daemon --start --quiet --no-close --background --make-pidfile --pidfile $DAEMON_PID --exec $DAEMON --chdir $RUN_DIRECTORY \
+			start-stop-daemon --start --quiet --no-close --background --make-pidfile --pidfile $DAEMON_PID --exec $DAEMON -c $RUN_USER --chdir $RUN_DIRECTORY \
                 $DAEMON_ARGS \
                 || return 2
 		else
-			start-stop-daemon --start --quiet --background --make-pidfile --pidfile $DAEMON_PID --exec $DAEMON --chdir $RUN_DIRECTORY -- \
+			start-stop-daemon --start --quiet --background --make-pidfile --pidfile $DAEMON_PID --exec $DAEMON -c $RUN_USER --chdir $RUN_DIRECTORY -- \
                 $DAEMON_ARGS -L$LOGDIR/$NAME\
                 || return 2
 		fi
