@@ -2,8 +2,8 @@
 
 1. Inherit Weather class and Override
 ```
-	Weather::ReturnVals GetVals(void) const override;
-	Weather::ReturnVals GetVals(const Weather::Settings & settings) const override;
+private:
+	Weather::ReturnVals InternalGetVals(const Weather::Settings & settings) const;
 ```
 2. Add commented out #define WEATHER_YOUR_PROVIDER line to settings.h
 3. Add #elif defined(WEATHER_YOUR_PROVIDER) blocks to the following places:

@@ -13,10 +13,9 @@ class Aeris : public Weather
 {
 public:
 	Aeris(void);
-	Weather::ReturnVals GetVals(void) const;
-	Weather::ReturnVals GetVals(const Weather::Settings & settings) const;
 private:
 	const char* m_aerisAPIHost;
+	Weather::ReturnVals InternalGetVals(const Weather::Settings & settings) const;
 };
 
 #endif

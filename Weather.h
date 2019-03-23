@@ -52,6 +52,8 @@ public:
 	int16_t GetScale(const ReturnVals & vals) const;
 	ReturnVals GetVals(void) const;
     ReturnVals GetVals(const Settings & settings) const;
+private:
+	virtual ReturnVals InternalGetVals(const Settings & settings) const;
 };
 
 #endif

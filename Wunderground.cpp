@@ -177,13 +177,7 @@ static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
 	} // while (true)
 }
 
-Weather::ReturnVals Wunderground::GetVals(void) const
-{
-	Settings settings = GetSettings();
-	return GetVals(settings);
-}
-
-Weather::ReturnVals Wunderground::GetVals(const Weather::Settings & settings) const
+Weather::ReturnVals Wunderground::InternalGetVals(const Weather::Settings & settings) const
 {
 	ReturnVals vals = {0};
 	EthernetClient client;

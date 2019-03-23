@@ -27,14 +27,14 @@ Weather::Settings Weather::GetSettings(void) {
 
 int16_t Weather::GetScale(void) const
 {
-	ReturnVals vals = GetVals();
-	return GetScale(vals);
+	ReturnVals vals = this->GetVals();
+	return this->GetScale(vals);
 }
 
 int16_t Weather::GetScale(const Weather::Settings & settings) const
 {
-	ReturnVals vals = GetVals(settings);
-	return GetScale(vals);
+	ReturnVals vals = this->GetVals(settings);
+	return this->GetScale(vals);
 }
 
 int16_t Weather::GetScale(const ReturnVals & vals) const
@@ -51,13 +51,19 @@ int16_t Weather::GetScale(const ReturnVals & vals) const
 
 Weather::ReturnVals Weather::GetVals(void) const
 {
-	Settings settings = GetSettings();
-	return GetVals(settings);
+	Settings settings = this->GetSettings();
+	return this->InternalGetVals(settings);
 }
 
 Weather::ReturnVals Weather::GetVals(const Settings & settings) const
 {
+	return this->InternalGetVals(settings);
+}
+
+Weather::ReturnVals Weather::InternalGetVals(const Settings & settings) const
+{
 	// You must override and implement this function
+	trace("Warning: Placeholder weather provider called. No weather scaling used.\n");
 	ReturnVals vals = {0};
 	vals.valid = false;
 	return vals;

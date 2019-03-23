@@ -15,10 +15,9 @@ class Wunderground : public Weather
 {
 public:
 	Wunderground(void);
-	Weather::ReturnVals GetVals(void) const;
-	Weather::ReturnVals GetVals(const Weather::Settings & settings) const;
 private:
 	const char* m_wundergroundAPIHost;
+	Weather::ReturnVals InternalGetVals(const Weather::Settings & settings) const;
 };
 
 #endif

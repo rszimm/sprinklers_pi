@@ -109,13 +109,7 @@ static void GetData(const Weather::Settings & settings,const char *m_darkSkyAPIH
 	}
 }
 
-Weather::ReturnVals DarkSky::GetVals(void) const
-{
-	Settings settings = GetSettings();
-	return GetVals(settings);
-}
-
-Weather::ReturnVals DarkSky::GetVals(const Weather::Settings & settings) const
+Weather::ReturnVals DarkSky::InternalGetVals(const Weather::Settings & settings) const
 {
 	ReturnVals vals = {0};
 	const time_t 	local_now = nntpTimeServer.LocalNow();
