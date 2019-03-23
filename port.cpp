@@ -53,7 +53,7 @@ EEPROMClass::EEPROMClass()
 	FILE * fd = fopen("settings", "rb");
 	if (!fd)
 		return;
-	(void) fread(m_buf, 1, sizeof(m_buf), fd);
+	auto bytes = fread(m_buf, 1, sizeof(m_buf), fd);
 	fclose(fd);
 }
 
