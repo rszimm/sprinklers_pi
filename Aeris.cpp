@@ -3,7 +3,7 @@
 //   from Aeris Weather
 // Author: Nick Horvath
 
-#include "settings.h"
+#include "config.h"
 #ifdef WEATHER_AERIS
 
 #include "Aeris.h"

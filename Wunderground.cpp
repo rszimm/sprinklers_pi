@@ -5,7 +5,7 @@
 // Copyright (c) 2013 Richard Zimmerman
 //
 
-#include "settings.h"
+#include "config.h"
 #ifdef WEATHER_WUNDERGROUND
 
 #include "Wunderground.h"

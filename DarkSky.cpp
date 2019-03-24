@@ -2,7 +2,7 @@
 // This file manages the retrieval of Weather related information and adjustment of durations
 //   from DarkSky
 
-#include "settings.h"
+#include "config.h"
 #ifdef WEATHER_DARKSKY
 
 #include "DarkSky.h"

@@ -18,8 +18,43 @@
           $.ajax("json/schedules", {dataType: "json", success: function (data) {
             var output = '';
             var found = false;
+
+            data.Table.sort(function(a, b) {
+              if (a.next != 'n/a' && b.next == 'n/a') {
+                return -1;
+              } else if (b.next != 'n/a' && a.next == 'n/a') {
+                return 1;
+              } else if (a.next == 'n/a' && b.next == 'n/a') {
+                return 0;
+              }
+
+              if (a.next.indexOf('Today') != -1) {
+                if (b.next.indexOf('Today') != -1) {
+                  return 0;
+                } else {
+                  return -1;
+                }
+              } else if (b.next.indexOf('Today') != -1) {
+                return 1;
+              }
+
+              if (a.next.indexOf('Tomorrow') != -1) {
+                if (b.next.indexOf('Tomorrow') != -1) {
+                  return 0;
+                } else {
+                  return -1;
+                }
+              } else if (b.next.indexOf('Tomorrow') != -1) {
+                return 1;
+              }
+
+              var aNum = a.next.match(/\d+/)[0];
+              var bNum = b.next.match(/\d+/)[0];
+              return aNum - bNum;
+            });
+
             for (var i = 0; i < data.Table.length; i++) {
-              if (data.Table[i].e == 'on' && (data.Table[i].td || data.Table[i].tm)) {
+              if (data.Table[i].e == 'on' && (data.Table[i].next != 'n/a')) {
                 found = true;
                 output += '<li><a href="ShSched.htm?id=' + data.Table[i].id + '" data-transition="slide">';
                 output += data.Table[i].name;

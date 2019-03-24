@@ -7,37 +7,8 @@
 #ifndef _SETTINGS_h
 #define _SETTINGS_h
 
-// max number of schedules you will be allowed to create
-#define MAX_SCHEDULES 10
-// maximum number of zones allowed
-#define NUM_ZONES 15
-
-// Uncomment the next line if you want schedules to turn off when you use manual control
-//#define DISABLE_SCHED_ON_MANUAL
-
-// Set the on/off delay for "ChatterBox" (in microseconds)
-// If your relay/solenoid isn't click-clacking try increasing this
-#define CHATTERBOX_DELAY 100000
-// Number of on/off cycles to execute per button press
-#define CHATTERBOX_CYCLES 10
-
-/*************************************************
- * Weather Provider Section
- * Only uncomment one weather provider below.
- *************************************************/
-
-// Weather Underground
-// WARNING: this API may stop working at any moment.
-//#define WEATHER_WUNDERGROUND
-
-// Aeris Weather https://www.aerisweather.com
-//#define WEATHER_AERIS
-
-// DarkSky Weather https://darksky.net/dev
-//#define WEATHER_DARKSKY
-
-
-// END WEATHER PROVIDER SECTION
+// If you're looking for the user settings #defines they have been moved to config.h
+#include "config.h"
 
 // EEPROM Memory locations
 #define ADDR_SCHEDULE_COUNT		4
@@ -136,10 +107,17 @@ public:
 			return sprintf(str, "n/a");
 		}
 		if (!IsRunToday(time_now) && !IsRunTomorrow(time_now)) {
-			return sprintf(str, "2+ days");
+			int days = 2;
+			while (days <= 14 && !IsRunToday(time_now + (SECS_PER_DAY*days))) {
+				days++;
+			}
+			if (days > 14) {
+				return sprintf(str, "In 14+ days @ %s", scheduledTimes);
+			}
+			return sprintf(str, "In %d days @ %s", days, scheduledTimes);
 		}
 
-		return sprintf(str, "%s %s",
+		return sprintf(str, "%s @ %s",
 					   IsRunToday(time_now) ? "Today" : "Tomorrow",
 					   scheduledTimes);
 	}

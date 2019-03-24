@@ -10,6 +10,7 @@ add_definitions(-DVERSION=\"${BUILD_VERSION}\")
 add_definitions(-DRELPATH)
 
 add_executable(sprinklers_pi
+        config.h
         core.cpp
         core.h
         Event.cpp
