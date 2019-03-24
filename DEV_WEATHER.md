@@ -5,7 +5,7 @@
 private:
 	Weather::ReturnVals InternalGetVals(const Weather::Settings & settings) const;
 ```
-2. Add commented out #define WEATHER_YOUR_PROVIDER line to settings.h
+2. Add commented out #define WEATHER_YOUR_PROVIDER line to config.h
 3. Add #elif defined(WEATHER_YOUR_PROVIDER) blocks to the following places:
   * core.cpp includes
   * core.cpp `static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)` function

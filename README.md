@@ -25,7 +25,7 @@ Follow the directions below to enable a weather provider. If you change weather 
 before rebuilding.
 
 ### DarkSky Weather
-Uncomment `#define WEATHER_DARKSKY` in settings.h before building.
+Uncomment `#define WEATHER_DARKSKY` in config.h before building.
 
 DarkSky is currently unsupported on Arduino/AVR Platforms due to a dependence on curl and a JSON library that is currently untested on Arduino.
 
@@ -35,7 +35,7 @@ Location must be (without the quotes):
   * GPS Latitude,Longitude (eg. "40.749748,-73.991618")
 
 ### Aeris Weather
-Uncomment `#define WEATHER_AERIS` in settings.h before building.
+Uncomment `#define WEATHER_AERIS` in config.h before building.
 
 Once you have built and started the server fill out the API Id, API Secret, and Location in the Settings page.
 Your API Id and Secret can be found here: https://www.aerisweather.com/account/apps (account required, free,
@@ -49,7 +49,7 @@ Location can be any of the following:
 ### Wunderground
 Wunderground setup requires you to have previously created an API Key, and for them to have not shut it down yet (As of 2019/03/15 it's no longer working for me).
 
-Uncomment `#define WEATHER_WUNDERGROUND` in settings.h before building.
+Uncomment `#define WEATHER_WUNDERGROUND` in config.h before building.
 
 ### Testing Weather Data
 You can click on Advanced -> Weather Provider Diagnostics to verify your setup is working.
