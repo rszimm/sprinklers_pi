@@ -5,7 +5,7 @@ VERSION := $(shell cat version.txt )
 
 BUILD_DIR=build
 CC=gcc
-CCFLAGS=-O3 -Wall -fmessage-length=0 -MMD -MP -DLOGGING -DVERSION=\"$(VERSION)\" -std=c++11 
+CCFLAGS=-O3 -Wall -fmessage-length=0 -MMD -MP -DLOGGING -DVERSION=\"$(VERSION)\" -Wno-psabi -std=c++11 
 
 CPP_SRCS += \
 Event.cpp \
