@@ -248,7 +248,7 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 	adj.seasonal = GetSeasonalAdjust();
 	long scale = ((long)adj.seasonal * (long)adj.wunderground) / 100;
 	for (uint8_t k = 0; k < NUM_ZONES; k++)
-		sched->zone_duration[k] = (uint8_t)spi_min(((long)sched->zone_duration[k] * scale + 50) / 100, 254);
+		sched->zone_duration[k] = (uint8_t)spi_min(((long)sched->zone_duration[k] * scale + 50) / 100, 255);
 	return adj;
 }
 

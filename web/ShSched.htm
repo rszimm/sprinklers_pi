@@ -109,7 +109,7 @@
 
         function addZone(j, name, enab, duration) {
           var zone_id = 'z' + String.fromCharCode(97+j);
-          var new_ctl = $('<div data-role="fieldcontain"><label for="' + zone_id + '"> ' + name + ' Duration:' + ((enab=="off")?"Disabled":"") + '</label><input type="range" name="' + zone_id + '" id="' + zone_id + '" value="' + duration + '" min="0" max="100"  /></div>');
+          var new_ctl = $('<div data-role="fieldcontain"><label for="' + zone_id + '"> ' + name + ' Duration:' + ((enab=="off")?"Disabled":"") + '</label><input type="range" name="' + zone_id + '" id="' + zone_id + '" value="' + duration + '" min="0" max="255"  /></div>');
           new_ctl.appendTo('#zones');
         }
 
