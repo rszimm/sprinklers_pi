@@ -12,7 +12,7 @@ Sprinklers Pi is a sophisticated Irrigation control system for the Raspberry Pi.
 * Quick Schedule
 * Named Zones
 * Full Graphing feature of historic logs
-* Ability to run with OpenSprinkler module or direct relay outputs.
+* Ability to run with OpenSprinkler module, direct relay outputs or an [external script](https://github.com/rszimm/sprinklers_pi/wiki/External-Zone-Control-Script).
 * Supports master valve/pump output
 * Supports expansion zone board (up to 15 zones)
 * Very simple installation
