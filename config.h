@@ -36,5 +36,9 @@
 // Number of on/off cycles to execute per button press
 #define CHATTERBOX_CYCLES 10
 
+// External script to use when "None" Output Type is selected.
+// If this script does not exist or is not executable, nothing will happen.
+// Has no effect if ARDUINO is defined.
+#define EXTERNAL_SCRIPT "/usr/local/bin/sprinklers_pi_zone"
 
 #endif //SPRINKLERS_PI_CONFIG_H

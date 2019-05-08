@@ -27,6 +27,7 @@ static tftp tftpServer;
 #else
 #include <wiringPi.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #endif
 
 #ifdef LOGGING
@@ -108,6 +109,19 @@ static void io_latch()
 	switch (eot)
 	{
 	case OT_NONE:
+#ifndef ARDUINO
+#ifdef EXTERNAL_SCRIPT
+        struct stat buffer;
+        char cmd[50];
+        if (stat(EXTERNAL_SCRIPT, &buffer) == 0) {
+            for (int i = 0; i <= NUM_ZONES; i++)
+            {
+                sprintf(cmd, "%s %i %i", EXTERNAL_SCRIPT, i, (outState&(0x01<<i))?1:0);
+                system(cmd);
+            }
+        }
+#endif
+#endif
 		break;
 	case OT_DIRECT_POS:
 	case OT_DIRECT_NEG:
