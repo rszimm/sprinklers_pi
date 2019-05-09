@@ -35,7 +35,7 @@ HOURS=$1
 if [ $# -eq 2 ] ; then
   if ! hash mail 2>/dev/null ; then
     echo 'mail program is required to send email. Try "sudo apt-get install heirloom-mailx ssmtp" or "sudo apt-get install ssmtp mailutils mpack"'
-    echo 'If you've never setup email on this system you should read this about setting up ssmtp https://github.com/rszimm/sprinklers_pi/issues/140#issuecomment-490645483'
+    echo "If you've never setup email on this system you should read this about setting up ssmtp https://github.com/rszimm/sprinklers_pi/issues/140#issuecomment-490645483"
     exit 2
   fi
   EMAIL=$2
