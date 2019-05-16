@@ -88,13 +88,18 @@ void runStateClass::SetManual(bool val, int8_t zone)
 
 #ifdef ARDUINO
 uint8_t ZoneToIOMap[] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
+#elif defined(GREENIQ)
+uint8_t ZoneToIOMap[] = {5,7,0,1,2,3,4};
+#define NW_LED			11
+#define LIGHT			6
 #else
 uint8_t ZoneToIOMap[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+#endif
 #define SR_CLK_PIN  7
 #define SR_NOE_PIN  0
 #define SR_DAT_PIN  2
 #define SR_LAT_PIN  3
-#endif
+
 
 static uint16_t outState;
 static uint16_t prevOutState;
@@ -125,9 +130,10 @@ static void io_latch()
 		break;
 	case OT_DIRECT_POS:
 	case OT_DIRECT_NEG:
+	case OT_GREEN_IQ:
 		for (int i = 0; i <= NUM_ZONES; i++)
 		{
-			if (eot == OT_DIRECT_POS)
+			if (eot == OT_DIRECT_POS || eot == OT_GREEN_IQ)
 				digitalWrite(ZoneToIOMap[i], (outState&(0x01<<i))?1:0);
 			else
 				digitalWrite(ZoneToIOMap[i], (outState&(0x01<<i))?0:1);
