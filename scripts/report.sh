@@ -1,17 +1,25 @@
 #!/bin/bash
 
-#Set to 1 to not email if no records found. Any other value will send email regardless.
+# Set to 1 to not email if no records found. Any other value will send email regardless.
 SUPPRESS_EMAIL=1
 
-#sprinklers pi log database location
+# Set to 1 to convert runtime seconds to minutes. 0 to display in seconds.
+REPORT_MINS=1
+
+# sprinklers pi log database location
 DB=/usr/local/etc/sprinklers_pi/db.sql
 
-#temporary file to write output to for sending email
+# temporary file to write output to for sending email
 TMPFILE=/tmp/sprinklerreport.txt
 
 
 if ! hash bc 2>/dev/null ; then
   echo bc is required. Try "sudo apt-get install bc".
+  exit 2
+fi
+
+if ! hash sqlite3 2>/dev/null ; then
+  echo sqlite3 is required. Try "sudo apt-get install sqlite3".
   exit 2
 fi
 
@@ -26,7 +34,8 @@ HOURS=$1
 
 if [ $# -eq 2 ] ; then
   if ! hash mail 2>/dev/null ; then
-    echo mail program is required to send email
+    echo 'mail program is required to send email. Try "sudo apt-get install heirloom-mailx ssmtp" or "sudo apt-get install ssmtp mailutils mpack"'
+    echo "If you've never setup email on this system you should read this about setting up ssmtp https://github.com/rszimm/sprinklers_pi/issues/140#issuecomment-490645483"
     exit 2
   fi
   EMAIL=$2
@@ -41,7 +50,7 @@ calc () {
 DATE=`date +%s`
 
 TIMEZONE=`date +%z`
-TIMEZONE=`calc $TIMEZONE / 100`
+TIMEZONE=`calc ${TIMEZONE/+/} / 100`
 
 TIMESPAN=`calc "($HOURS - $TIMEZONE) * 3600"`
 
@@ -68,7 +77,12 @@ if [ $ROWS -gt 1 ] ; then
   for i in {1..15} ; do
     LOG=`sqlite3 $DB "SELECT SUM(duration) FROM zonelog WHERE zone = $i AND date > $TIME" | tr -d '\n'`
     if [ "x$LOG" != "x" ] ; then
-      echo "Zone $i: $LOG seconds." >> $TMPFILE
+      if [ $REPORT_MINS -eq 1 ] ; then
+        LOG=`calc "scale=2; $LOG / 60"`
+        echo "Zone $i: $LOG minutes." >> $TMPFILE
+      else
+        echo "Zone $i: $LOG seconds." >> $TMPFILE
+      fi
     fi
   done
 else
