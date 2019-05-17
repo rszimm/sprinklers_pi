@@ -207,7 +207,7 @@ bool GetRunSchedules();
 void SetRunSchedules(bool value);
 bool GetDHCP();
 void SetDHCP(const bool value);
-enum EOT {OT_NONE, OT_DIRECT_POS, OT_DIRECT_NEG, OT_OPEN_SPRINKLER, OT_GREEN_IQ};
+enum EOT {OT_NONE, OT_DIRECT_POS, OT_DIRECT_NEG, OT_OPEN_SPRINKLER};
 EOT GetOT();
 void SetOT(EOT oType);
 uint16_t GetWebPort();

@@ -91,8 +91,6 @@ uint8_t ZoneToIOMap[] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
 #endif
 #if defined(GREENIQ)
 uint8_t ZoneToIOMap[] = {5, 7, 0, 1, 2, 3, 4};
-#define NW_LED			11
-#define LIGHT			6
 #else
 uint8_t ZoneToIOMap[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 #define SR_CLK_PIN  7
@@ -129,16 +127,13 @@ static void io_latch()
 #endif
 		break;
 	case OT_DIRECT_POS:
-	case OT_GREEN_IQ:
-		for (int i = 0; i <= NUM_ZONES; i++)
-		{
-			digitalWrite(ZoneToIOMap[i], (outState&(0x01<<i))?1:0);
-		}
-		break;
 	case OT_DIRECT_NEG:
 		for (int i = 0; i <= NUM_ZONES; i++)
 		{
-			digitalWrite(ZoneToIOMap[i], (outState&(0x01<<i))?0:1);
+			if (eot == OT_DIRECT_POS)
+				digitalWrite(ZoneToIOMap[i], (outState&(0x01<<i))?1:0);
+			else
+				digitalWrite(ZoneToIOMap[i], (outState&(0x01<<i))?0:1);
 		}
 		break;
 
