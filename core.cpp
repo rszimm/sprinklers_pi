@@ -88,6 +88,9 @@ void runStateClass::SetManual(bool val, int8_t zone)
 
 #ifdef ARDUINO
 uint8_t ZoneToIOMap[] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
+#endif
+#if defined(GREENIQ)
+uint8_t ZoneToIOMap[] = {5, 7, 0, 1, 2, 3, 4};
 #else
 uint8_t ZoneToIOMap[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 #define SR_CLK_PIN  7
@@ -136,6 +139,7 @@ static void io_latch()
 
 	case OT_OPEN_SPRINKLER:
 #ifndef ARDUINO
+#ifndef GREENIQ
 		// turn off the latch pin
 		digitalWrite(SR_LAT_PIN, 0);
 		digitalWrite(SR_CLK_PIN, 0);
@@ -151,6 +155,7 @@ static void io_latch()
 
 		// Turn off the NOT enable pin (turns on outputs)
 		digitalWrite(SR_NOE_PIN, 0);
+#endif
 #endif
 		break;
 	}
@@ -179,6 +184,7 @@ void io_setup()
 #endif
 		if (eot == OT_OPEN_SPRINKLER)
 		{
+#ifndef GREENIQ
 			pinMode(SR_CLK_PIN, OUTPUT);
 			digitalWrite(SR_CLK_PIN, 0);
 			pinMode(SR_NOE_PIN, OUTPUT);
@@ -187,6 +193,7 @@ void io_setup()
 			digitalWrite(SR_DAT_PIN, 0);
 			pinMode(SR_LAT_PIN, OUTPUT);
 			digitalWrite(SR_LAT_PIN, 0);
+#endif
 		}
 		else
 		{
