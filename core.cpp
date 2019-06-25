@@ -273,16 +273,6 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 	return adj;
 }
 
-// return true if the schedule is enabled and runs today.
-static inline bool IsRunToday(const Schedule & sched, time_t time_now)
-{
-	if ((sched.IsEnabled())
-			&& (((sched.IsInterval()) && ((elapsedDays(time_now) % sched.interval) == 0))
-					|| (!(sched.IsInterval()) && (sched.day & (0x01 << (weekday(time_now) - 1))))))
-		return true;
-	return false;
-}
-
 // Load the on/off events for a specific schedule/time or the quick schedule
 void LoadSchedTimeEvents(uint8_t sched_num, bool bQuickSchedule)
 {
@@ -360,7 +350,7 @@ void ReloadEvents(bool bAllEvents)
 	{
 		Schedule sched;
 		LoadSchedule(i, &sched);
-		if (IsRunToday(sched, time_now))
+		if (sched.IsRunToday(time_now))
 		{
 			// now load up events for each of the start times.
 			for (uint8_t j = 0; j <= 3; j++)
