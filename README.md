@@ -24,7 +24,20 @@ By default, we now ship with no weather provider enabled, and therefore no adjus
 Follow the directions below to enable a weather provider. If you change weather providers be sure to run "make clean"
 before rebuilding.
 
+### OpenWeather / OpenWeatherMap
+This is the current recommended free provider, however, it is currently unsupported on Arduino/AVR Platforms due to a dependence on curl and a JSON library that is currently untested on Arduino. It works on Linux devices including raspberry pi.
+
+1. Uncomment `#define WEATHER_OPENWEATHER` in config.h before building.
+1. Build and start the server.
+1. Navigate to the Settings Page.
+1. Fill in API Secret with your api key from this page: https://home.openweathermap.org/api_keys
+1. Fill in Location in the format: lattidue,longitude (eg. "40.749748,-73.991618")
+1. Click "OK" at the top to save.
+1. Navigate to the Advanced -> Weather Provider Diagnostics page to test everything is working.
+
 ### DarkSky Weather
+WARNING: Darksky has been aquired by Apple and is shutting down their free API at the end of 2021. 
+
 Uncomment `#define WEATHER_DARKSKY` in config.h before building.
 
 DarkSky is currently unsupported on Arduino/AVR Platforms due to a dependence on curl and a JSON library that is currently untested on Arduino.

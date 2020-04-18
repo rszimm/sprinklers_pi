@@ -78,6 +78,16 @@ public:
 		struct tm * ti = localtime(&t);
 		return t + ti->tm_gmtoff;
 	}
+    int LocalHour()
+    {
+        time_t t = time(0);
+        struct tm * ti = localtime(&t);
+        return ti->tm_hour;
+    }
+    time_t utcNow()
+    {
+        return time(0);
+    }
 	void checkTime()
 	{
 	}

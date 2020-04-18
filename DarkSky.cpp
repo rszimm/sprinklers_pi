@@ -72,11 +72,11 @@ static void ParseResponse(json &data, Weather::ReturnVals * ret)
 			ret->meantempi, ret->windmph/WIND_FACTOR, ret->precipi/PRECIP_FACTOR, ret->UV/UV_FACTOR);
 }
 
-static void GetData(const Weather::Settings & settings,const char *m_darkSkyAPIHost,time_t timstamp, Weather::ReturnVals * ret)
+static void GetData(const Weather::Settings & settings,const char *m_darkSkyAPIHost,time_t timestamp, Weather::ReturnVals * ret)
 {
 	char cmd[255];
 	
-	snprintf(cmd, sizeof(cmd), "/usr/bin/curl -sS -o /tmp/darksky.json 'https://%s/forecast/%s/%s,%ld?exclude=currently,daily,minutely,flags'", m_darkSkyAPIHost, settings.apiSecret, settings.location, timstamp);
+	snprintf(cmd, sizeof(cmd), "/usr/bin/curl -sS -o /tmp/darksky.json 'https://%s/forecast/%s/%s,%ld?exclude=currently,daily,minutely,flags'", m_darkSkyAPIHost, settings.apiSecret, settings.location, timestamp);
 	// trace("cmd: %s\n",cmd);
 	
 	FILE *fh;

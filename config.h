@@ -26,6 +26,9 @@
  * Only uncomment one weather provider below.
  *************************************************/
 
+// Open Weather https://openweathermap.org/darksky-openweather
+//#define WEATHER_OPENWEATHER
+
 // Weather Underground
 // WARNING: this API may stop working at any moment.
 //#define WEATHER_WUNDERGROUND
@@ -34,6 +37,7 @@
 //#define WEATHER_AERIS
 
 // DarkSky Weather https://darksky.net/dev
+// WARNING: this API will only work through the end of 2021
 //#define WEATHER_DARKSKY
 
 // END WEATHER PROVIDER SECTION

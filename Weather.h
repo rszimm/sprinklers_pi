@@ -17,6 +17,8 @@
 #define WIND_FACTOR 10.0
 #define UV_FACTOR 10.0
 
+#define MM_TO_IN 25.4
+
 class Weather
 {
 public:

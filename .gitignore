@@ -1,4 +1,5 @@
 .idea
 atlassian-ide-plugin.xml
 build
+cmake-build-debug
 sprinklers_pi

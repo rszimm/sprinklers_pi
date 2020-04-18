@@ -13,6 +13,8 @@
 #include "Aeris.h"
 #elif defined(WEATHER_DARKSKY)
 #include "DarkSky.h"
+#elif defined(WEATHER_OPENWEATHER)
+#include "OpenWeather.h"
 #else
 #include "Weather.h"
 #endif
@@ -259,6 +261,8 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 		Aeris w;
 #elif defined(WEATHER_DARKSKY)
 		DarkSky w;
+#elif defined(WEATHER_OPENWEATHER)
+        OpenWeather w;
 #else
 		// this is a dummy provider which will just result in 100
 		Weather w;
