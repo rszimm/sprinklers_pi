@@ -89,7 +89,6 @@ static void GetData(const Weather::Settings & settings,const char *m_openWeather
 	char cmd[255];
 
 	// split location into lat, long
-	char * pch;
 	char * loc = strdup(settings.location);
 	char * lat = strtok(loc, ", ");
 	char * lon = strtok(NULL, ", ");
