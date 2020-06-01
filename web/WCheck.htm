@@ -19,7 +19,7 @@
             $.ajax("json/wcheck", {dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
                 var wuText = $('#wuText');
                     if (data.noprovider == "true") {
-                        wuText.empty().append("No Weather Provider defined in settings.h");
+                        wuText.empty().append("No Weather Provider defined in config.h");
                     } else if (data.keynotfound == "true") {
                         wuText.empty().append("Weather Provider API Key is invalid!");
                     } else if (data.valid == "false") {
