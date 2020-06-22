@@ -28,14 +28,14 @@
                         wuText.empty().append("Resolved Weather Provider IP: " + data.resolvedIP);
                         wuText.append("<br/>Overall Scale: " + data.scale + "%");
                         wuText.append("<h3>Yesterday's Values</h3>");
-                        wuText.append("Mean Temp: " + data.meantempi + "&deg;F");
+                        wuText.append("Mean Temp: " + data.meantempi + "&deg;F / " + ((data.meantempi - 32) * (5 / 9)).toFixed(1) + "&deg;C");
                         wuText.append("<br/>Min Humidity: " + data.minhumidity + "%");
                         wuText.append("<br/>Max Humidity: " + data.maxhumidity + "%");
-                        wuText.append("<br/>Precipitation: " + data.precip/100 + "\"");
-                        wuText.append("<br/>Wind: " + data.wind_mph/10 + "mph");
+                        wuText.append("<br/>Precipitation: " + data.precip / 100 + "\" / " + (data.precip * 0.254).toFixed(1) + " mm");
+                        wuText.append("<br/>Wind: " + data.wind_mph / 10 + " mph / " + (data.wind_mph * 0.044704).toFixed(1) + " m/s");
                         wuText.append("<h3>Today's Values</h3>");
-                        wuText.append("Precipitation: " + data.precip_today/100 + "\"");
-                        wuText.append("<br/>UV: " + data.UV/10 + " ");
+                        wuText.append("Precipitation: " + data.precip_today / 100 + "\" / " + (data.precip_today * 0.254).toFixed(1) + " mm");
+                        wuText.append("<br/>UV: " + data.UV / 10 + " ");
                     }
                 }}); // ajax
         }); // on pagebeforeshow handler
