@@ -15,7 +15,9 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <errno.h>
-
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 void trace(const char * fmt, ...)
 {
 	time_t curTime = time(0);
@@ -51,7 +53,9 @@ EEPROMClass::EEPROMClass()
 	FILE * fd = fopen("settings", "rb");
 	if (!fd)
 		return;
-	fread(m_buf, 1, sizeof(m_buf), fd);
+	auto bytes = fread(m_buf, 1, sizeof(m_buf), fd);
+	if (!bytes)
+		trace("Warning: no bytes read when loading EEPROM.\n");
 	fclose(fd);
 }
 
@@ -188,7 +192,36 @@ int EthernetClient::connect(IPAddress ip, uint16_t port)
 	m_connected = true;
 	return 1;
 }
+int EthernetClient::connect(const char* host, uint16_t port)
+{
+	if (m_sock)
+		return 0;
+	trace("Trying to connect to:%s\n", host);
 
+	hostent * resolvedHost = gethostbyname(host);
+	if(resolvedHost == NULL)
+	{
+		trace("Error resolving %s (%d)%s\n",host, errno, strerror(errno));
+	}
+	
+	in_addr * actualIP = (in_addr * )resolvedHost->h_addr;
+	char* chIpAddress = inet_ntoa(* actualIP);
+	m_ipAddress=chIpAddress;
+	trace("Resolved %s to:%s\n",host, chIpAddress);
+
+	struct sockaddr_in sin = {0};
+	sin.sin_family = AF_INET;
+	sin.sin_port = htons(port);
+	sin.sin_addr=*actualIP;
+	m_sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (::connect(m_sock, (struct sockaddr *) &sin, sizeof(sin)) < 0)
+	{
+		trace("Error Connecting(%d)%s\n", errno, strerror(errno));
+		return false;
+	}
+	m_connected = true;
+	return 1;
+}
 bool EthernetClient::connected()
 {
 	if (!m_sock)
@@ -224,7 +257,7 @@ int EthernetClient::read(uint8_t *buf, size_t size)
 	FD_ZERO(&sock_set);
 	FD_SET(m_sock, &sock_set);
 	struct timeval timeout;
-	timeout.tv_sec = 1;
+	timeout.tv_sec = 10;
 	timeout.tv_usec = 0;
 
 	select(m_sock + 1, &sock_set, NULL, NULL, &timeout);

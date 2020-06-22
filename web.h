@@ -9,9 +9,12 @@
 
 class EthernetServer;
 
+// total number of kv pairs
 #define NUM_KEY_VALUES 50
+// largest allowed key
 #define KEY_SIZE 10
-#define VALUE_SIZE 20
+// largest allowed value
+#define VALUE_SIZE 64
 
 struct KVPairs
 {

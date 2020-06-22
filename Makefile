@@ -1,16 +1,20 @@
 #
 # Makefile for the Sprinkling System
 
-VERSION=1.0.6
+VERSION := $(shell cat version.txt )
 
 BUILD_DIR=build
 CC=gcc
-CCFLAGS=-O3 -Wall -fmessage-length=0 -MMD -MP -DLOGGING -DVERSION=\"$(VERSION)\"
+CCFLAGS=-O3 -Wall -fmessage-length=0 -MMD -MP -DLOGGING -DVERSION=\"$(VERSION)\" -Wno-psabi -std=c++11 
 
 CPP_SRCS += \
 Event.cpp \
 Logging.cpp \
 Weather.cpp \
+Wunderground.cpp \
+Aeris.cpp \
+DarkSky.cpp \
+OpenWeather.cpp \
 core.cpp \
 port.cpp \
 settings.cpp \
@@ -51,7 +55,7 @@ ifneq  ($(IUSER),root)
 endif
 	@cp -f $(LIBNAME) /usr/local/sbin
 	mkdir -p /web
-	-@cp -f web/* /web/
+	-@cp -rf web/* /web/
 	cp -f sprinklers_init.d.sh /etc/init.d/sprinklers_pi
 	chmod a+x /etc/init.d/sprinklers_pi
 	mkdir -p /usr/local

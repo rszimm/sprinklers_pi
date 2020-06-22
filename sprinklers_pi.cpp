@@ -17,11 +17,17 @@ void signal_callback_handler(int signum)
    bTermSignal = true;
 }
 
+void signal_pipe_callback_handler(int signum)
+{
+   printf("Caught and ignored signal %d\n",signum);
+}
+
 int main(int argc, char **argv)
 {
 	// Register signal handlers
 	signal(SIGTERM, signal_callback_handler);
 	signal(SIGINT, signal_callback_handler);
+	signal(SIGPIPE, signal_pipe_callback_handler);
 
 	char * logfile = 0;
 	int c = -1;

@@ -30,3 +30,6 @@
 #tablepane table tr:last-child td {
     border-bottom: none;
 }
+.ui-footer p {
+    margin-left: 1em;
+}

@@ -1,6 +1,5 @@
 // Weather.cpp
 // This file manages the retrieval of Weather related information and adjustment of durations
-//   from Weather Underground
 // Author: Richard Zimmerman
 // Copyright (c) 2013 Richard Zimmerman
 //
@@ -11,197 +10,61 @@
 #include <string.h>
 #include <stdlib.h>
 
-Weather::Weather(void)
-{
+Weather::Settings Weather::GetSettings(void) {
+	Settings settings = {0};
+
+	GetApiKey(settings.key);
+	GetApiId(settings.apiId);
+	GetApiSecret(settings.apiSecret);
+	GetPWS(settings.pws);
+	GetLoc(settings.location);
+
+	settings.zip = GetZip();
+	settings.usePws = GetUsePWS();
+
+	return settings;
 }
 
-static void ParseResponse(EthernetClient & client, Weather::ReturnVals * ret)
+int16_t Weather::GetScale(void) const
 {
-	freeMemory();
-	ret->valid = false;
-	enum
-	{
-		FIND_QUOTE1 = 0, PARSING_KEY, FIND_QUOTE2, PARSING_VALUE, PARSING_QVALUE, ERROR
-	} current_state = FIND_QUOTE1;
-	char recvbuf[100];
-	char * recvbufptr = recvbuf;
-	char * recvbufend = recvbuf;
-	char key[30], val[30];
-	char * keyptr = key;
-	char * valptr = val;
-	while (true)
-	{
-		if (recvbufptr >= recvbufend)
-		{
-			int len = client.read((uint8_t*) recvbuf, sizeof(recvbuf));
-//			trace(F("Received Bytes:%d\n"), len);
-			if (len <= 0)
-			{
-				if (!client.connected())
-					break;
-				else
-					continue;  //TODO:  implement a timeout here.  Same in testing parse headers.
-			}
-			else
-			{
-				recvbufptr = recvbuf;
-				recvbufend = recvbuf + len;
-			}
-		}
-		char c = *(recvbufptr++);
-
-		switch (current_state)
-		{
-		case FIND_QUOTE1:
-			if (c == '"')
-			{
-				current_state = PARSING_KEY;
-				keyptr = key;
-			}
-			break;
-		case PARSING_KEY:
-			if (c == '"')
-			{
-				current_state = FIND_QUOTE2;
-				*keyptr = 0;
-			}
-			else
-			{
-				if ((keyptr - key) < (long)(sizeof(key) - 1))
-				{
-					*keyptr = c;
-					keyptr++;
-				}
-			}
-			break;
-		case FIND_QUOTE2:
-			if (c == '"')
-			{
-				current_state = PARSING_QVALUE;
-				valptr = val;
-			}
-			else if (c == '{')
-			{
-				current_state = FIND_QUOTE1;
-			}
-			else if ((c >= '0') && (c <= '9'))
-			{
-				current_state = PARSING_VALUE;
-				valptr = val;
-				*valptr = c;
-				valptr++;
-			}
-			break;
-		case PARSING_VALUE:
-			if ((c >= '0') && (c <= '9'))
-			{
-				*valptr = c;
-				valptr++;
-			}
-			else
-			{
-				current_state = FIND_QUOTE1;
-				*valptr = 0;
-				// TODO:  Parse things here.
-			}
-			break;
-		case PARSING_QVALUE:
-			if (c == '"')
-			{
-				current_state = FIND_QUOTE1;
-				*valptr = 0;
-				//trace("%s:%s\n", key, val);
-				if (strcmp(key, "maxhumidity") == 0)
-				{
-					ret->valid = true;
-					ret->keynotfound = false;
-					ret->maxhumidity = atoi(val);
-				}
-				else if (strcmp(key, "minhumidity") == 0)
-				{
-					ret->minhumidity = atoi(val);
-				}
-				else if (strcmp(key, "meantempi") == 0)
-				{
-					ret->meantempi = atoi(val);
-				}
-				else if (strcmp(key, "precip_today_in") == 0)
-				{
-					ret->precip_today = (atof(val) * 100.0);
-				}
-				else if (strcmp(key, "precipi") == 0)
-				{
-					ret->precipi = (atof(val) * 100.0);
-				}
-				else if (strcmp(key, "type") == 0)
-				{
-					if (strcmp(val, "keynotfound") == 0)
-						ret->keynotfound = true;
-				}
-
-			}
-			else
-			{
-				if ((valptr - val) < (long)(sizeof(val) - 1))
-				{
-					*valptr = c;
-					valptr++;
-				}
-			}
-			break;
-		case ERROR:
-			break;
-		} // case
-	} // while (true)
+	ReturnVals vals = this->GetVals();
+	return this->GetScale(vals);
 }
 
-int Weather::GetScale(const IPAddress & ip, const char * key, uint32_t zip, const char * pws, bool usePws) const
+int16_t Weather::GetScale(const Weather::Settings & settings) const
 {
-	ReturnVals vals = GetVals(ip, key, zip, pws, usePws);
-	return GetScale(vals);
+	ReturnVals vals = this->GetVals(settings);
+	return this->GetScale(vals);
 }
 
-int Weather::GetScale(const ReturnVals & vals) const
+int16_t Weather::GetScale(const ReturnVals & vals) const
 {
 	if (!vals.valid)
 		return 100;
-	const int humid_factor = 30 - (vals.maxhumidity + vals.minhumidity) / 2;
+	const int humid_factor = NEUTRAL_HUMIDITY - (vals.maxhumidity + vals.minhumidity) / 2;
 	const int temp_factor = (vals.meantempi - 70) * 4;
 	const int rain_factor = (vals.precipi + vals.precip_today) * -2;
-	const int adj = min(max(0, 100+humid_factor+temp_factor+rain_factor), 200);
+	const int16_t adj = (uint16_t)spi_min(spi_max(0, 100+humid_factor+temp_factor+rain_factor), 200);
 	trace(F("Adjusting H(%d)T(%d)R(%d):%d\n"), humid_factor, temp_factor, rain_factor, adj);
 	return adj;
 }
 
-Weather::ReturnVals Weather::GetVals(const IPAddress & ip, const char * key, uint32_t zip, const char * pws, bool usePws) const
+Weather::ReturnVals Weather::GetVals(void) const
 {
-	ReturnVals vals = {0};
-	EthernetClient client;
-	if (client.connect(ip, 80))
-	{
-		char getstring[90];
-		trace(F("Connected\n"));
-		if (usePws)
-			snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/pws:%s.json HTTP/1.0\n\n", key, pws);
-		else
-			snprintf(getstring, sizeof(getstring), "GET /api/%s/yesterday/conditions/q/%ld.json HTTP/1.0\n\n", key, (long) zip);
-		//trace(getstring);
-		client.write((uint8_t*) getstring, strlen(getstring));
+	Settings settings = this->GetSettings();
+	return this->InternalGetVals(settings);
+}
 
-		ParseResponse(client, &vals);
-		client.stop();
-		if (!vals.valid)
-		{
-			if (vals.keynotfound)
-				trace("Invalid WUnderground Key\n");
-			else
-				trace("Bad WUnderground Response\n");
-		}
-	}
-	else
-	{
-		trace(F("connection failed\n"));
-		client.stop();
-	}
+Weather::ReturnVals Weather::GetVals(const Settings & settings) const
+{
+	return this->InternalGetVals(settings);
+}
+
+Weather::ReturnVals Weather::InternalGetVals(const Settings & settings) const
+{
+	// You must override and implement this function
+	trace("Warning: Placeholder weather provider called. No weather scaling used.\n");
+	ReturnVals vals = {0};
+	vals.valid = false;
 	return vals;
 }

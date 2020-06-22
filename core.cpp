@@ -6,7 +6,19 @@
 
 #include "core.h"
 #include "settings.h"
+
+#if defined(WEATHER_WUNDERGROUND)
+#include "Wunderground.h"
+#elif defined(WEATHER_AERIS)
+#include "Aeris.h"
+#elif defined(WEATHER_DARKSKY)
+#include "DarkSky.h"
+#elif defined(WEATHER_OPENWEATHER)
+#include "OpenWeather.h"
+#else
 #include "Weather.h"
+#endif
+
 #include "web.h"
 #include "Event.h"
 #include "port.h"
@@ -17,10 +29,11 @@ static tftp tftpServer;
 #else
 #include <wiringPi.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #endif
 
 #ifdef LOGGING
-Logging log;
+Logging logger;
 #endif
 static web webServer;
 nntp nntpTimeServer;
@@ -37,7 +50,7 @@ void runStateClass::LogSchedule()
 {
 #ifdef LOGGING
 	if ((m_eventTime > 0) && (m_zone >= 0))
-		log.LogZoneEvent(m_eventTime, m_zone, nntpTimeServer.LocalNow() - m_eventTime, m_bSchedule ? m_iSchedule+1:-1, m_adj.seasonal, m_adj.wunderground);
+		logger.LogZoneEvent(m_eventTime, m_zone, nntpTimeServer.LocalNow() - m_eventTime, m_bSchedule ? m_iSchedule+1:-1, m_adj.seasonal, m_adj.wunderground);
 #endif
 }
 
@@ -77,6 +90,9 @@ void runStateClass::SetManual(bool val, int8_t zone)
 
 #ifdef ARDUINO
 uint8_t ZoneToIOMap[] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
+#endif
+#if defined(GREENIQ)
+uint8_t ZoneToIOMap[] = {5, 7, 0, 1, 2, 3, 4};
 #else
 uint8_t ZoneToIOMap[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 #define SR_CLK_PIN  7
@@ -98,6 +114,19 @@ static void io_latch()
 	switch (eot)
 	{
 	case OT_NONE:
+#ifndef ARDUINO
+#ifdef EXTERNAL_SCRIPT
+        struct stat buffer;
+        char cmd[50];
+        if (stat(EXTERNAL_SCRIPT, &buffer) == 0) {
+            for (int i = 0; i <= NUM_ZONES; i++)
+            {
+                sprintf(cmd, "%s %i %i", EXTERNAL_SCRIPT, i, (outState&(0x01<<i))?1:0);
+                system(cmd);
+            }
+        }
+#endif
+#endif
 		break;
 	case OT_DIRECT_POS:
 	case OT_DIRECT_NEG:
@@ -112,6 +141,7 @@ static void io_latch()
 
 	case OT_OPEN_SPRINKLER:
 #ifndef ARDUINO
+#ifndef GREENIQ
 		// turn off the latch pin
 		digitalWrite(SR_LAT_PIN, 0);
 		digitalWrite(SR_CLK_PIN, 0);
@@ -127,6 +157,7 @@ static void io_latch()
 
 		// Turn off the NOT enable pin (turns on outputs)
 		digitalWrite(SR_NOE_PIN, 0);
+#endif
 #endif
 		break;
 	}
@@ -153,10 +184,26 @@ void io_setup()
 			trace("Failed to Setup Outputs\n");
 		}
 #endif
-		for (uint8_t i=0; i<sizeof(ZoneToIOMap); i++)
+		if (eot == OT_OPEN_SPRINKLER)
 		{
-			pinMode(ZoneToIOMap[i], OUTPUT);
-			digitalWrite(ZoneToIOMap[i], (eot==OT_DIRECT_NEG)?1:0);
+#ifndef GREENIQ
+			pinMode(SR_CLK_PIN, OUTPUT);
+			digitalWrite(SR_CLK_PIN, 0);
+			pinMode(SR_NOE_PIN, OUTPUT);
+			digitalWrite(SR_NOE_PIN, 0);
+			pinMode(SR_DAT_PIN, OUTPUT);
+			digitalWrite(SR_DAT_PIN, 0);
+			pinMode(SR_LAT_PIN, OUTPUT);
+			digitalWrite(SR_LAT_PIN, 0);
+#endif
+		}
+		else
+		{
+			for (uint8_t i=0; i<sizeof(ZoneToIOMap); i++)
+			{
+				pinMode(ZoneToIOMap[i], OUTPUT);
+				digitalWrite(ZoneToIOMap[i], (eot==OT_DIRECT_NEG)?1:0);
+			}
 		}
 	}
 	outState = 0;
@@ -164,6 +211,10 @@ void io_setup()
 	io_latch();
 }
 
+void io_latchNow()
+{
+	io_latch();
+}
 
 void TurnOffZones()
 {
@@ -203,34 +254,31 @@ void TurnOnZone(int iValve)
 static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 {
 	runStateClass::DurationAdjustments adj(100);
-	if (sched->IsWAdj())
-	{
+	if (sched->IsWAdj()) {
+#if defined(WEATHER_WUNDERGROUND)
+		Wunderground w;
+#elif defined(WEATHER_AERIS)
+		Aeris w;
+#elif defined(WEATHER_DARKSKY)
+		DarkSky w;
+#elif defined(WEATHER_OPENWEATHER)
+        OpenWeather w;
+#else
+		// this is a dummy provider which will just result in 100
 		Weather w;
-		char key[17];
-		GetApiKey(key);
-		char pws[12] = {0};
-		GetPWS(pws);
-		adj.wunderground = w.GetScale(GetWUIP(), key, GetZip(), pws, GetUsePWS());   // factor to adjust times by.  100 = 100% (i.e. no adjustment)
+#endif
+		// get factor to adjust times by.  100 = 100% (i.e. no adjustment)
+		adj.wunderground = w.GetScale();
 	}
 	adj.seasonal = GetSeasonalAdjust();
 	long scale = ((long)adj.seasonal * (long)adj.wunderground) / 100;
 	for (uint8_t k = 0; k < NUM_ZONES; k++)
-		sched->zone_duration[k] = min(((long)sched->zone_duration[k] * scale + 50) / 100, 254);
+		sched->zone_duration[k] = (uint8_t)spi_min(((long)sched->zone_duration[k] * scale + 50) / 100, 255);
 	return adj;
 }
 
-// return true if the schedule is enabled and runs today.
-static inline bool IsRunToday(const Schedule & sched, time_t time_now)
-{
-	if ((sched.IsEnabled())
-			&& (((sched.IsInterval()) && ((elapsedDays(time_now) % sched.interval) == 0))
-					|| (!(sched.IsInterval()) && (sched.day & (0x01 << (weekday(time_now) - 1))))))
-		return true;
-	return false;
-}
-
 // Load the on/off events for a specific schedule/time or the quick schedule
-void LoadSchedTimeEvents(int8_t sched_num, bool bQuickSchedule)
+void LoadSchedTimeEvents(uint8_t sched_num, bool bQuickSchedule)
 {
 	Schedule sched;
 	runStateClass::DurationAdjustments adj;
@@ -306,7 +354,7 @@ void ReloadEvents(bool bAllEvents)
 	{
 		Schedule sched;
 		LoadSchedule(i, &sched);
-		if (IsRunToday(sched, time_now))
+		if (sched.IsRunToday(time_now))
 		{
 			// now load up events for each of the start times.
 			for (uint8_t j = 0; j <= 3; j++)
@@ -387,7 +435,7 @@ void mainLoop()
 		io_setup();
 
 #ifdef LOGGING
-		if (!log.Init())
+		if (!logger.Init())
 			exit(EXIT_FAILURE);
 #endif
 

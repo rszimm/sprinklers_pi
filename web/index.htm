@@ -1,24 +1,82 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html lang="en">
   
   <head>
-    <title>Main Page</title>
+    <title>Sprinklers Pi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" type="text/css">
+    <link rel="icon" type="image/png" href="/sprinkler.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" type="text/css">
     <link rel="stylesheet" href="custom.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js" type="text/javascript"></script>
+    <script src="jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
   </head>
   
   <body>
     <!-- Home -->
     <div data-role="page" id="page1">
       <script language="javascript" type="text/javascript">
+        var getUpcomingSched = function() {
+          $.ajax("json/schedules", {dataType: "json", success: function (data) {
+            var output = '';
+            var found = false;
+
+            data.Table.sort(function(a, b) {
+              if (a.next != 'n/a' && b.next == 'n/a') {
+                return -1;
+              } else if (b.next != 'n/a' && a.next == 'n/a') {
+                return 1;
+              } else if (a.next == 'n/a' && b.next == 'n/a') {
+                return 0;
+              }
+
+              if (a.next.indexOf('Today') != -1) {
+                if (b.next.indexOf('Today') != -1) {
+                  return 0;
+                } else {
+                  return -1;
+                }
+              } else if (b.next.indexOf('Today') != -1) {
+                return 1;
+              }
+
+              if (a.next.indexOf('Tomorrow') != -1) {
+                if (b.next.indexOf('Tomorrow') != -1) {
+                  return 0;
+                } else {
+                  return -1;
+                }
+              } else if (b.next.indexOf('Tomorrow') != -1) {
+                return 1;
+              }
+
+              var aNum = a.next.match(/\d+/)[0];
+              var bNum = b.next.match(/\d+/)[0];
+              return aNum - bNum;
+            });
+
+            for (var i = 0; i < data.Table.length; i++) {
+              if (data.Table[i].e == 'on' && (data.Table[i].next != 'n/a')) {
+                found = true;
+                output += '<li><a href="ShSched.htm?id=' + data.Table[i].id + '" data-transition="slide">';
+                output += data.Table[i].name;
+                output += ': ';
+                output += data.Table[i].next;
+                output += '</a></li>';
+              }
+            }
+            if (found) {
+              $('#upcoming').show().find('ul').empty().append(output);
+            } else {
+              $('#upcoming').hide();
+            }
+          }});
+        };
         $(document).bind('pageinit', function () {
           $('#systemz').bind('change', function (e) {
             $.get("bin/run", {
               system: this.value
-            });
+            }).then(getUpcomingSched);
           });
         });
         var timeout = 0;
@@ -28,15 +86,17 @@
           return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
         }
         $('#page1').on('pagebeforeshow', function () {
-          $.ajax("json/state", {async: false, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
-            $('#zones_lv span').text(data.zones);
-            $('#schedules_lv span').text(data.schedules);
+          $.ajax("json/state", {dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
+            $('#zones_lv').find('span').text(data.zones);
+            $('#schedules_lv').find('span').text(data.schedules);
             var dt = new Date(data.timenow*1000);
             $('#version').text("V"+data.version);
             $('#timediv').empty().append('' + pad(dt.getUTCHours(),2) + ':' + pad(dt.getUTCMinutes(),2) + ':' + pad(dt.getUTCSeconds(),2) + ' ' + pad(dt.getUTCFullYear(),4) + '/' + pad(dt.getUTCMonth()+1,2) + '/' + pad(dt.getUTCDate(),2) );
             checkAnim(data);
+            getUpcomingSched();
           }});
         });
+
         function checkAnim(data) {
             $('#systemz').val(data.run).slider('refresh');
             if (data.offtime != null) {
@@ -70,7 +130,7 @@
       <div data-role="content">
         <div data-role="fieldcontain">
           <label for="systemz">Run Schedules</label>
-          <select name="systemz" id="systemz" data-mini="true" data-role="slider">
+          <select name="systemz" id="systemz" data-role="slider">
             <option value="off">Off</option>
             <option value="on" selected>On</option>
           </select>
@@ -79,25 +139,29 @@
           <img src="rainbird.gif" height="70" width="90"><br/>
           <span id="szone"></span> <span id="spantime">00:00</span>
         </div>
-        <ul data-role="listview" data-divider-theme="b" data-inset="true" data-split-theme="b">
-          <li data-theme="c"><a href="Scheds.htm" data-transition="slide" id="schedules_lv" name="schedules_lv">Schedules
+        <div id="upcoming" style="display:none">
+          <h3>Upcoming Schedules:</h3>
+          <ul></ul>
+        </div>
+        <ul data-role="listview" data-divider-theme="a" data-inset="true" data-split-theme="a">
+          <li data-theme="a"><a href="Scheds.htm" data-transition="slide" id="schedules_lv" name="schedules_lv">Schedules
         <span class="ui-li-count">0</span></a>
           </li>
-          <li data-theme="c"><a href="Manual.htm" data-transition="slide">Manual</a></li>
-          <li data-theme="c"><a href="QSched.htm" data-transition="slide">Quick Schedule</a>
+          <li data-theme="a"><a href="Manual.htm" data-transition="slide">Manual</a></li>
+          <li data-theme="a"><a href="QSched.htm" data-transition="slide">Quick Schedule</a>
           </li>
-          <li data-theme="c"><a href="Zones.htm" data-transition="slide" id="zones_lv" name="zones_lv">Zones <span class=
+          <li data-theme="a"><a href="Zones.htm" data-transition="slide" id="zones_lv" name="zones_lv">Zones <span class=
         "ui-li-count">0</span></a>
           </li>
-          <li data-theme="c"><a href="Logs.htm" data-transition="slide">Logs</a>
+          <li data-theme="a"><a href="Logs.htm" data-transition="slide">Logs</a>
           </li>
-          <li data-theme="c"><a href="Advanced.htm" data-transition="slide">Advanced</a>
+          <li data-theme="a"><a href="Advanced.htm" data-transition="slide">Advanced</a>
           </li>
         </ul>
         <div id="timediv"></div>
       </div> <!-- /content -->
-      <div data-role="footer" class="footer-docs" data-theme="c">
-        <p><span id="version"></span> &copy; 2013 Richard Zimmerman</p>
+      <div data-role="footer" class="footer-docs" data-theme="a">
+        <p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
       </div>
     </div><!-- /page -->
   </body>
