@@ -59,11 +59,6 @@ Location can be any of the following:
   * City, Country (eg. "London, United Kingdom")
   * ZIP Code (eg. 10001)
 
-### Wunderground
-Wunderground setup requires you to have previously created an API Key, and for them to have not shut it down yet (As of 2019/03/15 it's no longer working for me).
-
-Uncomment `#define WEATHER_WUNDERGROUND` in config.h before building.
-
 ### Testing Weather Data
 You can click on Advanced -> Weather Provider Diagnostics to verify your setup is working.
 

@@ -1,3 +1,5 @@
+// NO LONGER WORKING due to API shutdown/changes
+
 // Wunderground.cpp
 // This file manages the retrieval of Weather related information and adjustment of durations
 //   from Weather Underground
