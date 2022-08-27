@@ -163,7 +163,7 @@ static void GetData(const Weather::Settings & settings,const char *m_openWeather
 	}
 }
 
-Weather::ReturnVals OpenWeather::InternalGetVals(const Weather::Settings & settings) const
+Weather::ReturnVals OpenWeather3::InternalGetVals(const Weather::Settings & settings) const
 {
 	ReturnVals vals = {0};
 	const time_t 	now = nntpTimeServer.utcNow();

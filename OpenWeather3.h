@@ -1,4 +1,4 @@
-// OpenWeather.h
+// OpenWeather3.h
 // This file manages the retrieval of Weather related information and adjustment of durations
 //   from OpenWeather
 //
