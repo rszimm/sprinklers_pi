@@ -27,6 +27,9 @@ before rebuilding.
 ### OpenWeather / OpenWeatherMap
 This is the current recommended free provider, however, it is currently unsupported on Arduino/AVR Platforms due to a dependence on curl and a JSON library that is currently untested on Arduino. It works on Linux devices including raspberry pi.
 
+#### OpenWeatherMap appears to now require a CC on file for new accounts in order to work properly.
+As long as you use less than 1000 calls / day it is still free. Sprinklers_pi will only make calls before starting a schedule and when you use the Weather Provider Diagnostics page so you should be no where near this limit.
+
 1. Uncomment `#define WEATHER_OPENWEATHER` in config.h before building.
 1. Build and start the server.
 1. Navigate to the Settings Page.
