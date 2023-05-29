@@ -32,6 +32,9 @@
 // Open Weather https://openweathermap.org/darksky-openweather
 //#define WEATHER_OPENWEATHER
 
+// Open Weather V3 API https://openweathermap.org/darksky-openweather
+//#define WEATHER_OPENWEATHER3
+
 // Aeris Weather https://www.aerisweather.com
 //#define WEATHER_AERIS
 

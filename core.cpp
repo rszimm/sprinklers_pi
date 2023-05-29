@@ -15,6 +15,8 @@
 #include "DarkSky.h"
 #elif defined(WEATHER_OPENWEATHER)
 #include "OpenWeather.h"
+#elif defined(WEATHER_OPENWEATHER3)
+#include "OpenWeather3.h"
 #else
 #include "Weather.h"
 #endif
@@ -263,6 +265,9 @@ static runStateClass::DurationAdjustments AdjustDurations(Schedule * sched)
 		DarkSky w;
 #elif defined(WEATHER_OPENWEATHER)
         OpenWeather w;
+#elif defined(WEATHER_OPENWEATHER3)
+        OpenWeather3 w;
+
 #else
 		// this is a dummy provider which will just result in 100
 		Weather w;
