@@ -15,6 +15,7 @@ Wunderground.cpp \
 Aeris.cpp \
 DarkSky.cpp \
 OpenWeather.cpp \
+OpenMeteo.cpp \
 core.cpp \
 port.cpp \
 settings.cpp \

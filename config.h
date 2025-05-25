@@ -28,6 +28,8 @@
  * Weather Provider Section
  * Only uncomment one weather provider below.
  *************************************************/
+// Open-Meteo https://api.open-meteo.com
+// #define WEATHER_OPENMETEO
 
 // Open Weather https://openweathermap.org/darksky-openweather
 //#define WEATHER_OPENWEATHER
