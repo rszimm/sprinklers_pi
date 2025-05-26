@@ -34,6 +34,8 @@ add_executable(sprinklers_pi
         DarkSky.h
         OpenWeather.cpp
         OpenWeather.h
+        OpenMeteo.cpp
+        OpenMeteo.h
         web.cpp
         web.h
         json.hpp)
