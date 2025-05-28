@@ -18,6 +18,8 @@
 #include "DarkSky.h"
 #elif defined(WEATHER_OPENWEATHER)
 #include "OpenWeather.h"
+#elif defined(WEATHER_OPENMETEO)
+#include "OpenMeteo.h"
 #else
 #include "Weather.h"
 #endif
@@ -280,6 +282,8 @@ static void JSONwCheck(const KVPairs & key_value_pairs, FILE * stream_file)
 	DarkSky w;
 #elif defined(WEATHER_OPENWEATHER)
     OpenWeather w;
+#elif defined(WEATHER_OPENMETEO)
+    OpenMeteo w;
 #else
 	Weather w;
 	noprovider = true;
