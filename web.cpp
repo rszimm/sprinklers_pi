@@ -264,6 +264,9 @@ static void JSONSettings(const KVPairs & key_value_pairs, FILE * stream_file)
 	fprintf_P(stream_file, PSTR("\t\"apisecret\" : \"%s\",\n"), settings.apiSecret);
 	fprintf_P(stream_file, PSTR("\t\"loc\" : \"%s\",\n"), settings.location);
 #endif
+#if defined(WEATHER_OPENMETEO)
+	fprintf_P(stream_file, PSTR("\t\"loc\" : \"%s\",\n"), settings.location);
+#endif
 	// leave this value last, it has no comma after the value
 	fprintf_P(stream_file, PSTR("\t\"sadj\" : \"%ld\"\n"), (long) GetSeasonalAdjust());
 	fprintf(stream_file, "}");
